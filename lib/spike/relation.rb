@@ -23,12 +23,15 @@ module Spike
     end
 
     def find_one
-      klass.new fetch(klass.resource_path).data
+      fetch(klass.resource_path) do |request|
+        klass.new request.data
+      end
     end
 
     def find_some
-      request = fetch(klass.collection_path)
-      Collection.new request.data.map { |record| klass.new(record) }, request.metadata
+      fetch(klass.collection_path) do |request|
+        Collection.new request.data.map { |record| klass.new(record) }, request.metadata
+      end
     end
 
     def each
@@ -41,15 +44,8 @@ module Spike
         id.to_s.split('-').first
       end
 
-      def scoping
-        klass.current_scope = self
-        yield
-      ensure
-        klass.current_scope = nil
-      end
-
       def fetch(path)
-        @fetch ||= Request.new(path, @params)
+        yield @fetch ||= Request.new(path, @params)
       end
 
       def method_missing(name, *args, &block)
@@ -59,5 +55,14 @@ module Spike
           super
         end
       end
+
+      # Keep hold of current scope while running a method on the class
+      def scoping
+        klass.current_scope = self
+        yield
+      ensure
+        klass.current_scope = nil
+      end
+
   end
 end
