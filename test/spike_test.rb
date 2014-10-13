@@ -1,36 +1,23 @@
 require 'test_helper'
 
-class Recipe #< Spike::Base
+Spike::Request.connection =
+  Faraday.new(url: 'http://sushi.com') do |faraday|
+    faraday.response  :json
+    faraday.adapter   Faraday.default_adapter  # make requests with Net::HTTP
+  end
+
+class Recipe
   include Spike::Base
-  has_many :ingredient_groups
-  has_one :image
 
   def self.published
     where(status: 'published')
   end
-
-  def ingredients
-    ingredient_groups.first.ingredients
-  end
-end
-
-class Image
-  include Spike::Base
-end
-
-class IngredientGroup
-  include Spike::Base
-  has_many :ingredients
-end
-
-class Ingredient
-  include Spike::Base
 end
 
 module Spike
   class SpikeTest < MiniTest::Test
     def test_basic_find
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1, title: 'Sushi' })
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sushi' })
 
       recipe = Recipe.find(1)
 
@@ -38,39 +25,32 @@ module Spike
       assert_equal 'Sushi', recipe.title
     end
 
+    def test_predicate_methods
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sushi' })
+
+      recipe = Recipe.find(1)
+
+      assert_equal true, recipe.title?
+      assert_equal false, recipe.description?
+    end
+
+    def test_respond_to
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sushi' })
+
+      recipe = Recipe.find(1)
+
+      assert_equal true, recipe.respond_to?(:title)
+      assert_equal false, recipe.respond_to?(:description)
+    end
+
     def test_basic_all
-      stub_request(:get, 'http://sushi.com/recipes').to_return_json(result: [{ id: 1, title: 'Sushi' }, { id: 2, title: 'Nigiri' }])
+      stub_request(:get, 'http://sushi.com/recipes').to_return_json(data: [{ id: 1, title: 'Sushi' }, { id: 2, title: 'Nigiri' }], metadata: 'meta')
 
       recipes = Recipe.all
 
       assert_equal %w{ Sushi Nigiri }, recipes.map(&:title)
       assert_equal [1, 2], recipes.map(&:id)
-    end
-
-    def test_associations
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { ingredient_groups: [{ id: 1, name: 'Fish' }] })
-
-      assert_equal %i{ ingredient_groups image }, Recipe.associations
-      recipe = Recipe.find(1)
-
-      assert_equal %w{ Fish }, recipe.ingredient_groups.map(&:name)
-    end
-
-    def test_nested_associtations
-      json = { result: { ingredient_groups: [{ ingredients: [{ id: 1, name: 'Fish' }] }, { ingredients: [] }] } }
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(json)
-
-      recipe = Recipe.find(1)
-
-      assert_equal %w{ Fish }, recipe.ingredients.map(&:name)
-    end
-
-    def test_singular_associtations
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { image: { url: 'bob.jpg' } })
-
-      recipe = Recipe.find(1)
-
-      assert_equal 'bob.jpg', recipe.image.url
+      assert_equal 'meta', recipes.metadata
     end
 
     def test_chainable_where

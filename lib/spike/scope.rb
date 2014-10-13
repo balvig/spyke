@@ -8,7 +8,7 @@ module Spike
       @params = {}
     end
 
-    def where(params)
+    def where(params = {})
       @params.merge!(params)
       self
     end

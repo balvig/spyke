@@ -7,7 +7,7 @@ module Spike
     end
 
     def initialize(attributes)
-      self.attributes = attributes.deep_symbolize_keys
+      self.attributes = attributes
     end
 
     private
@@ -18,6 +18,18 @@ module Spike
 
       def build_attribute(name)
         attributes[name]
+      end
+
+      def predicate?(name)
+        name.to_s.end_with?('?')
+      end
+
+      def depredicate(name)
+        name.to_s.chomp('?').to_sym
+      end
+
+      def build_predicate(name)
+        !!build_attribute(depredicate(name))
       end
 
   end
