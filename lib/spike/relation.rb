@@ -36,6 +36,10 @@ module Spike
       end
     end
 
+    def build
+      klass.new(params)
+    end
+
     def each
       find_some.each { |record| yield record }
     end
@@ -47,7 +51,7 @@ module Spike
       end
 
       def fetch(path)
-        Request.new(path, @params).result
+        Request.new(path, params).result
       end
 
       def method_missing(name, *args, &block)

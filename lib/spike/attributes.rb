@@ -7,7 +7,7 @@ module Spike
     end
 
     def initialize(attributes = {})
-      self.attributes = attributes
+      self.attributes = attributes.deep_symbolize_keys
     end
 
     def persisted?

@@ -4,7 +4,7 @@ module Spike
     attr_reader :body
 
     def initialize(body)
-      @body = (body || {}).deep_symbolize_keys
+      @body = HashWithIndifferentAccess.new(body)
     end
 
     def data

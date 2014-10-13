@@ -32,7 +32,7 @@ module Spike
       end
 
       def owner_key
-        @owner.class.model_name.param_key
+        "#{@owner.class.model_name.param_key}_id"
       end
 
   end

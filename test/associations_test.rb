@@ -60,5 +60,10 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_build
+      group = Recipe.new(id: 1).groups.build
+      assert_equal 1, group.recipe_id
+    end
+
   end
 end
