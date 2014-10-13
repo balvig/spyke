@@ -9,8 +9,7 @@ module Spike
     delegate :to_ary, :metadata, to: :find_some
 
     def initialize(klass)
-      @klass = klass
-      @params = {}
+      @klass, @params = klass, {}
     end
 
     def where(params = {})
@@ -24,15 +23,12 @@ module Spike
     end
 
     def find_one
-      fetch(klass.resource_path) do |request|
-        klass.new(request.data)
-      end
+      klass.new fetch(klass.resource_path).data
     end
 
     def find_some
-      fetch(klass.collection_path) do |request|
-        Collection.new request.data.map { |record| klass.new(record) }, request.metadata
-      end
+      request = fetch(klass.collection_path)
+      Collection.new request.data.map { |record| klass.new(record) }, request.metadata
     end
 
     def each
@@ -45,15 +41,20 @@ module Spike
         id.to_s.split('-').first
       end
 
-      def fetch(path)
-        yield @request ||= Request.new(path, @params)
+      def scoping
+        klass.current_scope = self
+        yield
       ensure
-        klass.reset_scope!
+        klass.current_scope = nil
+      end
+
+      def fetch(path)
+        @fetch ||= Request.new(path, @params)
       end
 
       def method_missing(name, *args, &block)
         if klass.respond_to?(name)
-          klass.send(name)
+          scoping { klass.send(name) }
         else
           super
         end

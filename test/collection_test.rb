@@ -50,12 +50,12 @@ module Spike
       assert_requested endpoint
     end
 
-    def test_flushing
-      endpoint_1 = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
+    def test_scope_doesnt_get_stuck
+      endpoint_1 = stub_request(:get, 'http://sushi.com/recipes?per_page=3&status=published')
       endpoint_2 = stub_request(:get, 'http://sushi.com/recipes?status=published')
 
-      Recipe.published.where(per_page: 3).to_a
-      Recipe.published.to_a
+      Recipe.where(status: 'published').where(per_page: 3).to_a
+      Recipe.where(status: 'published').to_a
       assert_requested endpoint_1
       assert_requested endpoint_2
     end
