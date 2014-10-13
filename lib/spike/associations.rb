@@ -18,10 +18,6 @@ module Spike
       end
     end
 
-    def persisted?
-      id?
-    end
-
     private
 
       def has_association?(name)

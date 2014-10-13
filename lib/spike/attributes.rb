@@ -10,6 +10,10 @@ module Spike
       self.attributes = attributes
     end
 
+    def persisted?
+      id?
+    end
+
     private
 
       def has_attribute?(name)

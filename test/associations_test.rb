@@ -2,11 +2,11 @@ require 'test_helper'
 
 class Recipe
   include Spike::Base
-  has_many :ingredient_groups
+  has_many :groups
   has_one :image
 
   def ingredients
-    ingredient_groups.first.ingredients
+    groups.first.ingredients
   end
 end
 
@@ -14,7 +14,7 @@ class Image
   include Spike::Base
 end
 
-class IngredientGroup
+class Group
   include Spike::Base
   has_many :ingredients
 end
@@ -26,16 +26,23 @@ end
 module Spike
   class AssociationsTest < MiniTest::Test
     def test_associations
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { ingredient_groups: [{ id: 1, name: 'Fish' }] })
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { groups: [{ id: 1, name: 'Fish' }] })
 
-      assert_equal %i{ ingredient_groups image }, Recipe.associations
+      assert_equal %i{ groups image }, Recipe.associations
       recipe = Recipe.find(1)
 
-      assert_equal %w{ Fish }, recipe.ingredient_groups.map(&:name)
+      assert_equal %w{ Fish }, recipe.groups.map(&:name)
+    end
+
+    def test_empty_association
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { groups: nil })
+
+      recipe = Recipe.find(1)
+      assert_equal [], recipe.groups
     end
 
     def test_nested_associtations
-      json = { data: { ingredient_groups: [{ ingredients: [{ id: 1, name: 'Fish' }] }, { ingredients: [] }] } }
+      json = { data: { groups: [{ ingredients: [{ id: 1, name: 'Fish' }] }, { ingredients: [] }] } }
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(json)
 
       recipe = Recipe.find(1)
@@ -53,9 +60,9 @@ module Spike
 
     def test_unloaded_associations
       skip
-      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/ingredient_groups')
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/groups')
 
-      recipe = Recipe.new(id: 1).ingredient_groups.to_a
+      recipe = Recipe.new(id: 1).groups.to_a
 
       assert_requested(endpoint)
     end
