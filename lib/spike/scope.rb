@@ -14,19 +14,11 @@ module Spike
     end
 
     def find(id)
-      response = klass.api.get(klass.resource_path(id))
-      reset_params!
-      klass.new response.body
+      scoping { klass.get_resource(id) }
     end
 
     def all
-      url = "#{klass.collection_path}#{to_query}"
-      reset_params!
-      response = klass.api.get(url)
-      return [] unless response.body
-      response.body.map do |record|
-        klass.new(record)
-      end
+      scoping { klass.get_collection }
     end
 
     def to_query
@@ -35,7 +27,9 @@ module Spike
 
     private
 
-      def reset_params!
+      def scoping
+        yield
+      ensure
         @params = {}
       end
 

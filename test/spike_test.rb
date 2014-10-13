@@ -30,7 +30,7 @@ end
 module Spike
   class SpikeTest < MiniTest::Test
     def test_basic_find
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(id: 1, title: 'Sushi')
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1, title: 'Sushi' })
 
       recipe = Recipe.find(1)
 
@@ -39,7 +39,7 @@ module Spike
     end
 
     def test_basic_all
-      stub_request(:get, 'http://sushi.com/recipes').to_return_json([{ id: 1, title: 'Sushi' }, { id: 2, title: 'Nigiri' }])
+      stub_request(:get, 'http://sushi.com/recipes').to_return_json(result: [{ id: 1, title: 'Sushi' }, { id: 2, title: 'Nigiri' }])
 
       recipes = Recipe.all
 
@@ -48,7 +48,7 @@ module Spike
     end
 
     def test_associations
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(ingredient_groups: [{ id: 1, name: 'Fish' }])
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { ingredient_groups: [{ id: 1, name: 'Fish' }] })
 
       assert_equal %i{ ingredient_groups image }, Recipe.associations
       recipe = Recipe.find(1)
@@ -57,7 +57,7 @@ module Spike
     end
 
     def test_nested_associtations
-      json = { ingredient_groups: [{ ingredients: [{ id: 1, name: 'Fish' }] }, { ingredients: [] }] }
+      json = { result: { ingredient_groups: [{ ingredients: [{ id: 1, name: 'Fish' }] }, { ingredients: [] }] } }
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(json)
 
       recipe = Recipe.find(1)
@@ -66,7 +66,7 @@ module Spike
     end
 
     def test_singular_associtations
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(image: { url: 'bob.jpg' })
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { image: { url: 'bob.jpg' } })
 
       recipe = Recipe.find(1)
 
