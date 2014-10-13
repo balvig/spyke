@@ -8,10 +8,10 @@ Spike::Request.connection =
 
 class Recipe
   include Spike::Base
+end
 
-  def self.published
-    where(status: 'published')
-  end
+class User
+  include Spike::Base
 end
 
 module Spike
@@ -23,6 +23,22 @@ module Spike
 
       assert_equal 1, recipe.id
       assert_equal 'Sushi', recipe.title
+    end
+
+    def test_slug
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1')
+
+      Recipe.find('1-delicious-soup')
+
+      assert_requested endpoint
+    end
+
+    def test_dynamic_resource_path
+      stub_request(:get, 'http://sushi.com/users/1').to_return_json(data: { id: 1, name: 'Bob' })
+
+      user = User.find(1)
+
+      assert_equal 'Bob', user.name
     end
 
     def test_predicate_methods
@@ -41,32 +57,6 @@ module Spike
 
       assert_equal true, recipe.respond_to?(:title)
       assert_equal false, recipe.respond_to?(:description)
-    end
-
-    def test_basic_all
-      stub_request(:get, 'http://sushi.com/recipes').to_return_json(data: [{ id: 1, title: 'Sushi' }, { id: 2, title: 'Nigiri' }], metadata: 'meta')
-
-      recipes = Recipe.all
-
-      assert_equal %w{ Sushi Nigiri }, recipes.map(&:title)
-      assert_equal [1, 2], recipes.map(&:id)
-      assert_equal 'meta', recipes.metadata
-    end
-
-    def test_chainable_where
-      endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
-
-      Recipe.where(status: 'published').where(per_page: 3).all
-
-      assert_requested endpoint
-    end
-
-    def test_chainable_class_method
-      endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
-
-      Recipe.where(per_page: 3).published.all
-
-      assert_requested endpoint
     end
 
   end

@@ -5,16 +5,21 @@ module Spike
     included do
       class_attribute :associations
       self.associations = []
+
+      class << self
+        alias :has_one :has_many
+        alias :belongs_to :has_many
+      end
     end
 
     module ClassMethods
       def has_many(association)
-        self.associations += [association]
+        associations << association
       end
+    end
 
-      def has_one(association)
-        has_many(association)
-      end
+    def persisted?
+      id?
     end
 
     private

@@ -1,4 +1,4 @@
-require 'spike/scope'
+require 'spike/relation'
 
 module Spike
   module Scopes
@@ -6,9 +6,15 @@ module Spike
 
     included do
       class_attribute :current_scope
-      self.current_scope = Scope.new(self)
+      self.current_scope = Relation.new(self)
       class << self
-        delegate :find, :all, :where, to: :current_scope
+        delegate :find, :where, to: :all
+      end
+    end
+
+    module ClassMethods
+      def all
+        current_scope
       end
     end
 

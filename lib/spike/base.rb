@@ -1,5 +1,4 @@
 require "active_model"
-require 'spike/api'
 require 'spike/associations'
 require 'spike/attributes'
 require 'spike/scopes'
@@ -8,15 +7,31 @@ module Spike
   module Base
     extend ActiveSupport::Concern
 
-    include Api
+    # Spike
     include Associations
     include Attributes
     include Scopes
+
+    # ActiveModel
+    include ActiveModel::Conversion
 
     included do
       extend ActiveModel::Translation
     end
 
+    module ClassMethods
+      def collection_path
+        base_path
+      end
+
+      def resource_path
+        "#{base_path}/:id"
+      end
+
+      def base_path
+        "/#{model_name.route_key}"
+      end
+    end
 
     private
 

@@ -31,7 +31,7 @@ class Ingredient
 end
 
 module Spike
-  class SpikeTest < MiniTest::Test
+  class AssociationsTest < MiniTest::Test
     def test_associations
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { ingredient_groups: [{ id: 1, name: 'Fish' }] })
 
@@ -56,6 +56,15 @@ module Spike
       recipe = Recipe.find(1)
 
       assert_equal 'bob.jpg', recipe.image.url
+    end
+
+    def test_unloaded_associations
+      skip
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/ingredient_groups')
+
+      recipe = Recipe.new(id: 1).ingredient_groups.to_a
+
+      assert_requested(endpoint)
     end
 
   end
