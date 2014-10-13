@@ -28,7 +28,7 @@ module Spike
     def test_embedded_associations
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { groups: [{ id: 1, name: 'Fish' }] })
 
-      assert_equal %i{ groups image }, Recipe.associations #.map(&:name)
+      assert_equal %i{ groups image }, Recipe.associations.keys
       recipe = Recipe.find(1)
 
       assert_equal %w{ Fish }, recipe.groups.map(&:name)
@@ -44,7 +44,6 @@ module Spike
     end
 
     def test_singular_associtations
-      skip
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { image: { url: 'bob.jpg' } })
 
       recipe = Recipe.find(1)
