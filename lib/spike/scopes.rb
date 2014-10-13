@@ -6,7 +6,8 @@ module Spike
 
     included do
       class_attribute :current_scope
-      self.current_scope = Relation.new(self)
+      reset_scope!
+
       class << self
         delegate :find, :where, to: :all
       end
@@ -15,6 +16,10 @@ module Spike
     module ClassMethods
       def all
         current_scope
+      end
+
+      def reset_scope!
+        self.current_scope = Relation.new(self)
       end
     end
 

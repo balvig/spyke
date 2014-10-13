@@ -46,9 +46,9 @@ module Spike
       end
 
       def fetch(path)
-        yield Request.new(path, @params)
+        yield @request ||= Request.new(path, @params)
       ensure
-        @params = {}
+        klass.reset_scope!
       end
 
       def method_missing(name, *args, &block)

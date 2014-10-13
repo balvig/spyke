@@ -41,5 +41,32 @@ module Spike
 
       assert_requested endpoint
     end
+
+    def test_prepended_chainable_class_method
+      endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
+
+      Recipe.published.where(per_page: 3).to_a
+
+      assert_requested endpoint
+    end
+
+    def test_flushing
+      endpoint_1 = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
+      endpoint_2 = stub_request(:get, 'http://sushi.com/recipes?status=published')
+
+      Recipe.published.where(per_page: 3).to_a
+      Recipe.published.to_a
+      assert_requested endpoint_1
+      assert_requested endpoint_2
+    end
+
+    def test_only_called_once
+      endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
+
+      recipes = Recipe.published.where(per_page: 3)
+      recipes.any?
+      recipes.to_a
+      assert_requested endpoint
+    end
   end
 end
