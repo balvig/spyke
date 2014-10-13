@@ -5,9 +5,8 @@ module Spike
     extend ActiveSupport::Concern
 
     included do
-      class_attribute :current_scope
-
       class << self
+        attr_accessor :current_scope
         delegate :find, :where, to: :all
       end
     end

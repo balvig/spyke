@@ -1,4 +1,5 @@
 require 'faraday'
+require 'spike/result'
 
 module Spike
   class Request
@@ -8,16 +9,8 @@ module Spike
       @base_path, @params = base_path, params
     end
 
-    def data
-      body[:data] || {}
-    end
-
-    def metadata
-      body[:metadata]
-    end
-
-    def errors
-      body[:errors]
+    def result
+      @result ||= Result.new(connection.get(path).body)
     end
 
     def path
@@ -25,14 +18,6 @@ module Spike
     end
 
     private
-
-      def body
-        @body ||= (get.body || {}).deep_symbolize_keys
-      end
-
-      def get
-        connection.get(path)
-      end
 
       def params_in_path
         @params.select { |key| @base_path.include?(":#{key}") }

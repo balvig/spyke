@@ -6,7 +6,7 @@ module Spike
       attr_accessor :attributes
     end
 
-    def initialize(attributes)
+    def initialize(attributes = {})
       self.attributes = attributes
     end
 
@@ -20,7 +20,7 @@ module Spike
         attributes.keys.include?(name)
       end
 
-      def build_attribute(name)
+      def get_attribute(name)
         attributes[name]
       end
 
@@ -28,12 +28,12 @@ module Spike
         name.to_s.end_with?('?')
       end
 
-      def depredicate(name)
-        name.to_s.chomp('?').to_sym
+      def get_predicate(name)
+        !!get_attribute(depredicate(name))
       end
 
-      def build_predicate(name)
-        !!build_attribute(depredicate(name))
+      def depredicate(name)
+        name.to_s.chomp('?').to_sym
       end
 
   end

@@ -23,14 +23,16 @@ module Spike
     end
 
     def find_one
-      fetch(klass.resource_path) do |request|
-        klass.new request.data
+      @find_one ||= begin
+        result = fetch(resource_path)
+        klass.new result.data
       end
     end
 
     def find_some
-      fetch(klass.collection_path) do |request|
-        Collection.new request.data.map { |record| klass.new(record) }, request.metadata
+      @find_some ||= begin
+        result = fetch(collection_path)
+        Collection.new result.data.map { |record| klass.new(record) }, result.metadata
       end
     end
 
@@ -45,7 +47,7 @@ module Spike
       end
 
       def fetch(path)
-        yield @fetch ||= Request.new(path, @params)
+        Request.new(path, @params).result
       end
 
       def method_missing(name, *args, &block)

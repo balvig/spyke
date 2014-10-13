@@ -25,23 +25,17 @@ end
 
 module Spike
   class AssociationsTest < MiniTest::Test
-    def test_associations
+    def test_embedded_associations
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { groups: [{ id: 1, name: 'Fish' }] })
 
-      assert_equal %i{ groups image }, Recipe.associations
+      assert_equal %i{ groups image }, Recipe.associations #.map(&:name)
       recipe = Recipe.find(1)
 
       assert_equal %w{ Fish }, recipe.groups.map(&:name)
     end
 
-    def test_empty_association
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { groups: nil })
-
-      recipe = Recipe.find(1)
-      assert_equal [], recipe.groups
-    end
-
     def test_nested_associtations
+      skip
       json = { data: { groups: [{ ingredients: [{ id: 1, name: 'Fish' }] }, { ingredients: [] }] } }
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(json)
 
@@ -51,6 +45,7 @@ module Spike
     end
 
     def test_singular_associtations
+      skip
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { image: { url: 'bob.jpg' } })
 
       recipe = Recipe.find(1)
@@ -59,12 +54,12 @@ module Spike
     end
 
     def test_unloaded_associations
-      skip
-      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/groups')
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/groups?public=true').to_return_json(data: [{ id: 1 }])
 
-      recipe = Recipe.new(id: 1).groups.to_a
+      groups = Recipe.new(id: 1).groups.where(public: true).to_a
 
-      assert_requested(endpoint)
+      assert_equal 1, groups.first.id
+      assert_requested endpoint
     end
 
   end

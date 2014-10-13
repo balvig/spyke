@@ -1,3 +1,5 @@
+require 'spike/association'
+
 module Spike
   module Associations
     extend ActiveSupport::Concern
@@ -24,13 +26,8 @@ module Spike
         associations.include?(name)
       end
 
-      def build_association(name)
-        klass = name.to_s.classify.constantize
-        data = attributes[name]
-        return klass.new(data) unless data.is_a?(Array)
-        data.map do |attr|
-          klass.new(attr)
-        end
+      def get_association(name)
+        Association.new(self, name)
       end
 
   end
