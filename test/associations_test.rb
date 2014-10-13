@@ -35,7 +35,6 @@ module Spike
     end
 
     def test_nested_associtations
-      skip
       json = { data: { groups: [{ ingredients: [{ id: 1, name: 'Fish' }] }, { ingredients: [] }] } }
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(json)
 
