@@ -36,9 +36,10 @@ module Spike
       end
     end
 
-    def build
+    def new
       klass.new(params)
     end
+    alias :build :new
 
     def each
       find_some.each { |record| yield record }
