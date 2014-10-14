@@ -5,8 +5,7 @@ module Spike
   class AssociationProxy < Relation
 
     def initialize(owner, name:, **options)
-      @owner, @name = owner, name
-      @klass = (options[:class_name] || @name.to_s).classify.constantize
+      @owner, @name, @options = owner, name, options
       @params = { owner_key => @owner.try(:id) }
     end
 
@@ -15,6 +14,10 @@ module Spike
     end
 
     private
+
+      def klass
+        (@options[:class_name] || @name.to_s).classify.constantize
+      end
 
       def fetch(path)
         fetch_embedded || super

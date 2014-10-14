@@ -71,6 +71,7 @@ module Spike
       recipe = Recipe.find(1)
 
       assert_equal 'bob.jpg', recipe.background_image.url
+      assert_equal Image, recipe.background_image.class
     end
 
   end
