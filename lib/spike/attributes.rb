@@ -7,7 +7,7 @@ module Spike
     end
 
     def initialize(attributes = {})
-      self.attributes = attributes.deep_symbolize_keys
+      self.attributes = attributes.with_indifferent_access
     end
 
     def persisted?
@@ -17,7 +17,7 @@ module Spike
     private
 
       def has_attribute?(name)
-        attributes.keys.include?(name)
+        attributes.has_key?(name)
       end
 
       def get_attribute(name)

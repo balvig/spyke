@@ -2,6 +2,7 @@ require 'test_helper'
 
 class Recipe
   include Spike::Base
+  scope :page, -> { where(per_page: 3) }
 
   def self.published
     where(status: 'published')
@@ -41,6 +42,13 @@ module Spike
 
       Recipe.published.where(per_page: 3).to_a
 
+      assert_requested endpoint
+    end
+
+    def test_scope_class_method
+      endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
+
+      Recipe.published.page(3).to_a
       assert_requested endpoint
     end
 

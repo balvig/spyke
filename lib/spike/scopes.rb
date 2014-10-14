@@ -15,6 +15,10 @@ module Spike
       def all
         current_scope || Relation.new(self)
       end
+
+      def scope(name, code)
+        self.class.send :define_method, name, code
+      end
     end
 
   end

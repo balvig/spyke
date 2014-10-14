@@ -25,11 +25,11 @@ module Spike
       end
 
       def resource_path
-        "#{base_path}/:id"
+        [base_path, ':id'].join('/')
       end
 
       def base_path
-        "/#{model_name.route_key}"
+        model_name.route_key
       end
     end
 
