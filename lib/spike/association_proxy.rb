@@ -2,10 +2,11 @@ require 'spike/relation'
 require 'spike/result'
 
 module Spike
-  class Association < Relation
+  class AssociationProxy < Relation
 
-    def initialize(owner, name)
+    def initialize(owner, name:, **options)
       @owner, @name = owner, name
+      @klass = (options[:class_name] || @name.to_s).classify.constantize
       @params = { owner_key => @owner.try(:id) }
     end
 
@@ -14,10 +15,6 @@ module Spike
     end
 
     private
-
-      def klass
-        @klass ||= @name.to_s.classify.constantize
-      end
 
       def fetch(path)
         fetch_embedded || super

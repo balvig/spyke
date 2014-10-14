@@ -4,6 +4,7 @@ class Recipe
   include Spike::Base
   has_many :groups
   has_one :image
+  has_one :background_image, class_name: 'Image'
 
   def ingredients
     groups.first.ingredients
@@ -28,13 +29,12 @@ module Spike
     def test_embedded_associations
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { groups: [{ id: 1, name: 'Fish' }] })
 
-      assert_equal %i{ groups image }, Recipe.associations.keys
       recipe = Recipe.find(1)
 
       assert_equal %w{ Fish }, recipe.groups.map(&:name)
     end
 
-    def test_nested_associtations
+    def test_nested_embedded_associtations
       json = { data: { groups: [{ ingredients: [{ id: 1, name: 'Fish' }] }, { ingredients: [] }] } }
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(json)
 
@@ -60,9 +60,17 @@ module Spike
       assert_requested endpoint
     end
 
-    def test_build
+    def test_build_association
       group = Recipe.new(id: 1).groups.build
       assert_equal 1, group.recipe_id
+    end
+
+    def test_custom_class_name
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { background_image: { url: 'bob.jpg' } })
+
+      recipe = Recipe.find(1)
+
+      assert_equal 'bob.jpg', recipe.background_image.url
     end
 
   end

@@ -1,4 +1,4 @@
-require 'spike/association'
+require 'spike/association_proxy'
 
 module Spike
   module Associations
@@ -14,12 +14,14 @@ module Spike
     end
 
     module ClassMethods
-      def has_many(name)
-        associations[name] = :collection
+      def has_many(name, **options)
+        options.reverse_merge!(type: :collection, name: name)
+        associations[name] = options
       end
 
-      def belongs_to(name)
-        associations[name] = :singular
+      def belongs_to(name, **options)
+        options.reverse_merge!(type: :singular)
+        has_many(name, options)
       end
     end
 
@@ -30,9 +32,10 @@ module Spike
       end
 
       def get_association(name)
-        assoc = Association.new(self, name)
-        assoc = assoc.find_one unless associations[name] == :collection
-        assoc
+        association = associations[name]
+        proxy = AssociationProxy.new(self, association)
+        proxy = proxy.find_one unless association[:type] == :collection
+        proxy
       end
 
   end
