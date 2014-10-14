@@ -1,6 +1,7 @@
 require 'active_model'
 require 'spike/associations'
 require 'spike/attributes'
+require 'spike/paths'
 require 'spike/scopes'
 
 module Spike
@@ -10,6 +11,7 @@ module Spike
     # Spike
     include Associations
     include Attributes
+    include Paths
     include Scopes
 
     # ActiveModel
@@ -17,20 +19,6 @@ module Spike
 
     included do
       extend ActiveModel::Translation
-    end
-
-    module ClassMethods
-      def collection_path
-        base_path
-      end
-
-      def resource_path
-        [base_path, ':id'].join('/')
-      end
-
-      def base_path
-        model_name.route_key
-      end
     end
 
     private
