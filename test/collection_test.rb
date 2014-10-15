@@ -1,14 +1,5 @@
 require 'test_helper'
 
-class Recipe
-  include Spike::Base
-  scope :page, -> { where(per_page: 3) }
-
-  def self.published
-    where(status: 'published')
-  end
-end
-
 module Spike
   class CollectionTest < MiniTest::Test
     def test_all
@@ -62,13 +53,16 @@ module Spike
       assert_requested endpoint_2
     end
 
-    def test_only_called_once
-      endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
+    def test_cached_result
+      endpoint_1 = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
+      endpoint_2 = stub_request(:get, 'http://sushi.com/recipes?status=published')
 
       recipes = Recipe.published.where(per_page: 3)
       recipes.any?
       recipes.to_a
-      assert_requested endpoint
+      assert_requested endpoint_1
+      Recipe.published.to_a
+      assert_requested endpoint_2
     end
   end
 end

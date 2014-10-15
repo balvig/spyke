@@ -1,29 +1,5 @@
 require 'test_helper'
 
-class Recipe
-  include Spike::Base
-  has_many :groups
-  has_one :image
-  has_one :background_image, class_name: 'Image'
-
-  def ingredients
-    groups.first.ingredients
-  end
-end
-
-class Image
-  include Spike::Base
-end
-
-class Group
-  include Spike::Base
-  has_many :ingredients
-end
-
-class Ingredient
-  include Spike::Base
-end
-
 module Spike
   class AssociationsTest < MiniTest::Test
     def test_embedded_associations

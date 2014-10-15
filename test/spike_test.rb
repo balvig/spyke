@@ -1,13 +1,5 @@
 require 'test_helper'
 
-class Recipe
-  include Spike::Base
-end
-
-class User
-  include Spike::Base
-end
-
 module Spike
   class SpikeTest < MiniTest::Test
     def test_basic_find

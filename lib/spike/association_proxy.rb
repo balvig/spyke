@@ -4,13 +4,13 @@ require 'spike/result'
 module Spike
   class AssociationProxy < Relation
 
-    def initialize(model, name:, **options)
-      @model, @name, @options = model, name, options
-      @params = { model_key => @model.try(:id) }
+    def initialize(owner, name:, **options)
+      @owner, @name, @options = owner, name, options
+      @params = { owner_key => @owner.try(:id) }
     end
 
     def collection_path
-      [@model.class.base_path, ":#{model_key}", klass.collection_path].join('/')
+      [@owner.class.base_path, ":#{owner_key}", klass.collection_path].join('/')
     end
 
     private
@@ -28,11 +28,11 @@ module Spike
       end
 
       def embedded_result
-        @model.attributes[@name]
+        @owner.attributes[@name]
       end
 
-      def model_key
-        "#{@model.class.model_name.param_key}_id"
+      def owner_key
+        "#{@owner.class.model_name.param_key}_id"
       end
 
   end
