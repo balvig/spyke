@@ -24,7 +24,7 @@ module Spike
       end
 
       def fetch_embedded
-        Result.new(data: embedded_result) if embedded_result
+        klass.build_records_from_result Result.new(data: embedded_result) if embedded_result
       end
 
       def embedded_result

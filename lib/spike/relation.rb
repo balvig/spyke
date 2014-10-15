@@ -6,7 +6,7 @@ module Spike
     include Enumerable
 
     attr_reader :klass, :params
-    delegate :to_ary, :size, :metadata, to: :find_some
+    delegate :inspect, :to_ary, :size, :metadata, to: :find_some
 
     def initialize(klass)
       @klass, @params = klass, {}
@@ -23,17 +23,11 @@ module Spike
     end
 
     def find_one
-      @find_one ||= begin
-        result = fetch(resource_path)
-        klass.new result.data
-      end
+      @find_one ||= fetch(resource_path)
     end
 
     def find_some
-      @find_some ||= begin
-        result = fetch(collection_path)
-        Collection.new result.data.map { |record| klass.new(record) }, result.metadata
-      end
+      @find_some ||= fetch(collection_path)
     end
 
     def new
@@ -47,12 +41,12 @@ module Spike
 
     private
 
-      def strip_slug(id)
-        id.to_s.split('-').first
+      def fetch(path)
+        klass.get(path, params)
       end
 
-      def fetch(path)
-        Request.new(path, params).result
+      def strip_slug(id)
+        id.to_s.split('-').first
       end
 
       def method_missing(name, *args, &block)
