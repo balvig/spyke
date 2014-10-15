@@ -1,5 +1,4 @@
 require 'spike/collection'
-require 'spike/request'
 
 module Spike
   class Relation

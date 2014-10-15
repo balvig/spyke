@@ -1,16 +1,8 @@
-require 'faraday'
-require 'spike/result'
-
 module Spike
-  class Request
-    class_attribute :connection
+  class Route
 
     def initialize(base_path, params = {})
-      @base_path, @params = base_path, params
-    end
-
-    def result
-      @result ||= Result.new(connection.get(path).body)
+      @base_path, @params =  base_path, params
     end
 
     def path
@@ -27,10 +19,6 @@ module Spike
         @params.reject { |key| params_in_path.has_key?(key) }
       end
 
-      def query_string
-        "?#{params_in_query.to_query}" if params_in_query.any?
-      end
-
       def path_with_params
         path = @base_path.dup
         params_in_path.each do |key, value|
@@ -38,6 +26,11 @@ module Spike
         end
         path
       end
+
+      def query_string
+        "?#{params_in_query.to_query}" if params_in_query.any?
+      end
+
 
   end
 end

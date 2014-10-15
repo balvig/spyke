@@ -1,8 +1,8 @@
 require 'active_model'
-require 'spike/api'
 require 'spike/associations'
 require 'spike/attributes'
 require 'spike/paths'
+require 'spike/requests'
 require 'spike/scopes'
 
 module Spike
@@ -10,10 +10,10 @@ module Spike
     extend ActiveSupport::Concern
 
     # Spike
-    include Api
     include Associations
     include Attributes
     include Paths
+    include Requests
     include Scopes
 
     # ActiveModel
