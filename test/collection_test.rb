@@ -58,10 +58,10 @@ module Spike
       endpoint_2 = stub_request(:get, 'http://sushi.com/recipes?status=published')
 
       recipes = Recipe.published.where(per_page: 3)
-      recipes.inspect
-      recipes.inspect
+      recipes.any?
+      recipes.to_a
       assert_requested endpoint_1
-      Recipe.published.inspect
+      Recipe.published.to_a
       assert_requested endpoint_2
     end
   end

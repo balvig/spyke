@@ -2,7 +2,7 @@ require 'active_model'
 require 'spike/associations'
 require 'spike/attributes'
 require 'spike/paths'
-require 'spike/requests'
+require 'spike/http'
 require 'spike/scopes'
 
 module Spike
@@ -12,8 +12,8 @@ module Spike
     # Spike
     include Associations
     include Attributes
+    include Http
     include Paths
-    include Requests
     include Scopes
 
     # ActiveModel

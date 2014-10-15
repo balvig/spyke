@@ -22,11 +22,15 @@ module Spike
     end
 
     def find_one
-      @find_one ||= fetch(resource_path)
+      @find_one ||= klass.new_from_result fetch(resource_path)
     end
 
     def find_some
-      @find_some ||= fetch(collection_path)
+      @find_some ||= klass.new_collection_from_result fetch(collection_path)
+    end
+
+    def fetch(path)
+      klass.get_raw(path, params)
     end
 
     def new
@@ -39,10 +43,6 @@ module Spike
     end
 
     private
-
-      def fetch(path)
-        klass.get(path, params)
-      end
 
       def strip_slug(id)
         id.to_s.split('-').first
