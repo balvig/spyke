@@ -15,8 +15,11 @@ module Spike
     end
 
     def test_custom_put_request_from_instance
-      endpoint = stub_request(:put, 'http://sushi.com/recipes/1/publish')
-      Recipe.new(id: 1).publish!
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1/publish').to_return_json(data: { id: 1, status: 'published' })
+      recipe = Recipe.new(id: 1, status: 'unpublished')
+      recipe.publish!
+
+      assert_equal 'published', recipe.status
       assert_requested endpoint
     end
   end

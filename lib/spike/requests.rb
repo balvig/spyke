@@ -11,12 +11,11 @@ module Spike
 
       def request(method, base_path, params = {})
         route = Route.new(base_path, params)
-        result = Result.new connection.run_request(method, route.path, nil, nil).body
-        build_records_from_result(result)
+        Result.new connection.run_request(method, route.path, nil, nil).body
       end
 
       def get(base_path, params = {})
-        request :get, base_path, params
+        build_records_from_result request(:get, base_path, params)
       end
 
       def put(base_path, params = {})
@@ -39,7 +38,8 @@ module Spike
     end
 
     def put(path, params = {})
-      self.class.put [self.class.resource_path, path].join('/'), params.merge(id: id)
+      result = self.class.put [self.class.resource_path, path].join('/'), params.merge(id: id)
+      self.attributes = result.data
     end
 
   end
