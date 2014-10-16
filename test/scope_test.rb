@@ -60,9 +60,9 @@ module Spike
       recipes = Recipe.published.where(per_page: 3)
       recipes.any?
       recipes.to_a
-      assert_requested endpoint_1
+      assert_requested endpoint_1, times: 1
       Recipe.published.to_a
-      assert_requested endpoint_2
+      assert_requested endpoint_2, times: 1
     end
   end
 end

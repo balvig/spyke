@@ -59,5 +59,17 @@ module Spike
       assert_equal Image, recipe.background_image.class
     end
 
+    def test_cached_result
+      endpoint_1 = stub_request(:get, 'http://sushi.com/recipes/1/groups?per_page=3')
+      endpoint_2 = stub_request(:get, 'http://sushi.com/recipes/1/groups')
+
+      recipe = Recipe.new(id: 1)
+      groups = recipe.groups.where(per_page: 3)
+      groups.any?
+      groups.to_a
+      assert_requested endpoint_1, times: 1
+      recipe.groups.to_a
+      assert_requested endpoint_2, times: 1
+    end
   end
 end
