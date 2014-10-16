@@ -31,5 +31,14 @@ module Spike
       assert_equal 'Sushi', recipe.title
       assert_requested endpoint
     end
+
+    def test_create_on_association
+      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(title: 'Topping').to_return_json(data: { id: 1, title: 'Topping' })
+
+      group = Recipe.new(id: 1).groups.create(title: 'Topping')
+
+      assert_equal 'Topping', group.title
+      assert_requested endpoint
+    end
   end
 end

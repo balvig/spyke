@@ -38,8 +38,8 @@ module Spike
     end
     alias :build :new
 
-    def create(params = {})
-      klass.post(collection_path, params)
+    def create(attributes = {})
+      klass.post collection_path, params.merge(attributes)
     end
 
     private
