@@ -6,8 +6,19 @@ require 'spike/router'
 module Spike
   module Http
     extend ActiveSupport::Concern
+    METHODS = %i{ get post put patch delete }
 
     module ClassMethods
+
+      METHODS.each do |method|
+        define_method(method) do |path, params = {}|
+          new_or_collection_from_result send("#{method}_raw", path, params)
+        end
+
+        define_method("#{method}_raw") do |path, params = {}|
+          request(method, path, params)
+        end
+      end
 
       def request(method, path, params = {})
         response = connection.send(method) do |request|
@@ -17,33 +28,20 @@ module Spike
         Result.new_from_response(response)
       end
 
-      def get(path, params = {})
-        record_or_collection_from_result get_raw(path, params)
-      end
-
-      def put(path, params = {})
-        request :put, path, params
-      end
-
-      def get_raw(path, params = {})
-        request(:get, path, params)
-      end
-
-
-      def new_collection_from_result(result)
-        Collection.new result.data.map { |record| new(record) }, result.metadata
+      def new_or_collection_from_result(result)
+        if result.data.is_a?(Array)
+          new_collection_from_result(result)
+        else
+          new_from_result(result)
+        end
       end
 
       def new_from_result(result)
         new result.data
       end
 
-      def record_or_collection_from_result(result)
-        if result.data.is_a?(Array)
-          new_collection_from_result(result)
-        else
-          new_from_result(result)
-        end
+      def new_collection_from_result(result)
+        Collection.new result.data.map { |record| new(record) }, result.metadata
       end
 
       private
@@ -54,7 +52,7 @@ module Spike
     end
 
     def put(path, params = {})
-      result = self.class.put File.join(self.class.resource_path, path.to_s), params.merge(id: id)
+      result = self.class.put_raw File.join(self.class.resource_path, path.to_s), params.merge(id: id)
       self.attributes = result.data
     end
 

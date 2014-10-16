@@ -13,14 +13,14 @@ module Spike
       File.join @owner.class.base_path, ":#{owner_key}", klass.collection_path
     end
 
-    def fetch(path)
-      fetch_embedded || super
-    end
-
     private
 
       def klass
         (@options[:class_name] || @name.to_s).classify.constantize
+      end
+
+      def fetch(path)
+        fetch_embedded || super
       end
 
       def fetch_embedded

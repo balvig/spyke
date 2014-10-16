@@ -29,10 +29,6 @@ module Spike
       @find_some ||= klass.new_collection_from_result fetch(collection_path)
     end
 
-    def fetch(path)
-      klass.get_raw(path, params)
-    end
-
     def new
       klass.new(params)
     end
@@ -43,6 +39,10 @@ module Spike
     end
 
     private
+
+      def fetch(path)
+        klass.get_raw(path, params)
+      end
 
       def strip_slug(id)
         id.to_s.split('-').first
