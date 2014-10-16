@@ -23,7 +23,12 @@ module Spike
       def request(method, path, params = {})
         response = connection.send(method) do |request|
           router = Router.new(path, params)
-          request.url router.resolved_path, router.resolved_params
+          if method == :get
+            request.url router.resolved_path, router.resolved_params
+          else
+            request.url router.resolved_path
+            request.body = router.resolved_params
+          end
         end
         Result.new_from_response(response)
       end
@@ -52,7 +57,7 @@ module Spike
     end
 
     def put(path, params = {})
-      result = self.class.put_raw File.join(self.class.resource_path, path.to_s), params.merge(id: id)
+      result = self.class.put_raw path, params
       self.attributes = result.data
     end
 

@@ -6,11 +6,11 @@ module Spike
     end
 
     def resolved_path
-      path = @path.dup
-      params_in_path.each do |key, value|
-        path.sub!(":#{key}", value.to_s)
+      @path.dup.tap do |path|
+        params_in_path.each do |key, value|
+          path.sub!(":#{key}", value.to_s)
+        end
       end
-      path
     end
 
     def resolved_params

@@ -29,13 +29,17 @@ module Spike
       @find_some ||= klass.new_collection_from_result fetch(collection_path)
     end
 
-    def new
-      klass.new(params)
+    def each
+      find_some.each { |record| yield record }
+    end
+
+    def new(attributes = {})
+      klass.new(params.merge(attributes))
     end
     alias :build :new
 
-    def each
-      find_some.each { |record| yield record }
+    def create(params = {})
+      klass.post(collection_path, params)
     end
 
     private

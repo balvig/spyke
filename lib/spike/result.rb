@@ -1,6 +1,5 @@
 module Spike
   class Result
-
     attr_reader :body
 
     def self.new_from_response(response)

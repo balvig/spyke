@@ -36,5 +36,13 @@ module Spike
         name.to_s.chomp('?').to_sym
       end
 
+      def setter?(name)
+        name.to_s.end_with?('=')
+      end
+
+      def set_attribute(name, value)
+        attributes[name.to_s.chomp('=')] = value
+      end
+
   end
 end

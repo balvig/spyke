@@ -15,7 +15,7 @@ class Recipe
   end
 
   def publish!
-    put :publish
+    put "/recipes/#{id}/publish"
   end
 
   def ingredients

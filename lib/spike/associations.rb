@@ -15,18 +15,12 @@ module Spike
 
     module ClassMethods
       def has_many(name, **options)
-        attach_association name, options.reverse_merge!(type: :collection)
+        associations[name] = options.merge(name: name, type: :collection)
       end
 
       def belongs_to(name, **options)
-        attach_association name, options.reverse_merge!(type: :singular)
+        associations[name] = options.merge(name: name, type: :singular)
       end
-
-      private
-
-        def attach_association(name, **options)
-          associations[name] = options.reverse_merge!(name: name)
-        end
     end
 
     private

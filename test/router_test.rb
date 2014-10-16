@@ -19,6 +19,5 @@ module Spike
       assert_equal '/recipes/2', router.resolved_path
       assert_equal({ public: true }, router.resolved_params)
     end
-
   end
 end

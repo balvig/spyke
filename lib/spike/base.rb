@@ -1,9 +1,9 @@
 require 'active_model'
 require 'spike/associations'
 require 'spike/attributes'
+require 'spike/orm'
 require 'spike/paths'
 require 'spike/http'
-require 'spike/scopes'
 
 module Spike
   module Base
@@ -13,8 +13,8 @@ module Spike
     include Associations
     include Attributes
     include Http
+    include Orm
     include Paths
-    include Scopes
 
     # ActiveModel
     include ActiveModel::Conversion
@@ -32,6 +32,8 @@ module Spike
           get_attribute(name)
         elsif predicate?(name)
           get_predicate(name)
+        elsif setter?(name)
+          set_attribute(name, args.first)
         else
           super
         end
