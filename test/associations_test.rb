@@ -27,12 +27,21 @@ module Spike
       assert_equal 'bob.jpg', recipe.image.url
     end
 
-    def test_unloaded_associations
+    def test_unloaded_has_many_association
       endpoint = stub_request(:get, 'http://sushi.com/recipes/1/groups?public=true').to_return_json(data: [{ id: 1 }])
 
       groups = Recipe.new(id: 1).groups.where(public: true).to_a
 
       assert_equal 1, groups.first.id
+      assert_requested endpoint
+    end
+
+    def test_unloaded_has_one_association
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/image').to_return_json(data: { url: 'bob.jpg' })
+
+      image = Recipe.new(id: 1).image
+
+      assert_equal 'bob.jpg', image.url
       assert_requested endpoint
     end
 

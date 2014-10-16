@@ -13,6 +13,10 @@ module Spike
       File.join @owner.class.base_path, ":#{owner_key}", klass.collection_path
     end
 
+    def resource_path
+      collection_path.singularize
+    end
+
     private
 
       def klass

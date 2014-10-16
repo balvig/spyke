@@ -15,7 +15,7 @@ module Spike
     def test_chainable_where
       endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
 
-      Recipe.where(status: 'published').where(per_page: 3).inspect
+      Recipe.where(status: 'published').where(per_page: 3).to_a
 
       assert_requested endpoint
     end
@@ -23,7 +23,7 @@ module Spike
     def test_chainable_class_method
       endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
 
-      Recipe.where(per_page: 3).published.inspect
+      Recipe.where(per_page: 3).published.to_a
 
       assert_requested endpoint
     end
@@ -31,7 +31,7 @@ module Spike
     def test_prepended_chainable_class_method
       endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
 
-      Recipe.published.where(per_page: 3).inspect
+      Recipe.published.where(per_page: 3).to_a
 
       assert_requested endpoint
     end
@@ -39,7 +39,7 @@ module Spike
     def test_scope_class_method
       endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
 
-      Recipe.published.page(3).inspect
+      Recipe.published.page(3).to_a
       assert_requested endpoint
     end
 
@@ -47,8 +47,8 @@ module Spike
       endpoint_1 = stub_request(:get, 'http://sushi.com/recipes?per_page=3&status=published')
       endpoint_2 = stub_request(:get, 'http://sushi.com/recipes?status=published')
 
-      Recipe.where(status: 'published').where(per_page: 3).inspect
-      Recipe.where(status: 'published').inspect
+      Recipe.where(status: 'published').where(per_page: 3).to_a
+      Recipe.where(status: 'published').to_a
       assert_requested endpoint_1
       assert_requested endpoint_2
     end
