@@ -32,7 +32,7 @@ module Spike
     private
 
       def has_association?(name)
-        associations.keys.include?(name)
+        associations.has_key?(name)
       end
 
       def get_association(name)

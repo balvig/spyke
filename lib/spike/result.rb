@@ -3,6 +3,10 @@ module Spike
 
     attr_reader :body
 
+    def self.new_from_response(response)
+      new(response.body)
+    end
+
     def initialize(body)
       @body = HashWithIndifferentAccess.new(body)
     end

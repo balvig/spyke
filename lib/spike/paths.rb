@@ -8,7 +8,7 @@ module Spike
       end
 
       def resource_path
-        [base_path, ':id'].join('/')
+        File.join base_path, ':id'
       end
 
       def base_path

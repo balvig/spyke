@@ -1,7 +1,7 @@
 require 'faraday'
 require 'spike/config'
 require 'spike/result'
-require 'spike/route'
+require 'spike/router'
 
 module Spike
   module Http
@@ -10,21 +10,25 @@ module Spike
     module ClassMethods
 
       def request(method, path, params = {})
-        route = Route.new(path, params)
-        Result.new connection.run_request(method, route.path, nil, nil).body
+        response = connection.send(method) do |request|
+          router = Router.new(path, params)
+          request.url router.resolved_path, router.resolved_params
+        end
+        Result.new_from_response(response)
       end
 
       def get(path, params = {})
         record_or_collection_from_result get_raw(path, params)
       end
 
+      def put(path, params = {})
+        request :put, path, params
+      end
+
       def get_raw(path, params = {})
         request(:get, path, params)
       end
 
-      def put(path, params = {})
-        request :put, path, params
-      end
 
       def new_collection_from_result(result)
         Collection.new result.data.map { |record| new(record) }, result.metadata
@@ -50,7 +54,7 @@ module Spike
     end
 
     def put(path, params = {})
-      result = self.class.put [self.class.resource_path, path].join('/'), params.merge(id: id)
+      result = self.class.put File.join(self.class.resource_path, path.to_s), params.merge(id: id)
       self.attributes = result.data
     end
 
