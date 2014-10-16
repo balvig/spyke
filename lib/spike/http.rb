@@ -57,8 +57,11 @@ module Spike
     end
 
     def put(path, params = {})
-      result = self.class.put_raw path, params
-      self.attributes = result.data
+      if path.is_a?(Symbol)
+        path = File.join(self.class.resource_path, path.to_s)
+        params.merge!(id: id)
+      end
+      self.attributes = self.class.put_raw(path, params).data
     end
 
   end

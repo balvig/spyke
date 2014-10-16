@@ -22,5 +22,12 @@ module Spike
       assert_equal 'published', recipe.status
       assert_requested endpoint
     end
+
+    def test_custom_put_request_from_instance_with_symbol
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1/draft')
+      recipe = Recipe.new(id: 1)
+      recipe.draft!
+      assert_requested endpoint
+    end
   end
 end

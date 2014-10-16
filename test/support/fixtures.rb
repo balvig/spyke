@@ -18,6 +18,10 @@ class Recipe
     put "/recipes/#{id}/publish"
   end
 
+  def draft!
+    put :draft
+  end
+
   def ingredients
     groups.first.ingredients
   end
