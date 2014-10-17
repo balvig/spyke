@@ -54,7 +54,7 @@ module Spike
 
       def method_missing(name, *args, &block)
         if klass.respond_to?(name)
-          scoping { klass.send(name) }
+          scoping { klass.send(name, *args) }
         else
           super
         end

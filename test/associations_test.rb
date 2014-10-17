@@ -45,6 +45,14 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_scopes_on_assocations
+      endpoint = stub_request(:get, 'http://sushi.com/users/1/recipes?page=2')
+
+      User.new(id: 1).recipes.page(2).to_a
+
+      assert_requested endpoint
+    end
+
     def test_build_association
       group = Recipe.new(id: 1).groups.build
       assert_equal 1, group.recipe_id

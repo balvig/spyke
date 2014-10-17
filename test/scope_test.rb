@@ -37,7 +37,7 @@ module Spike
     end
 
     def test_scope_class_method
-      endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
+      endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&page=3')
 
       Recipe.published.page(3).to_a
       assert_requested endpoint

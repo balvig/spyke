@@ -4,10 +4,14 @@ class Recipe
   has_one :image
   has_one :background_image, class_name: 'Image'
 
-  scope :page, -> { where(per_page: 3) }
+  scope :published, -> { where(status: 'published') }
 
-  def self.published
-    where(status: 'published')
+  def self.page(number)
+    if number.present?
+      where(page: number)
+    else
+      all
+    end
   end
 
   def self.recent
@@ -42,4 +46,5 @@ end
 
 class User
   include Spike::Base
+  has_many :recipes
 end
