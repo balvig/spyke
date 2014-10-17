@@ -2,7 +2,7 @@ module Spike
   class Router
 
     def initialize(path, params = {})
-      @path, @params =  path, params
+      @path, @params = path.to_s, params
     end
 
     def resolved_path

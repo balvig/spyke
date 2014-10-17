@@ -45,6 +45,15 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_unloaded_belongs_to_association
+      endpoint = stub_request(:get, 'http://sushi.com/users/1')
+
+      recipe = Recipe.new(user_id: 1)
+      recipe.user
+
+      assert_requested endpoint
+    end
+
     def test_scopes_on_assocations
       endpoint = stub_request(:get, 'http://sushi.com/users/1/recipes?page=2')
 

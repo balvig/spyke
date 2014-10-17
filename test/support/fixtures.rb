@@ -3,6 +3,7 @@ class Recipe
   has_many :groups
   has_one :image
   has_one :background_image, class_name: 'Image'
+  belongs_to :user
 
   scope :published, -> { where(status: 'published') }
 

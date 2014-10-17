@@ -7,12 +7,12 @@ module Spike
     attr_reader :klass, :params
     delegate :to_ary, :size, :metadata, to: :find_some
 
-    def initialize(klass)
-      @klass, @params = klass, {}
+    def initialize(klass, params = {})
+      @klass, @params = klass, params
     end
 
-    def where(params = {})
-      @params.merge!(params)
+    def where(conditions = {})
+      @params.merge!(conditions)
       self
     end
 

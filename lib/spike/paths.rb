@@ -4,15 +4,11 @@ module Spike
 
     module ClassMethods
       def collection_path
-        base_path
+        Pathname.new model_name.plural
       end
 
       def resource_path
-        File.join base_path, ':id'
-      end
-
-      def base_path
-        model_name.route_key
+        collection_path.join ':id'
       end
     end
   end
