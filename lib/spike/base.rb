@@ -2,7 +2,7 @@ require 'active_model'
 require 'spike/associations'
 require 'spike/attributes'
 require 'spike/orm'
-require 'spike/paths'
+require 'spike/default_paths'
 require 'spike/http'
 
 module Spike
@@ -12,9 +12,9 @@ module Spike
     # Spike
     include Associations
     include Attributes
+    include DefaultPaths
     include Http
     include Orm
-    include Paths
 
     # ActiveModel
     include ActiveModel::Conversion
@@ -23,25 +23,14 @@ module Spike
       extend ActiveModel::Translation
     end
 
-    private
-
-      def method_missing(name, *args, &block)
-        if has_association?(name)
-          get_association(name)
-        elsif has_attribute?(name)
-          get_attribute(name)
-        elsif predicate?(name)
-          get_predicate(name)
-        elsif setter?(name)
-          set_attribute(name, args.first)
-        else
-          super
-        end
+    module ClassMethods
+      def collection_path
+        Path.new model_name.plural
       end
 
-      def respond_to_missing?(name, include_private = false)
-        has_association?(name) || has_attribute?(name) || predicate?(name) || super
+      def resource_path
+        collection_path.join ':id'
       end
-
+    end
   end
 end

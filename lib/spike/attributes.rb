@@ -10,12 +10,25 @@ module Spike
       self.attributes = attributes.with_indifferent_access
     end
 
-    def persisted?
-      id?
-    end
-
     private
 
+      def method_missing(name, *args, &block)
+        if has_association?(name)
+          get_association(name)
+        elsif has_attribute?(name)
+          get_attribute(name)
+        elsif predicate?(name)
+          get_predicate(name)
+        elsif setter?(name)
+          set_attribute(name, args.first)
+        else
+          super
+        end
+      end
+
+      def respond_to_missing?(name, include_private = false)
+        has_association?(name) || has_attribute?(name) || predicate?(name) || super
+      end
       def has_attribute?(name)
         attributes.has_key?(name)
       end

@@ -8,11 +8,14 @@ module Spike
       attr_reader :owner
 
       def initialize(name, owner, options = {})
-        @name, @owner, @options = name, owner, options
-        @params = { owner.foreign_key => owner.try(:id) }
+        @name, @owner,  @options = name, owner, options
       end
 
       private
+
+        def foreign_key
+          @options[:foreign_key] || "#{owner.class.model_name.param_key}_id"
+        end
 
         def klass
           (@options[:class_name] || @name.to_s).classify.constantize

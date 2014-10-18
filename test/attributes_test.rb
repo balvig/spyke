@@ -2,6 +2,7 @@ require 'test_helper'
 
 module Spike
   class AttributesTest < MiniTest::Test
+
     def test_predicate_methods
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sushi' })
 
@@ -25,5 +26,6 @@ module Spike
       recipe.title = 'Sushi'
       assert_equal 'Sushi', recipe.title
     end
+
   end
 end

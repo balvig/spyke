@@ -2,6 +2,7 @@ require 'test_helper'
 
 module Spike
   class AssociationsTest < MiniTest::Test
+
     def test_embedded_associations
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { groups: [{ id: 1, name: 'Fish' }] })
 
@@ -85,8 +86,10 @@ module Spike
       groups.any?
       groups.to_a
       assert_requested endpoint_1, times: 1
+
       recipe.groups.to_a
       assert_requested endpoint_2, times: 1
     end
+
   end
 end

@@ -2,6 +2,7 @@ require 'test_helper'
 
 module Spike
   class OrmTest < MiniTest::Test
+
     def test_save_on_new_record
       endpoint = stub_request(:post, 'http://sushi.com/recipes').with(title: 'Sushi').to_return_json(data: { id: 1, title: 'Sushi' })
 
@@ -40,5 +41,6 @@ module Spike
       assert_equal 'Topping', group.title
       assert_requested endpoint
     end
+
   end
 end

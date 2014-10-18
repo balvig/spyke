@@ -27,10 +27,6 @@ module Spike
       end
     end
 
-    def foreign_key
-      "#{self.class.model_name.param_key}_id"
-    end
-
     private
 
       def has_association?(name)

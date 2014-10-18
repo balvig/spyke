@@ -2,6 +2,7 @@ require 'test_helper'
 
 module Spike
   class RouterTest < MiniTest::Test
+
     def test_path
       assert_equal '/recipes', Router.new('/recipes').resolved_path
       assert_equal '/recipes/2', Router.new('/recipes/:id', id: 2).resolved_path
@@ -19,5 +20,6 @@ module Spike
       assert_equal '/recipes/2', router.resolved_path
       assert_equal({ public: true }, router.resolved_params)
     end
+
   end
 end

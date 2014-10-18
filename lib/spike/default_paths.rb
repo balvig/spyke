@@ -1,10 +1,12 @@
+require 'spike/path'
+
 module Spike
-  module Paths
+  module DefaultPaths
     extend ActiveSupport::Concern
 
     module ClassMethods
       def collection_path
-        Pathname.new model_name.plural
+        Path.new model_name.plural
       end
 
       def resource_path

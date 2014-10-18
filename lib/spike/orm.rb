@@ -22,6 +22,10 @@ module Spike
       end
     end
 
+    def persisted?
+      id?
+    end
+
     def save
       if persisted?
         put self.class.resource_path, attributes
@@ -29,6 +33,5 @@ module Spike
         self.class.create attributes
       end
     end
-
   end
 end
