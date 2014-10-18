@@ -35,9 +35,7 @@ module Spike
 
       def get_association(name)
         options = associations[name]
-        association = options[:type].new(name, self, options.except(:type))
-        association = association.find_one unless association.is_a?(HasMany)
-        association
+        options[:type].activate name, self, options.except(:type)
       end
 
   end

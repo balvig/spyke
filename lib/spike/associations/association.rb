@@ -7,8 +7,17 @@ module Spike
 
       attr_reader :owner
 
+      def self.activate(*args)
+        new(*args).activate
+      end
+
       def initialize(name, owner, options = {})
         @name, @owner,  @options = name, owner, options
+      end
+
+      # Override for plural associations that return an association
+      def activate
+        find_one
       end
 
       private
