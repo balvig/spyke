@@ -6,11 +6,11 @@ module Spike
 
       def initialize(*args)
         super
-        @params = { foreign_key => owner.try(:id) }
+        @path_params = { foreign_key => parent.try(:id) }
       end
 
-      def resource_path
-        Pathname.new File.join owner.class.collection_path, ":#{foreign_key}", klass.model_name.singular
+      def uri_template
+        File.join parent.class.model_name.plural, ":#{foreign_key}", klass.model_name.singular
       end
 
     end

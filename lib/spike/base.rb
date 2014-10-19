@@ -2,7 +2,6 @@ require 'active_model'
 require 'spike/associations'
 require 'spike/attributes'
 require 'spike/orm'
-require 'spike/default_paths'
 require 'spike/http'
 
 module Spike
@@ -12,7 +11,6 @@ module Spike
     # Spike
     include Associations
     include Attributes
-    include DefaultPaths
     include Http
     include Orm
 

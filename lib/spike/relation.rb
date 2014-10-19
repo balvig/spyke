@@ -4,11 +4,12 @@ module Spike
   class Relation
     include Enumerable
 
-    attr_reader :klass, :params
+    attr_reader :klass, :params, :path_params
     delegate :to_ary, :size, :metadata, to: :find_some
 
-    def initialize(klass, params = {})
-      @klass, @params = klass, params
+    def initialize(klass)
+      @klass = klass
+      @params, @path_params = {}, {}
     end
 
     def where(conditions = {})
@@ -17,16 +18,16 @@ module Spike
     end
 
     def find(id)
-      where id: strip_slug(id)
+      @path_params[:id] = strip_slug(id)
       find_one
     end
 
     def find_one
-      @find_one ||= klass.new_from_result fetch(resource_path)
+      @find_one ||= klass.new_from_result(fetch)
     end
 
     def find_some
-      @find_some ||= klass.new_collection_from_result fetch(collection_path)
+      @find_some ||= klass.new_collection_from_result(fetch)
     end
 
     def each
@@ -34,17 +35,32 @@ module Spike
     end
 
     def new(attributes = {})
-      klass.new(params.merge(attributes))
+      klass.new params.merge(attributes)
     end
-    alias :build :new
+
+    def build(*args)
+      new(*args)
+    end
 
     def create(attributes = {})
-      klass.post collection_path, params.merge(attributes)
+      new(attributes).save
+    end
+
+    def uri_template
+      File.join klass.model_name.plural, ':id'
     end
 
     private
 
-      def fetch(path)
+      def id
+        strip_slug(super)
+      end
+
+      def path
+        Path.new(uri_template, path_params).to_s
+      end
+
+      def fetch
         klass.get_raw(path, params)
       end
 

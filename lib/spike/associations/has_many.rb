@@ -7,20 +7,21 @@ module Spike
 
       def initialize(*args)
         super
-        @params = { foreign_key => owner.try(:id) }
+        @path_params = { foreign_key => parent.try(:id) }
       end
 
       def activate
         self
       end
 
-      def collection_path
-        Path.new owner.class.collection_path, ":#{foreign_key}", klass.collection_path
+      def uri_template
+        File.join parent.class.model_name.plural, ":#{foreign_key}", klass.model_name.plural, ':id'
       end
 
-      def resource_path
-        collection_path.join ':id'
+      def new(attributes = {})
+        super attributes.merge(@path_params)
       end
+
     end
   end
 end

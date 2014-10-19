@@ -1,4 +1,4 @@
-require 'spike/path'
+#require 'spike/path'
 
 module Spike
   module DefaultPaths

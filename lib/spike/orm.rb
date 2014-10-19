@@ -30,7 +30,7 @@ module Spike
       if persisted?
         put self.class.resource_path, attributes
       else
-        self.class.create attributes
+        self.class.post self.class.collection_path, attributes
       end
     end
   end

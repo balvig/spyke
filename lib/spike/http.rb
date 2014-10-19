@@ -22,12 +22,11 @@ module Spike
 
       def request(method, path, params = {})
         response = connection.send(method) do |request|
-          router = Router.new(path, params)
           if method == :get
-            request.url router.resolved_path, router.resolved_params
+            request.url path, params
           else
-            request.url router.resolved_path
-            request.body = router.resolved_params
+            request.url path
+            request.body = params
           end
         end
         Result.new_from_response(response)
@@ -58,8 +57,9 @@ module Spike
 
     def put(path, params = {})
       if path.is_a?(Symbol)
-        path = File.join(self.class.resource_path, path.to_s)
-        params.merge!(id: id)
+        path = Path.new(self, id: id)
+          #File.join(self.class.resource_path, path.to_s)
+        #params.merge!(id: id)
       end
       self.attributes = self.class.put_raw(path, params).data
     end
