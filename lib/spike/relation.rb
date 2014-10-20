@@ -1,4 +1,5 @@
 require 'spike/collection'
+require 'spike/exceptions'
 
 module Spike
   class Relation
@@ -19,7 +20,7 @@ module Spike
 
     def find(id)
       @path_params[:id] = strip_slug(id)
-      find_one
+      find_one || raise(ResourceNotFound)
     end
 
     def find_one

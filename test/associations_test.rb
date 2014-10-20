@@ -46,6 +46,14 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_nil_has_one_association
+      stub_request(:get, 'http://sushi.com/recipes/1/image')
+
+      image = Recipe.new(id: 1).image
+
+      assert_nil image
+    end
+
     def test_unloaded_belongs_to_association
       endpoint = stub_request(:get, 'http://sushi.com/users/1')
 
