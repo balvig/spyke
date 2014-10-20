@@ -3,9 +3,14 @@ require 'test_helper'
 module Spike
   class AssociationsTest < MiniTest::Test
 
-    def test_setting_associtions
+    def test_setting_has_many_association
       group = Group.new(ingredients: [Ingredient.new(title: 'Water'), Ingredient.new(title: 'Flour')])
       assert_equal %w{Water Flour}, group.ingredients.map(&:title)
+    end
+
+    def test_setting_has_one_association
+      recipe = Recipe.new(image: Image.new(url: 'bob.jpg'))
+      assert_equal 'bob.jpg', recipe.image.url
     end
 
     def test_embedded_associations

@@ -5,12 +5,11 @@ module Spike
   module Associations
     class Association < Relation
 
-      attr_reader :parent, :uri_template
+      attr_reader :parent, :name
 
       def initialize(parent, name, options = {})
         super (options[:class_name] || name.to_s).classify.constantize
         @parent, @name, @options = parent, name, options
-        @uri_template = options[:uri_template] || default_uri_template
       end
 
       def self.activate(*args)
@@ -23,6 +22,10 @@ module Spike
       end
 
       private
+
+        def uri_template
+          @options[:uri_template] || default_uri_template
+        end
 
         def foreign_key
           (@options[:foreign_key] || "#{parent.class.model_name.param_key}_id").to_sym
@@ -37,7 +40,7 @@ module Spike
         end
 
         def embedded_result
-          parent.attributes[@name]
+          parent.attributes[name]
         end
 
     end

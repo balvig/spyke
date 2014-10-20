@@ -40,7 +40,7 @@ module Spike
       end
 
       def new_from_result(result)
-        new result.data if result.data.any?
+        new result.data if result.data.present?
       end
 
       def new_collection_from_result(result)
