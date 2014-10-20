@@ -40,11 +40,11 @@ module Spike
       end
 
       def new_from_result(result)
-        new result.data if result.data
+        new result.data if result.data.any?
       end
 
       def new_collection_from_result(result)
-        Collection.new Array(result.data).map { |record| new(record) }, result.metadata
+        Collection.new result.data.map { |record| new(record) }, result.metadata
       end
 
       private
