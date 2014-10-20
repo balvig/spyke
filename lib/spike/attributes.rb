@@ -3,14 +3,40 @@ module Spike
     extend ActiveSupport::Concern
 
     included do
-      attr_accessor :attributes
+      attr_reader :attributes
+    end
+
+    module ClassMethods
+      def attributes(*args)
+        @attributes ||= args
+      end
+
+      def default_attributes
+        HashWithIndifferentAccess[Array(@attributes).map {|a| [a, nil]}]
+      end
     end
 
     def initialize(attributes = {})
-      self.attributes = attributes.with_indifferent_access
+      self.attributes = parse(attributes).with_indifferent_access
+    end
+
+    def attributes=(attributes)
+      @attributes = self.class.default_attributes.merge(attributes)
+    end
+
+    def ==(other)
+      attributes == other.attributes
     end
 
     private
+
+      def parse(input)
+        if input.respond_to?(:attributes)
+          input.attributes
+        else
+          input
+        end
+      end
 
       def method_missing(name, *args, &block)
         if has_association?(name)

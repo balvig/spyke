@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Spike::VERSION
   spec.authors       = ["Jens Balvig"]
   spec.email         = ["jens@balvig.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{Faster version of Her}
+  spec.description   = %q{Faster version of Her}
   spec.homepage      = ""
   spec.license       = "MIT"
 

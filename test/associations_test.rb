@@ -3,6 +3,11 @@ require 'test_helper'
 module Spike
   class AssociationsTest < MiniTest::Test
 
+    def test_setting_associtions
+      group = Group.new(ingredients: [Ingredient.new(title: 'Water'), Ingredient.new(title: 'Flour')])
+      assert_equal %w{Water Flour}, group.ingredients.map(&:title)
+    end
+
     def test_embedded_associations
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { groups: [{ id: 1, name: 'Fish' }] })
 

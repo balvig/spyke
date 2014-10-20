@@ -6,6 +6,7 @@ class Recipe
   belongs_to :user
 
   scope :published, -> { where(status: 'published') }
+  attributes :title
 
   def self.page(number)
     if number.present?
