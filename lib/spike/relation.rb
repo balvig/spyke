@@ -18,7 +18,7 @@ module Spike
     end
 
     def find(id)
-      set_primary_key
+      @path_params[:id] = strip_slug(id)
       find_one
     end
 
@@ -54,10 +54,6 @@ module Spike
 
       def fetch
         klass.get_raw(path, params)
-      end
-
-      def set_primary_key
-        @path_params[:id] = strip_slug(id)
       end
 
       def strip_slug(id)

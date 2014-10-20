@@ -21,7 +21,6 @@ module Spike
       assert_requested endpoint
     end
 
-
     def test_all
       stub_request(:get, 'http://sushi.com/recipes').to_return_json(data: [{ id: 1, title: 'Sushi' }, { id: 2, title: 'Nigiri' }], metadata: 'meta')
 
