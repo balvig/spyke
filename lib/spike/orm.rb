@@ -20,6 +20,11 @@ module Spike
       def scope(name, code)
         self.class.send :define_method, name, code
       end
+
+      def uri_template
+        File.join model_name.plural, ':id'
+      end
+
     end
 
     def persisted?
@@ -28,10 +33,14 @@ module Spike
 
     def save
       if persisted?
-        put self.class.resource_path, attributes
+        self.class.put Path.new(self.class.uri_template, id: id), to_params
       else
-        self.class.post self.class.collection_path, attributes
+        self.class.post Path.new(self.class.uri_template), to_params
       end
+    end
+
+    def to_params
+      { self.class.model_name.param_key => attributes }
     end
   end
 end

@@ -14,7 +14,7 @@ module Spike
     end
 
     def test_save_persisted_record
-      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').with(body: { recipe: { title: 'Sushi' } }).to_return_json(data: { id: 1, title: 'Sushi' })
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').with(body: { recipe: { id: 1, title: 'Sushi' } }).to_return_json(data: { id: 1, title: 'Sushi' })
 
       recipe = Recipe.new(id: 1, title: 'Sashimi')
       recipe.title = 'Sushi'
@@ -34,7 +34,7 @@ module Spike
     end
 
     def test_create_association
-      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping' } }).to_return_json(data: { id: 1, title: 'Topping' })
+      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping', recipe_id: 1 } }).to_return_json(data: { title: 'Topping', recipe_id: 1 })
 
       group = Recipe.new(id: 1).groups.create(title: 'Topping')
 

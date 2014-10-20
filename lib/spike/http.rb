@@ -1,7 +1,6 @@
 require 'faraday'
 require 'spike/config'
 require 'spike/result'
-require 'spike/router'
 
 module Spike
   module Http
@@ -23,9 +22,9 @@ module Spike
       def request(method, path, params = {})
         response = connection.send(method) do |request|
           if method == :get
-            request.url path, params
+            request.url path.to_s, params
           else
-            request.url path
+            request.url path.to_s
             request.body = params
           end
         end

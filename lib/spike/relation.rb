@@ -18,7 +18,7 @@ module Spike
     end
 
     def find(id)
-      @path_params[:id] = strip_slug(id)
+      set_primary_key
       find_one
     end
 
@@ -46,22 +46,18 @@ module Spike
       new(attributes).save
     end
 
-    def uri_template
-      File.join klass.model_name.plural, ':id'
-    end
-
     private
 
-      def id
-        strip_slug(super)
-      end
-
       def path
-        Path.new(uri_template, path_params).to_s
+        Path.new(uri_template, path_params)
       end
 
       def fetch
         klass.get_raw(path, params)
+      end
+
+      def set_primary_key
+        @path_params[:id] = strip_slug(id)
       end
 
       def strip_slug(id)

@@ -21,14 +21,5 @@ module Spike
       extend ActiveModel::Translation
     end
 
-    module ClassMethods
-      def collection_path
-        Path.new model_name.plural
-      end
-
-      def resource_path
-        collection_path.join ':id'
-      end
-    end
   end
 end

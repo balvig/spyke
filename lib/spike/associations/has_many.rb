@@ -22,6 +22,10 @@ module Spike
         super attributes.merge(@path_params)
       end
 
+      def create(attributes = {})
+        klass.post path, new(attributes).to_params
+      end
+
     end
   end
 end
