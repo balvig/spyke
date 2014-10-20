@@ -35,7 +35,7 @@ module Spike
 
       def get_association(name)
         options = associations[name]
-        options[:type].activate name, self, options.except(:type)
+        options[:type].activate self, name, options
       end
 
   end

@@ -5,11 +5,12 @@ module Spike
   module Associations
     class Association < Relation
 
-      attr_reader :parent
+      attr_reader :parent, :uri_template
 
-      def initialize(name, parent, options = {})
+      def initialize(parent, name, options = {})
         super (options[:class_name] || name.to_s).classify.constantize
-        @name, @parent, @options = name, parent, options
+        @parent, @name, @options = parent, name, options
+        @uri_template = options[:uri_template] || default_uri_template
       end
 
       def self.activate(*args)

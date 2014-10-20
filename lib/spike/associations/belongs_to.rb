@@ -10,9 +10,11 @@ module Spike
         @path_params = { id: parent.try(foreign_key) }
       end
 
-      def uri_template
-        File.join klass.model_name.plural, ':id'
-      end
+      private
+
+        def default_uri_template
+          File.join klass.model_name.plural, ':id'
+        end
 
     end
   end

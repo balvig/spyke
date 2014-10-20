@@ -104,5 +104,11 @@ module Spike
       assert_requested endpoint_2, times: 1
     end
 
+    def test_custom_uri_template
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/alternates/recipe')
+      Recipe.new(id: 1).alternate
+      assert_requested endpoint
+    end
+
   end
 end

@@ -3,6 +3,7 @@ class Recipe
   has_many :groups
   has_one :image
   has_one :background_image, class_name: 'Image'
+  has_one :alternate, class_name: 'Recipe', uri_template: '/recipes/:recipe_id/alternates/recipe'
   belongs_to :user
 
   scope :published, -> { where(status: 'published') }

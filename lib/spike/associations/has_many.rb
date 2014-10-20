@@ -14,10 +14,6 @@ module Spike
         self
       end
 
-      def uri_template
-        File.join parent.class.model_name.plural, ":#{foreign_key}", klass.model_name.plural, ':id'
-      end
-
       def new(attributes = {})
         super attributes.merge(@path_params)
       end
@@ -25,6 +21,12 @@ module Spike
       def create(attributes = {})
         klass.post path, new(attributes).to_params
       end
+
+      private
+
+        def default_uri_template
+          File.join parent.class.model_name.plural, ":#{foreign_key}", klass.model_name.plural, ':id'
+        end
 
     end
   end
