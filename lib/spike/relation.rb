@@ -6,7 +6,7 @@ module Spike
     include Enumerable
 
     attr_reader :klass, :params, :path_params
-    delegate :to_ary, :size, :metadata, to: :find_some
+    delegate :to_ary, :empty?, :size, :metadata, to: :find_some
 
     def initialize(klass)
       @klass = klass
