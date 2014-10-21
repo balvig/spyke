@@ -39,22 +39,19 @@ module Spike
       end
 
       def method_missing(name, *args, &block)
-        if has_association?(name)
-          get_association(name)
-        elsif has_attribute?(name)
-          get_attribute(name)
-        elsif predicate?(name)
-          get_predicate(name)
-        elsif setter?(name)
-          set_attribute(name, args.first)
-        else
-          super
+        case
+        when has_association?(name) then get_association(name)
+        when has_attribute?(name)   then get_attribute(name)
+        when predicate?(name)       then get_predicate(name)
+        when setter?(name)          then set_attribute(name, args.first)
+        else super
         end
       end
 
       def respond_to_missing?(name, include_private = false)
         has_association?(name) || has_attribute?(name) || predicate?(name) || super
       end
+
       def has_attribute?(name)
         attributes.has_key?(name)
       end
