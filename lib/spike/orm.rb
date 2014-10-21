@@ -21,8 +21,8 @@ module Spike
         self.class.send :define_method, name, code
       end
 
-      def uri_template
-        File.join model_name.plural, ':id'
+      def uri_template(uri = File.join(model_name.plural, ':id'))
+        @uri_template ||= uri
       end
 
     end

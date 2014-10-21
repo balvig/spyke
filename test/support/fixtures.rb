@@ -51,3 +51,9 @@ class User
   include Spike::Base
   has_many :recipes
 end
+
+class Photo
+  include Spike::Base
+
+  uri_template '/images/photos/:id'
+end

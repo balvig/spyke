@@ -68,5 +68,17 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_find_using_custom_uri_template
+      endpoint = stub_request(:get, 'http://sushi.com/images/photos/1').to_return_json(data: { id: 1 })
+      Photo.find(1)
+      assert_requested endpoint
+    end
+
+    def test_create_using_custom_uri_template
+      endpoint = stub_request(:post, 'http://sushi.com/images/photos')
+      Photo.create
+      assert_requested endpoint
+    end
+
   end
 end
