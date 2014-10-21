@@ -56,6 +56,7 @@ class Group < Spike::Base
 end
 
 class Ingredient < Spike::Base
+  uri_template '/recipes/:recipe_id/ingredients/:id'
 end
 
 class User < Spike::Base

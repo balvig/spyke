@@ -66,11 +66,11 @@ module Spike
     private
 
       def element_path
-        Path.new(self.class.uri_template, id: id).to_s
+        Path.new(self.class.uri_template, attributes).to_s
       end
 
       def collection_path
-        Path.new(self.class.uri_template).to_s
+        Path.new(self.class.uri_template, attributes.except(:id)).to_s
       end
 
   end

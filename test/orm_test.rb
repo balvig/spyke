@@ -80,6 +80,12 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_create_using_nested_custom_uri_template
+      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/ingredients')
+      Ingredient.new(recipe_id: 1).save
+      assert_requested endpoint
+    end
+
     def test_create_using_custom_method
       endpoint = stub_request(:put, 'http://sushi.com/images')
       Image.create
