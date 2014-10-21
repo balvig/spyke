@@ -8,6 +8,10 @@ class Recipe < Spike::Base
   scope :published, -> { where(status: 'published') }
   attributes :title
 
+  before_save :before_save_callback
+  before_create :before_create_callback
+  before_update :before_update_callback
+
   def self.page(number)
     if number.present?
       where(page: number)

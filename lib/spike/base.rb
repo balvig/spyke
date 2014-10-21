@@ -6,21 +6,17 @@ require 'spike/http'
 
 module Spike
   class Base
-    #extend ActiveSupport::Concern
+
+    # ActiveModel
+    include ActiveModel::Conversion
+    extend ActiveModel::Translation
+    extend ActiveModel::Callbacks
 
     # Spike
     include Associations
     include Attributes
     include Http
     include Orm
-
-    # ActiveModel
-    include ActiveModel::Conversion
-    extend ActiveModel::Translation
-
-    #included do
-      #extend ActiveModel::Callbacks
-    #end
 
   end
 end

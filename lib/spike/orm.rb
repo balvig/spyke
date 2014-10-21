@@ -5,7 +5,7 @@ module Spike
     extend ActiveSupport::Concern
 
     included do
-  #define_model_callbacks :create, :update, :save
+      define_model_callbacks :create, :update, :save
       class << self
         attr_accessor :current_scope
         delegate :find, :where, to: :all
@@ -32,10 +32,16 @@ module Spike
     end
 
     def save
-      if persisted?
-        self.class.put Path.new(self.class.uri_template, id: id), to_params
-      else
-        self.class.post Path.new(self.class.uri_template), to_params
+      run_callbacks :save do
+        if persisted?
+          run_callbacks :update do
+            self.class.put Path.new(self.class.uri_template, id: id), to_params
+          end
+        else
+          run_callbacks :create do
+            self.class.post Path.new(self.class.uri_template), to_params
+          end
+        end
       end
     end
 
