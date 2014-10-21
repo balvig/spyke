@@ -5,6 +5,7 @@ module Spike
     extend ActiveSupport::Concern
 
     included do
+  #define_model_callbacks :create, :update, :save
       class << self
         attr_accessor :current_scope
         delegate :find, :where, to: :all
@@ -24,7 +25,6 @@ module Spike
       def uri_template(uri = File.join(model_name.plural, ':id'))
         @uri_template ||= uri
       end
-
     end
 
     def persisted?

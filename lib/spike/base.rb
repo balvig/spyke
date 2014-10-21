@@ -5,8 +5,8 @@ require 'spike/orm'
 require 'spike/http'
 
 module Spike
-  module Base
-    extend ActiveSupport::Concern
+  class Base
+    #extend ActiveSupport::Concern
 
     # Spike
     include Associations
@@ -16,10 +16,11 @@ module Spike
 
     # ActiveModel
     include ActiveModel::Conversion
+    extend ActiveModel::Translation
 
-    included do
-      extend ActiveModel::Translation
-    end
+    #included do
+      #extend ActiveModel::Callbacks
+    #end
 
   end
 end
