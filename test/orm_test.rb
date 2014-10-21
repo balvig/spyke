@@ -85,5 +85,11 @@ module Spike
       Image.create
       assert_requested endpoint
     end
+
+    def test_inheritance_using_custom_method
+      endpoint = stub_request(:put, 'http://sushi.com/step_images')
+      StepImage.create
+      assert_requested endpoint
+    end
   end
 end

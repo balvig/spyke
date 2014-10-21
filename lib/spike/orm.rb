@@ -7,6 +7,9 @@ module Spike
     included do
       define_model_callbacks :create, :update, :save
 
+      class_attribute :callback_methods
+      self.callback_methods = { create: :post, update: :put }.freeze
+
       class << self
         attr_accessor :current_scope # TODO: Need to check thread safety for this
         delegate :find, :where, to: :all
@@ -28,8 +31,8 @@ module Spike
       end
 
       def method_for(callback, value = nil)
-        @callback_methods ||= { create: :post, update: :put }
-        @callback_methods[callback] = value || @callback_methods[callback]
+        self.callback_methods = callback_methods.merge(callback => value) if value
+        callback_methods[callback]
       end
     end
 

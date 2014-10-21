@@ -48,6 +48,9 @@ class Image < Spike::Base
   method_for :create, :put
 end
 
+class StepImage < Image
+end
+
 class Group < Spike::Base
   has_many :ingredients
 end
