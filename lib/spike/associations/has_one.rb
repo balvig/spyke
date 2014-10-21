@@ -6,14 +6,9 @@ module Spike
 
       def initialize(*args)
         super
-        @path_params = { foreign_key => parent.try(:id) }
+        @options[:uri_template] ||= File.join parent.class.model_name.plural, ":#{foreign_key}", klass.model_name.singular
+        @params[foreign_key] = parent.try(:id)
       end
-
-      private
-
-        def default_uri_template
-          File.join parent.class.model_name.plural, ":#{foreign_key}", klass.model_name.singular
-        end
 
     end
   end

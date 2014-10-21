@@ -6,15 +6,10 @@ module Spike
 
       def initialize(*args)
         super
-        @options.reverse_merge!(foreign_key: "#{klass.model_name.param_key}_id")
-        @path_params = { id: parent.try(foreign_key) }
+        @options[:foreign_key] ||= "#{klass.model_name.param_key}_id"
+        @options[:uri_template] ||= File.join klass.model_name.plural, ':id'
+        @params[:id] = parent.try(foreign_key)
       end
-
-      private
-
-        def default_uri_template
-          File.join klass.model_name.plural, ':id'
-        end
 
     end
   end

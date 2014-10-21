@@ -20,6 +20,7 @@ module Spike
       end
 
       def request(method, path, params = {})
+        params = params.except(*path.path_params)
         response = connection.send(method) do |request|
           if method == :get
             request.url path.to_s, params
@@ -54,24 +55,18 @@ module Spike
         end
     end
 
-    def put(path, params = {})
-      path = File.join(element_path, path.to_s) if path.is_a?(Symbol)
+    def put(params = {})
+      #path = File.join(element_path, path.to_s) if path.is_a?(Symbol)
       self.attributes = self.class.put_raw(path, params).data
     end
 
-    def post(path, params = {})
+    def post(params = {})
       self.attributes = self.class.post_raw(path, params).data
     end
 
-    private
-
-      def element_path
-        Path.new(self.class.uri_template, attributes).to_s
-      end
-
-      def collection_path
-        Path.new(self.class.uri_template, attributes.except(:id)).to_s
-      end
+    def path
+      Path.new(self.class.uri_template, attributes)
+    end
 
   end
 end

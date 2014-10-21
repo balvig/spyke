@@ -5,12 +5,11 @@ module Spike
   class Relation
     include Enumerable
 
-    attr_reader :klass, :params, :path_params
+    attr_reader :klass, :params
     delegate :to_ary, :empty?, :size, :metadata, to: :find_some
 
-    def initialize(klass)
-      @klass = klass
-      @params, @path_params = {}, {}
+    def initialize(klass, params = {})
+      @klass, @params = klass, params
     end
 
     def where(conditions = {})
@@ -19,7 +18,7 @@ module Spike
     end
 
     def find(id)
-      @path_params[:id] = strip_slug(id)
+      params[:id] = strip_slug(id)
       find_one || raise(ResourceNotFound)
     end
 
@@ -52,7 +51,7 @@ module Spike
     private
 
       def path
-        Path.new(uri_template, path_params)
+        klass.new(params).path
       end
 
       def fetch

@@ -44,11 +44,11 @@ module Spike
       run_callbacks :save do
         if persisted?
           run_callbacks :update do
-            send self.class.method_for(:update), element_path, to_params
+            send self.class.method_for(:update), to_params
           end
         else
           run_callbacks :create do
-            send self.class.method_for(:create), collection_path, to_params
+            send self.class.method_for(:create), to_params
           end
         end
       end

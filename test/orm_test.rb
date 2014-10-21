@@ -59,10 +59,36 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_create_scoped
+      endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { title: 'Sushi', status: 'published' } })
+
+      Recipe.published.create(title: 'Sushi')
+
+      assert_requested endpoint
+    end
+
     def test_create_association
       endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping', recipe_id: 1 } }).to_return_json(data: { title: 'Topping', recipe_id: 1 })
 
       group = Recipe.new(id: 1).groups.create(title: 'Topping')
+
+      assert_equal 'Topping', group.title
+      assert_requested endpoint
+    end
+
+    def test_create_scoped_association
+      skip
+      endpoint = stub_request(:post, 'http://sushi.com/users/1/recipes').with(body: { recipe: { title: 'Sushi', status: 'published' } })
+
+      User.new(id: 1).recipes.published.create(title: 'Sushi')
+
+      assert_requested endpoint
+    end
+
+    def test_save_association
+      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping', recipe_id: 1 } }).to_return_json(data: { title: 'Topping', recipe_id: 1 })
+
+      group = Recipe.new(id: 1).groups.build(title: 'Topping').save
 
       assert_equal 'Topping', group.title
       assert_requested endpoint

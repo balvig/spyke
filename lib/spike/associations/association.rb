@@ -21,10 +21,14 @@ module Spike
         find_one
       end
 
+      def path
+        Path.new(uri_template, params)
+      end
+
       private
 
         def uri_template
-          @options[:uri_template] || default_uri_template
+          @options[:uri_template]
         end
 
         def foreign_key
