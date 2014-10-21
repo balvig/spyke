@@ -44,7 +44,9 @@ module Spike
     end
 
     def create(attributes = {})
-      new(attributes).save
+      record = new(attributes)
+      record.save
+      record
     end
 
     private

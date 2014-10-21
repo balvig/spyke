@@ -66,5 +66,9 @@ module Spike
       self.attributes = self.class.put_raw(path, params).data
     end
 
+    def post(params)
+      self.attributes = self.class.post_raw(Path.new(self.class.uri_template), params).data
+    end
+
   end
 end

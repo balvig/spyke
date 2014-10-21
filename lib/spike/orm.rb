@@ -39,7 +39,7 @@ module Spike
           end
         else
           run_callbacks :create do
-            self.class.post Path.new(self.class.uri_template), to_params
+            post to_params
           end
         end
       end
