@@ -35,7 +35,7 @@ module Spike
       run_callbacks :save do
         if persisted?
           run_callbacks :update do
-            self.class.put Path.new(self.class.uri_template, id: id), to_params
+            put to_params
           end
         else
           run_callbacks :create do

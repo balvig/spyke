@@ -54,10 +54,15 @@ module Spike
         end
     end
 
-    def put(path, params = {})
-      if path.is_a?(Symbol)
-        path = File.join Path.new(self.class.uri_template, id: id).to_s, path.to_s
-      end
+    def put(action, params = {})
+      params = action if action.is_a?(Hash)
+
+      path = case action
+             when String then action
+             when Symbol then File.join Path.new(self.class.uri_template, id: id).to_s, action.to_s
+             when Hash   then Path.new(self.class.uri_template, id: id)
+             end
+
       self.attributes = self.class.put_raw(path, params).data
     end
 

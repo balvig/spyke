@@ -30,23 +30,23 @@ module Spike
     end
 
     def test_save_new_record
-      endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { title: 'Sushi' } }).to_return_json(data: { id: 1, title: 'Sushi' })
+      endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { title: 'Sushi' } }).to_return_json(data: { id: 1, title: 'Sushi (created)' })
 
       recipe = Recipe.new(title: 'Sushi')
       recipe.save
 
-      assert_equal 'Sushi', recipe.title
+      assert_equal 'Sushi (created)', recipe.title
       assert_requested endpoint
     end
 
     def test_save_persisted_record
-      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').with(body: { recipe: { id: 1, title: 'Sushi' } }).to_return_json(data: { id: 1, title: 'Sushi' })
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').with(body: { recipe: { id: 1, title: 'Sushi' } }).to_return_json(data: { id: 1, title: 'Sushi (saved)' })
 
       recipe = Recipe.new(id: 1, title: 'Sashimi')
       recipe.title = 'Sushi'
       recipe.save
 
-      assert_equal 'Sushi', recipe.title
+      assert_equal 'Sushi (saved)', recipe.title
       assert_requested endpoint
     end
 
