@@ -54,19 +54,13 @@ module Spike
         end
     end
 
-    def put(action, params = {})
-      params = action if action.is_a?(Hash)
-      path = case action
-             when String then action
-             when Hash   then element_path
-             when Symbol then File.join element_path, action.to_s
-             end
-
+    def put(path, params = {})
+      path = File.join(element_path, path.to_s) if path.is_a?(Symbol)
       self.attributes = self.class.put_raw(path, params).data
     end
 
-    def post(params)
-      self.attributes = self.class.post_raw(collection_path, params).data
+    def post(path, params = {})
+      self.attributes = self.class.post_raw(path, params).data
     end
 
     private

@@ -45,6 +45,7 @@ class Recipe < Spike::Base
 end
 
 class Image < Spike::Base
+  method_for :create, :put
 end
 
 class Group < Spike::Base

@@ -80,5 +80,10 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_create_using_custom_method
+      endpoint = stub_request(:put, 'http://sushi.com/images')
+      Image.create
+      assert_requested endpoint
+    end
   end
 end
