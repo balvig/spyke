@@ -149,5 +149,21 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_nested_attributes_has_one
+      recipe = Recipe.new(image_attributes: { file: 'bob.jpg' })
+      assert_equal 'bob.jpg', recipe.image.file
+    end
+
+    def test_nested_attributes_belongs_to
+      recipe = Recipe.new(user_attributes: { name: 'Bob' })
+      assert_equal 'Bob', recipe.user.name
+    end
+
+    def test_nested_attributes_has_many
+      recipe = Recipe.new(groups_attributes: { '0' => { title: 'starter' }, '1' => { title: 'sauce' } })
+      assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
+    end
+
+
   end
 end
