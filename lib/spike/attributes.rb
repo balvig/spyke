@@ -50,10 +50,6 @@ module Spike
 
     private
 
-      def current_scope
-        self.class.current_scope
-      end
-
       def default_attributes
         self.class.default_attributes
       end

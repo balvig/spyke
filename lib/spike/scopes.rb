@@ -20,5 +20,12 @@ module Spike
         @current_scope || Relation.new(self, uri_template: uri_template)
       end
     end
+
+    private
+
+      def current_scope
+        self.class.current_scope
+      end
+
   end
 end
