@@ -16,7 +16,7 @@ module Spike
         new(*args).activate
       end
 
-      # Override for plural associations that return an association
+      # Override for plural associations that return an association object
       def activate
         find_one
       end
@@ -25,11 +25,11 @@ module Spike
         Path.new(uri_template, params)
       end
 
-      private
+      def uri_template
+        @options[:uri_template]
+      end
 
-        def uri_template
-          @options[:uri_template]
-        end
+      private
 
         def foreign_key
           (@options[:foreign_key] || "#{parent.class.model_name.param_key}_id").to_sym

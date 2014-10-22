@@ -18,10 +18,11 @@ module Spike
 
     def initialize(attributes = {})
       self.attributes = parse(attributes).with_indifferent_access
+      @uri_template = self.class.current_scope.try(:uri_template) || self.class.uri_template
     end
 
     def attributes=(attributes)
-      @attributes = self.class.default_attributes.merge(attributes)
+      @attributes = default_attributes.merge(scope_params).merge(attributes)
     end
 
     def ==(other)
@@ -29,6 +30,14 @@ module Spike
     end
 
     private
+
+      def default_attributes
+        self.class.default_attributes
+      end
+
+      def scope_params
+        self.class.current_scope.try(:params) || {}
+      end
 
       def parse(input)
         if input.respond_to?(:attributes)

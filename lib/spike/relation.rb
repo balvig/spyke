@@ -34,25 +34,11 @@ module Spike
       find_some.each { |record| yield record }
     end
 
-    def new(attributes = {})
-      klass.new params.merge(attributes)
-    end
-
-    def build(*args)
-      new(*args)
-    end
-
-    def create(attributes = {})
-      record = new(attributes)
-      record.save
-      record
+    def path
+      Path.new(klass.uri_template, params)
     end
 
     private
-
-      def path
-        klass.new(params).path
-      end
 
       def fetch
         klass.get_raw(path, params)

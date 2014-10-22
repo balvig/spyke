@@ -15,13 +15,9 @@ module Spike
         self
       end
 
-      def new(attributes = {})
-        super attributes.merge(params)
-      end
-
-      def create(attributes = {})
-        klass.post path, new(attributes).to_params
-      end
+      #def create(attributes = {})
+        #klass.post path, new(attributes).to_params
+      #end
 
     end
   end

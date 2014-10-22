@@ -13,7 +13,7 @@ module Spike
       class << self
         attr_accessor :current_scope # TODO: Need to check thread safety for this
         delegate :find, :where, to: :all
-        delegate :create, to: :all
+        #delegate :create, to: :all
       end
     end
 
@@ -26,14 +26,21 @@ module Spike
         self.class.send :define_method, name, code
       end
 
-      def uri_template(uri = File.join(model_name.plural, ':id'))
-        @uri_template ||= uri
-      end
-
       def method_for(callback, value = nil)
         self.callback_methods = callback_methods.merge(callback => value) if value
         callback_methods[callback]
       end
+
+      def create(attributes = {})
+        record = new(attributes)
+        record.save
+        record
+      end
+
+      def build(attributes = {})
+        new(attributes)
+      end
+
     end
 
     def persisted?
@@ -55,7 +62,7 @@ module Spike
     end
 
     def to_params
-      { self.class.model_name.param_key => attributes }
+      { self.class.model_name.param_key => attributes.except(*path.path_params) }
     end
 
   end

@@ -48,6 +48,10 @@ module Spike
         Collection.new result.data.map { |record| new(record) }, result.metadata
       end
 
+      def uri_template(uri = File.join(model_name.plural, ':id'))
+        @uri_template ||= uri
+      end
+
       private
 
         def connection
@@ -65,7 +69,7 @@ module Spike
     end
 
     def path
-      Path.new(self.class.uri_template, attributes)
+      Path.new(@uri_template, attributes)
     end
 
   end

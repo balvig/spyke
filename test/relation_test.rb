@@ -54,6 +54,14 @@ module Spike
       assert_requested endpoint_2
     end
 
+    def test_create_scoped
+      endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { title: 'Sushi', status: 'published' } })
+
+      Recipe.published.create(title: 'Sushi')
+
+      assert_requested endpoint
+    end
+
     def test_cached_result
       endpoint_1 = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
       endpoint_2 = stub_request(:get, 'http://sushi.com/recipes?status=published')
