@@ -3,6 +3,13 @@ require 'test_helper'
 module Spike
   class AssociationsTest < MiniTest::Test
 
+    def test_association_independence
+      assert_kind_of Associations::HasMany, Recipe.new.groups
+      assert_raises NoMethodError do
+        Recipe.new.recipes
+      end
+    end
+
     def test_setting_has_many_association
       group = Group.new(ingredients: [Ingredient.new(title: 'Water'), Ingredient.new(title: 'Flour')])
       assert_equal %w{Water Flour}, group.ingredients.map(&:title)

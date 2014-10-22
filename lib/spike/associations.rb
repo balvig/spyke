@@ -9,21 +9,21 @@ module Spike
 
     included do
       class_attribute :associations
-      self.associations = {}
+      self.associations = {}.freeze
     end
 
     module ClassMethods
 
       def has_many(name, options = {})
-        associations[name] = options.merge(type: HasMany)
+        self.associations = associations.merge(name => options.merge(type: HasMany))
       end
 
       def has_one(name, options = {})
-        associations[name] = options.merge(type: HasOne)
+        self.associations = associations.merge(name => options.merge(type: HasOne))
       end
 
       def belongs_to(name, options = {})
-        associations[name] = options.merge(type: BelongsTo)
+        self.associations = associations.merge(name => options.merge(type: BelongsTo))
       end
     end
 
