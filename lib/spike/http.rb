@@ -20,7 +20,6 @@ module Spike
       end
 
       def request(method, path, params = {})
-        params = params.except(*path.path_params)
         response = connection.send(method) do |request|
           if method == :get
             request.url path.to_s, params
@@ -32,43 +31,29 @@ module Spike
         Result.new_from_response(response)
       end
 
-      def new_or_collection_from_result(result)
-        if result.data.is_a?(Array)
-          new_collection_from_result(result)
-        else
-          new_from_result(result)
-        end
-      end
-
-      def new_from_result(result)
-        new result.data if result.data.present?
-      end
-
-      def new_collection_from_result(result)
-        Collection.new result.data.map { |record| new(record) }, result.metadata
+      def connection
+        Config.connection
       end
 
       def uri_template(uri = File.join(model_name.plural, ':id'))
         @uri_template ||= uri
       end
 
-      private
-
-        def connection
-          Config.connection
-        end
     end
 
-    def put(params = {})
-      #path = File.join(element_path, path.to_s) if path.is_a?(Symbol)
-      self.attributes = self.class.put_raw(path, params).data
+    METHODS.each do |method|
+      define_method(method) do |action = nil, params = {}|
+        params = action if action.is_a?(Hash)
+        path = case action
+               when Symbol then uri.join(action)
+               when String then Path.new(action, attributes)
+               else uri
+               end
+        self.attributes = self.class.send("#{method}_raw", path, params).data
+      end
     end
 
-    def post(params = {})
-      self.attributes = self.class.post_raw(path, params).data
-    end
-
-    def path
+    def uri
       Path.new(@uri_template, attributes)
     end
 

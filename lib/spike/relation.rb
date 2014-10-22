@@ -1,4 +1,3 @@
-require 'spike/collection'
 require 'spike/exceptions'
 
 module Spike
@@ -8,8 +7,12 @@ module Spike
     attr_reader :klass, :params
     delegate :to_ary, :empty?, :size, :metadata, to: :find_some
 
-    def initialize(klass, params = {})
-      @klass, @params = klass, params
+    def initialize(klass, options = {})
+      @klass, @options, @params = klass, options, {}
+    end
+
+    def all
+      where
     end
 
     def where(conditions = {})
@@ -34,15 +37,11 @@ module Spike
       find_some.each { |record| yield record }
     end
 
-    def path
-      Path.new(klass.uri_template, params)
+    def uri_template
+      @options[:uri_template]
     end
 
     private
-
-      def fetch
-        klass.get_raw(path, params)
-      end
 
       def strip_slug(id)
         id.to_s.split('-').first

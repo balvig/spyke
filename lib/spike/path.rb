@@ -3,10 +3,15 @@ module Spike
     PLACEHOLDER_FORMAT = /\/:\w+/ # /:recipe_id etc
 
     attr_reader :path_params
+    # TODO PATH PARAMS IS NOT A VARIABLE IT'S A METHOOOOOD
 
     def initialize(uri_template, params = {})
       @uri_template, @params, @path_params = uri_template, params, []
       @path = compute_path
+    end
+
+    def join(other_path)
+      self.class.new File.join(@path, other_path.to_s), @params
     end
 
     def to_s

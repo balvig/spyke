@@ -1,3 +1,5 @@
+require 'spike/collection'
+
 module Spike
   module Attributes
     extend ActiveSupport::Concern
@@ -14,15 +16,32 @@ module Spike
       def default_attributes
         HashWithIndifferentAccess[Array(@attributes).map {|a| [a, nil]}]
       end
+
+      def new_or_collection_from_result(result)
+        if result.data.is_a?(Array)
+          new_collection_from_result(result)
+        else
+          new_from_result(result)
+        end
+      end
+
+      def new_from_result(result)
+        new result.data if result.data.present?
+      end
+
+      def new_collection_from_result(result)
+        Collection.new result.data.map { |record| new(record) }, result.metadata
+      end
+
     end
 
     def initialize(attributes = {})
       self.attributes = parse(attributes).with_indifferent_access
-      @uri_template = self.class.current_scope.try(:uri_template) || self.class.uri_template
+      @uri_template = current_scope.uri_template
     end
 
     def attributes=(attributes)
-      @attributes = default_attributes.merge(scope_params).merge(attributes)
+      @attributes = default_attributes.merge(current_scope.params).merge(attributes)
     end
 
     def ==(other)
@@ -31,12 +50,12 @@ module Spike
 
     private
 
-      def default_attributes
-        self.class.default_attributes
+      def current_scope
+        self.class.current_scope
       end
 
-      def scope_params
-        self.class.current_scope.try(:params) || {}
+      def default_attributes
+        self.class.default_attributes
       end
 
       def parse(input)

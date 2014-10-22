@@ -16,17 +16,8 @@ module Spike
         new(*args).activate
       end
 
-      # Override for plural associations that return an association object
       def activate
-        find_one
-      end
-
-      def path
-        Path.new(uri_template, params)
-      end
-
-      def uri_template
-        @options[:uri_template]
+        find_one # Override for plural associations that return an association object
       end
 
       private

@@ -3,6 +3,7 @@ require 'spike/associations'
 require 'spike/attributes'
 require 'spike/orm'
 require 'spike/http'
+require 'spike/scopes'
 
 module Spike
   class Base
@@ -17,6 +18,7 @@ module Spike
     include Attributes
     include Http
     include Orm
+    include Scopes
 
   end
 end

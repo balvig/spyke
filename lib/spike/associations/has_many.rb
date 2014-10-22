@@ -15,10 +15,6 @@ module Spike
         self
       end
 
-      #def create(attributes = {})
-        #klass.post path, new(attributes).to_params
-      #end
-
     end
   end
 end

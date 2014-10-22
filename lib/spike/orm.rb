@@ -1,5 +1,3 @@
-require 'spike/relation'
-
 module Spike
   module Orm
     extend ActiveSupport::Concern
@@ -9,23 +7,9 @@ module Spike
 
       class_attribute :callback_methods
       self.callback_methods = { create: :post, update: :put }.freeze
-
-      class << self
-        attr_accessor :current_scope # TODO: Need to check thread safety for this
-        delegate :find, :where, to: :all
-        #delegate :create, to: :all
-      end
     end
 
     module ClassMethods
-      def all
-        current_scope || Relation.new(self)
-      end
-
-      def scope(name, code)
-        self.class.send :define_method, name, code
-      end
-
       def method_for(callback, value = nil)
         self.callback_methods = callback_methods.merge(callback => value) if value
         callback_methods[callback]
@@ -41,6 +25,10 @@ module Spike
         new(attributes)
       end
 
+      def fetch
+        path = new.uri
+        get_raw path, current_scope.params.except(*path.path_params)
+      end
     end
 
     def persisted?
@@ -62,8 +50,7 @@ module Spike
     end
 
     def to_params
-      { self.class.model_name.param_key => attributes.except(*path.path_params) }
+      { self.class.model_name.param_key => attributes.except(*uri.path_params) }
     end
-
   end
 end
