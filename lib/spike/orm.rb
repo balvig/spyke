@@ -23,6 +23,10 @@ module Spike
         record
       end
 
+      def destroy(id = nil)
+        new(id: id).destroy
+      end
+
       def build(attributes = {})
         new(attributes)
       end

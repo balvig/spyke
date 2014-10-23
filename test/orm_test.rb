@@ -95,5 +95,24 @@ module Spike
       Recipe.new(id: 1).destroy
       assert_requested endpoint
     end
+
+    def test_destroy_class_method
+      endpoint = stub_request(:delete, 'http://sushi.com/recipes/1')
+      Recipe.destroy(1)
+      assert_requested endpoint
+    end
+
+    def test_scoped_destroy_class_method
+      endpoint = stub_request(:delete, 'http://sushi.com/recipes/1/ingredients/2')
+      Ingredient.where(recipe_id: 1).destroy(2)
+      assert_requested endpoint
+    end
+
+    def test_scoped_destroy_class_method_without_param
+      endpoint = stub_request(:delete, 'http://sushi.com/recipes/1/image')
+      RecipeImage.where(recipe_id: 1).destroy
+      assert_requested endpoint
+    end
+
   end
 end
