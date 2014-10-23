@@ -49,10 +49,7 @@ module Spike
 
     def assign_attributes(new_attributes)
       @attributes ||= default_attributes.merge(current_scope.params)
-      if new_attributes
-        new_attributes = Attribute.paramify(new_attributes)
-        use_setters(new_attributes)
-      end
+      use_setters process(new_attributes) if new_attributes
     end
 
     def attributes=(attributes)
@@ -67,6 +64,24 @@ module Spike
 
       def default_attributes
         self.class.default_attributes
+      end
+
+      def process(attributes)
+        parameters = {}
+        attributes.each do |key, value|
+          parameters[key] = process_value(value)
+        end
+        parameters
+      end
+
+      def process_value(value)
+        case
+        when value.is_a?(Spike::Base)         then process(value.attributes)
+        when value.respond_to?(:content_type) then Faraday::UploadIO.new(value.path, value.content_type)
+        when value.is_a?(Hash)                then process(value)
+        when value.is_a?(Array)               then value.map { |v| process_value(v) }
+        else value
+        end
       end
 
       def use_setters(attributes)

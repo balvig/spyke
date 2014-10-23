@@ -1,6 +1,5 @@
 require 'spike/relation'
 require 'spike/result'
-require 'spike/attribute'
 
 module Spike
   module Associations

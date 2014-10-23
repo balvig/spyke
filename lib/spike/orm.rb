@@ -1,5 +1,3 @@
-require 'spike/attribute'
-
 module Spike
   module Orm
     extend ActiveSupport::Concern
