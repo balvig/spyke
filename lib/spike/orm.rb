@@ -35,30 +35,25 @@ module Spike
       end
     end
 
+    def to_params
+      { self.class.model_name.param_key => attributes.except(*uri.path_params) }
+    end
+
     def persisted?
       id?
     end
 
     def save
       run_callbacks :save do
-        if persisted?
-          run_callbacks :update do
-            send self.class.method_for(:update), to_params
-          end
-        else
-          run_callbacks :create do
-            send self.class.method_for(:create), to_params
-          end
+        callback = persisted? ? :update : :create
+        run_callbacks(callback) do
+          send self.class.method_for(callback), to_params
         end
       end
     end
 
     def destroy
       delete to_params
-    end
-
-    def to_params
-      { self.class.model_name.param_key => attributes.except(*uri.path_params) }
     end
 
   end
