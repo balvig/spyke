@@ -35,8 +35,12 @@ module Spike
     end
 
     def initialize(attributes = {})
-      self.attributes = attributes
+      assign_attributes(attributes)
       @uri_template = current_scope.uri_template
+    end
+
+    def assign_attributes(attributes)
+      self.attributes = Attribute.paramify(attributes)
     end
 
     def attributes=(new_attributes)
@@ -46,7 +50,7 @@ module Spike
     end
 
     def ==(other)
-      other.is_a?(Spike::Base) && attributes == other.attributes
+      other.is_a?(Spike::Base) && id == other.id
     end
 
     private

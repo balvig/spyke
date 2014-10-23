@@ -15,6 +15,23 @@ module Spike
         self
       end
 
+      def assign_nested_attributes(new_attributes)
+        new_attributes = new_attributes.values if new_attributes.is_a?(Hash)
+        super(new_attributes)
+      end
+
+      def build(*args)
+        add_to_parent super
+      end
+
+      private
+
+        def add_to_parent(record)
+          parent.attributes[name] ||= []
+          parent.attributes[name] << record.attributes
+          record
+        end
+
     end
   end
 end

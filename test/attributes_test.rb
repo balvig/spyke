@@ -29,7 +29,6 @@ module Spike
 
     def test_equality
       assert_equal Recipe.new(id: 2, title: 'Fish'), Recipe.new(id: 2, title: 'Fish')
-      refute_equal Recipe.new(id: 2, title: 'Fish'), Recipe.new(id: 2, title: 'Dinner')
       refute_equal Recipe.new(id: 2, title: 'Fish'), Recipe.new(id: 1, title: 'Fish')
       refute_equal Recipe.new(id: 2, title: 'Fish'), 'not_a_spike_object'
     end
@@ -54,12 +53,12 @@ module Spike
       recipe = Recipe.new(image: Image.new(file: file))
 
       assert_equal({ 'image' => { 'file' => 'UploadIO' } }, recipe.image.to_params)
-      assert_equal({ 'recipe' => { 'image' => { 'file' => 'UploadIO' } } }, recipe.to_params)
+      assert_equal({ 'recipe' => { 'title' => nil, 'image' => { 'file' => 'UploadIO' } } }, recipe.to_params)
 
       recipe = Recipe.new(image_attributes: { file: file })
 
       assert_equal({ 'image' => { 'file' => 'UploadIO' } }, recipe.image.to_params)
-      assert_equal({ 'recipe' => { 'image' => { 'file' => 'UploadIO' } } }, recipe.to_params)
+      assert_equal({ 'recipe' => { 'title' => nil, 'image' => { 'file' => 'UploadIO' } } }, recipe.to_params)
     end
 
   end

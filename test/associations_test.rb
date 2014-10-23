@@ -11,7 +11,6 @@ module Spike
     end
 
     def test_initializing_with_has_many_association
-      skip
       group = Group.new(ingredients: [Ingredient.new(title: 'Water'), Ingredient.new(title: 'Flour')])
       assert_equal %w{Water Flour}, group.ingredients.map(&:title)
       assert_equal({ 'group' => { 'ingredients' => [{ 'title' => 'Water' }, { 'title' => 'Flour' }] } }, group.to_params)
@@ -96,10 +95,17 @@ module Spike
     end
 
     def test_build_association
-      skip
       recipe = Recipe.new(id: 1)
       recipe.groups.build
       assert_equal 1, recipe.groups.first.recipe_id
+    end
+
+    def test_deep_build_has_many_association
+      recipe = Recipe.new(id: 1)
+      recipe.groups.build(ingredients: [Ingredient.new(name: 'Salt')])
+
+      assert_equal %w{ Salt }, recipe.ingredients.map(&:name)
+      assert_equal({ 'recipe' => { 'title' => nil, 'groups' => [{ 'recipe_id' => 1, 'ingredients' => [{ 'name' => 'Salt' }] }] } }, recipe.to_params)
     end
 
     def test_custom_class_name
@@ -169,10 +175,13 @@ module Spike
     end
 
     def test_nested_attributes_has_many
-      #recipe = Recipe.new(groups_attributes: { '0' => { title: 'starter' }, '1' => { title: 'sauce' } })
       recipe = Recipe.new(groups_attributes: [{ title: 'starter' }, { title: 'sauce' }])
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
 
+    def test_nested_attributes_has_many_using_hash_syntax
+      recipe = Recipe.new(groups_attributes: { '0' => { title: 'starter' }, '1' => { title: 'sauce' } })
+      assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
+    end
   end
 end

@@ -30,7 +30,8 @@ module Spike
         names.each do |association_name|
           class_eval <<-RUBY, __FILE__, __LINE__ + 1
             def #{association_name}_attributes=(association_attributes)
-              attributes[:#{association_name}] = association_attributes
+              build_association(:#{association_name}).assign_nested_attributes(association_attributes)
+              #attributes[:#{association_name}] = association_attributes
               #self.#{association_name}.assign_nested_attributes(attributes)
             end
           RUBY
@@ -45,8 +46,12 @@ module Spike
       end
 
       def get_association(name)
+        build_association(name).activate
+      end
+
+      def build_association(name)
         options = associations[name]
-        options[:type].activate self, name, options
+        options[:type].new(self, name, options)
       end
 
   end

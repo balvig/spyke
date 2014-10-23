@@ -1,3 +1,5 @@
+require 'spike/attribute'
+
 module Spike
   module Orm
     extend ActiveSupport::Concern
@@ -50,24 +52,7 @@ module Spike
     end
 
     def to_params
-      { self.class.model_name.param_key => paramify(attributes.except(*uri.path_params)) }
-    end
-
-    def paramify(attributes)
-      parameters = {}
-      attributes.each do |key, value|
-        parameters[key] = attribute_to_params(value) if value
-      end
-      parameters
-    end
-
-    def attribute_to_params(value)
-      value = case
-              when value.is_a?(Spike::Base)         then paramify(value.attributes)
-              when value.respond_to?(:content_type) then Faraday::UploadIO.new(value.path, value.content_type)
-              when value.is_a?(Hash)                then paramify(value)
-              else value
-              end
+      { self.class.model_name.param_key => attributes.except(*uri.path_params) }
     end
 
 
