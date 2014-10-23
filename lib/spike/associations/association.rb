@@ -13,16 +13,12 @@ module Spike
         @parent, @name, @options = parent, name, options
       end
 
-      #def self.activate(*args)
-        #new(*args).activate
-      #end
-
       def activate
         find_one # Override for plural associations that return an association object
       end
 
-      def assign_nested_attributes(new_attributes)
-        parent.attributes[name] = new_attributes
+      def assign_nested_attributes(attributes)
+        parent.attributes[name] = new(attributes).attributes
       end
 
       private
@@ -41,8 +37,6 @@ module Spike
 
         def embedded_attributes
           parent.attributes[name]
-          #attributes = attributes.attributes if attributes.is_a?(Spike::Base)
-          #Attribute.paramify parent.attributes[name]
         end
 
     end

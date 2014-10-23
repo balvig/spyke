@@ -47,6 +47,7 @@ end
 
 class Group < Spike::Base
   has_many :ingredients
+  accepts_nested_attributes_for :ingredients
 end
 
 class Ingredient < Spike::Base

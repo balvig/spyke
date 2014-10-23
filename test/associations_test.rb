@@ -183,5 +183,10 @@ module Spike
       recipe = Recipe.new(groups_attributes: { '0' => { title: 'starter' }, '1' => { title: 'sauce' } })
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
+
+    def test_nested_nested_attributes
+      recipe = Recipe.new(groups_attributes: { '0' => { ingredients_attributes: { '0' => { name: 'Salt' } } } })
+      assert_equal %w{ Salt }, recipe.ingredients.map(&:name)
+    end
   end
 end

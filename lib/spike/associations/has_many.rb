@@ -15,9 +15,11 @@ module Spike
         self
       end
 
-      def assign_nested_attributes(new_attributes)
-        new_attributes = new_attributes.values if new_attributes.is_a?(Hash)
-        super(new_attributes)
+      def assign_nested_attributes(collection)
+        collection = collection.values if collection.is_a?(Hash)
+        collection.each do |attributes|
+          build(attributes)
+        end
       end
 
       def build(*args)
