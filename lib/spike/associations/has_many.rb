@@ -7,7 +7,7 @@ module Spike
 
       def initialize(*args)
         super
-        @options[:uri_template] ||= File.join parent.class.model_name.plural, ":#{foreign_key}", klass.model_name.plural, ':id'
+        @options[:uri_template] ||= File.join '/', parent.class.model_name.plural, ":#{foreign_key}", klass.model_name.plural, ':id'
         @params[foreign_key] = parent.id
       end
 

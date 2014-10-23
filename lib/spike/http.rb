@@ -35,7 +35,7 @@ module Spike
         Config.connection
       end
 
-      def uri_template(uri = File.join(model_name.plural, ':id'))
+      def uri_template(uri = File.join('/', model_name.plural, ':id'))
         @uri_template ||= uri
       end
 
