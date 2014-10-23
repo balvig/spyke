@@ -34,14 +34,6 @@ module Spike
       end
     end
 
-    def id
-      attributes[:id]
-    end
-
-    def id=(value)
-      attributes[:id] = value if value.present?
-    end
-
     def initialize(attributes = {})
       assign_attributes(attributes)
       @uri_template = current_scope.uri_template
@@ -56,6 +48,15 @@ module Spike
       assign_attributes(attributes)
     end
 
+    def id
+      attributes[:id]
+    end
+
+    def id=(value)
+      attributes[:id] = value if value.present?
+    end
+
+
     def ==(other)
       other.is_a?(Spike::Base) && id == other.id
     end
@@ -67,11 +68,9 @@ module Spike
       end
 
       def process(attributes)
-        parameters = {}
-        attributes.each do |key, value|
+        attributes.each_with_object({}) do |(key, value), parameters|
           parameters[key] = process_value(value)
         end
-        parameters
       end
 
       def process_value(value)
@@ -92,9 +91,9 @@ module Spike
 
       def method_missing(name, *args, &block)
         case
-        when has_association?(name) then get_association(name)
-        when has_attribute?(name)   then get_attribute(name)
-        when predicate?(name)       then get_predicate(name)
+        when has_association?(name) then association(name).run
+        when has_attribute?(name)   then attribute(name)
+        when predicate?(name)       then predicate(name)
         when setter?(name)          then set_attribute(name, args.first)
         else super
         end
@@ -104,11 +103,20 @@ module Spike
         has_association?(name) || has_attribute?(name) || predicate?(name) || super
       end
 
+      def has_association?(name)
+        associations.has_key?(name)
+      end
+
+      def association(name)
+        options = associations[name]
+        options[:type].new(self, name, options)
+      end
+
       def has_attribute?(name)
         attributes.has_key?(name)
       end
 
-      def get_attribute(name)
+      def attribute(name)
         attributes[name]
       end
 
@@ -116,8 +124,8 @@ module Spike
         name.to_s.end_with?('?')
       end
 
-      def get_predicate(name)
-        !!get_attribute(depredicate(name))
+      def predicate(name)
+        !!attribute(depredicate(name))
       end
 
       def depredicate(name)

@@ -11,7 +11,7 @@ module Spike
         @params[foreign_key] = parent.id
       end
 
-      def activate
+      def run
         self
       end
 

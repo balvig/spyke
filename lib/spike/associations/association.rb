@@ -12,7 +12,7 @@ module Spike
         @parent, @name, @options = parent, name, options
       end
 
-      def activate
+      def run
         find_one # Override for plural associations that return an association object
       end
 
