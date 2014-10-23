@@ -26,11 +26,11 @@ module Spike
       end
 
       def new_from_result(result)
-        new result.data if result.data.present?
+        new result.data if result.data
       end
 
       def new_collection_from_result(result)
-        Collection.new result.data.map { |record| new(record) }, result.metadata
+        Collection.new Array(result.data).map { |record| new(record) }, result.metadata
       end
     end
 
@@ -39,11 +39,10 @@ module Spike
       @uri_template = current_scope.uri_template
     end
 
-    def attributes=(attributes)
-      @attributes = default_attributes
-        .merge current_scope.params
-        .merge parse(attributes)
-        .with_indifferent_access
+    def attributes=(new_attributes)
+      @attributes = default_attributes.merge(current_scope.params).with_indifferent_access
+      use_setters(new_attributes) if new_attributes
+      @attributes
     end
 
     def ==(other)
@@ -56,13 +55,9 @@ module Spike
         self.class.default_attributes
       end
 
-      def parse(input)
-        if input.respond_to?(:attributes)
-          input.attributes
-        elsif input.is_a?(Hash)
-          input
-        else
-          raise "#{self.class}.new expected a Hash or Spike::Base object, but got #{input.inspect}"
+      def use_setters(attributes)
+        attributes.each do |key, value|
+          send "#{key}=", value
         end
       end
 
@@ -85,9 +80,7 @@ module Spike
       end
 
       def get_attribute(name)
-        attribute = attributes[name]
-        attribute = Faraday::UploadIO.new(attribute.path, attribute.content_type) if attribute.respond_to?(:content_type)
-        attribute
+        attributes[name]
       end
 
       def predicate?(name)
@@ -107,6 +100,7 @@ module Spike
       end
 
       def set_attribute(name, value)
+        value = value.attributes if value.respond_to?(:attributes)
         attributes[name.to_s.chomp('=')] = value
       end
 

@@ -10,6 +10,7 @@ module Spike
 
     # ActiveModel
     include ActiveModel::Conversion
+    include ActiveModel::Model
     extend ActiveModel::Translation
     extend ActiveModel::Callbacks
 

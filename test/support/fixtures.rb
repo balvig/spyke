@@ -12,6 +12,8 @@ class Recipe < Spike::Base
   before_create :before_create_callback
   before_update :before_update_callback
 
+  accepts_nested_attributes_for :image, :user, :groups
+
   def self.page(number)
     if number.present?
       where(page: number)

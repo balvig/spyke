@@ -25,6 +25,17 @@ module Spike
       def belongs_to(name, options = {})
         self.associations = associations.merge(name => options.merge(type: BelongsTo))
       end
+
+      def accepts_nested_attributes_for(*names)
+        names.each do |association_name|
+          class_eval <<-RUBY, __FILE__, __LINE__ + 1
+            def #{association_name}_attributes=(association_attributes)
+              attributes[:#{association_name}] = association_attributes
+              #self.#{association_name}.assign_nested_attributes(attributes)
+            end
+          RUBY
+        end
+      end
     end
 
     private
