@@ -31,11 +31,13 @@ module Spike
         end
 
         def fetch_embedded
-          Result.new(data: embedded_result) if embedded_result
+          Result.new(data: embedded_attributes) if embedded_attributes
         end
 
-        def embedded_result
-          parent.attributes[name]
+        def embedded_attributes
+          attributes = parent.attributes[name]
+          attributes = attributes.attributes if attributes.is_a?(Spike::Base)
+          attributes
         end
 
     end

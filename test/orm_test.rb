@@ -22,7 +22,7 @@ module Spike
     end
 
     def test_404
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return(status: 404)
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return(status: 404, body: { message: 'Not found' }.to_json )
 
       assert_raises ResourceNotFound do
         Recipe.find(1)

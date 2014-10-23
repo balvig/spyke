@@ -63,7 +63,7 @@ module Spike
 
     def attribute_to_params(value)
       value = case
-              when value.respond_to?(:attributes)   then paramify(value.attributes)
+              when value.is_a?(Spike::Base)         then paramify(value.attributes)
               when value.respond_to?(:content_type) then Faraday::UploadIO.new(value.path, value.content_type)
               when value.is_a?(Hash)                then paramify(value)
               else value

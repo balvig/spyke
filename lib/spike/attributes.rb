@@ -46,7 +46,7 @@ module Spike
     end
 
     def ==(other)
-      attributes == other.attributes
+      other.is_a?(Spike::Base) && attributes == other.attributes
     end
 
     private
@@ -100,7 +100,6 @@ module Spike
       end
 
       def set_attribute(name, value)
-        value = value.attributes if value.respond_to?(:attributes)
         attributes[name.to_s.chomp('=')] = value
       end
 
