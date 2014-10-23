@@ -35,17 +35,13 @@ module Spike
     end
 
     def initialize(attributes = {})
-      assign_attributes(attributes)
+      self.attributes = attributes
       @uri_template = current_scope.uri_template
     end
 
-    def assign_attributes(new_attributes)
+    def attributes=(new_attributes)
       @attributes ||= default_attributes.merge(current_scope.params)
       use_setters process(new_attributes) if new_attributes
-    end
-
-    def attributes=(attributes)
-      assign_attributes(attributes)
     end
 
     def id
