@@ -51,10 +51,13 @@ module Spike
       end
     end
 
+    def destroy
+      delete to_params
+    end
+
     def to_params
       { self.class.model_name.param_key => attributes.except(*uri.path_params) }
     end
-
 
   end
 end

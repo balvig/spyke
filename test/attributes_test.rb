@@ -21,6 +21,25 @@ module Spike
       assert_equal false, recipe.respond_to?(:story)
     end
 
+    def test_assigning_attributes
+      recipe = Recipe.new(id: 2)
+      recipe.attributes = { title: 'Pasta' }
+
+      assert_equal 'Pasta', recipe.title
+      assert_equal 2, recipe.id
+    end
+
+    def test_removing_id_if_blank
+      recipe = Recipe.new
+
+      assert_nil recipe.id
+      assert_equal({ 'recipe' => { 'title' => nil } }, recipe.to_params)
+
+      recipe.id = ''
+      assert_nil recipe.id
+      assert_equal({ 'recipe' => { 'title' => nil } }, recipe.to_params)
+    end
+
     def test_setters
       recipe = Recipe.new
       recipe.title = 'Sushi'
@@ -52,13 +71,13 @@ module Spike
 
       recipe = Recipe.new(image: Image.new(file: file))
 
-      assert_equal({ 'image' => { 'file' => 'UploadIO' } }, recipe.image.to_params)
-      assert_equal({ 'recipe' => { 'title' => nil, 'image' => { 'file' => 'UploadIO' } } }, recipe.to_params)
+      assert_equal 'UploadIO', recipe.image.to_params['image']['file']
+      assert_equal 'UploadIO', recipe.to_params['recipe']['image']['file']
 
       recipe = Recipe.new(image_attributes: { file: file })
 
-      assert_equal({ 'image' => { 'file' => 'UploadIO' } }, recipe.image.to_params)
-      assert_equal({ 'recipe' => { 'title' => nil, 'image' => { 'file' => 'UploadIO' } } }, recipe.to_params)
+      assert_equal 'UploadIO', recipe.image.to_params['image']['file']
+      assert_equal 'UploadIO', recipe.to_params['recipe']['image']['file']
     end
 
   end

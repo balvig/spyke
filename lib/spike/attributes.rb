@@ -34,19 +34,29 @@ module Spike
       end
     end
 
+    def id
+      attributes[:id]
+    end
+
+    def id=(value)
+      attributes[:id] = value if value.present?
+    end
+
     def initialize(attributes = {})
       assign_attributes(attributes)
       @uri_template = current_scope.uri_template
     end
 
-    def assign_attributes(attributes)
-      self.attributes = Attribute.paramify(attributes)
+    def assign_attributes(new_attributes)
+      @attributes ||= default_attributes.merge(current_scope.params)
+      if new_attributes
+        new_attributes = Attribute.paramify(new_attributes)
+        use_setters(new_attributes)
+      end
     end
 
-    def attributes=(new_attributes)
-      @attributes = default_attributes.merge(current_scope.params).with_indifferent_access
-      use_setters(new_attributes) if new_attributes
-      @attributes
+    def attributes=(attributes)
+      assign_attributes(attributes)
     end
 
     def ==(other)

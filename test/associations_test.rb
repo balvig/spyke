@@ -108,6 +108,12 @@ module Spike
       assert_equal({ 'recipe' => { 'title' => nil, 'groups' => [{ 'recipe_id' => 1, 'ingredients' => [{ 'name' => 'Salt' }] }] } }, recipe.to_params)
     end
 
+    def test_deep_build_has_many_association_with_scope
+      recipe = User.new(id: 1).recipes.published.build
+
+      assert_equal({ 'recipe' => { 'title' => nil, 'status' => 'published' } }, recipe.to_params)
+    end
+
     def test_custom_class_name
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { background_image: { url: 'bob.jpg' } })
 
@@ -179,6 +185,12 @@ module Spike
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
 
+    def test_nested_attributes_overwriting_existing
+      recipe = Recipe.new(groups_attributes: [{ title: 'starter' }, { title: 'sauce' }])
+      recipe.attributes = { groups_attributes: [{ title: 'flavor' }] }
+      assert_equal %w{ flavor }, recipe.groups.map(&:title)
+    end
+
     def test_nested_attributes_has_many_using_hash_syntax
       recipe = Recipe.new(groups_attributes: { '0' => { title: 'starter' }, '1' => { title: 'sauce' } })
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
@@ -187,6 +199,12 @@ module Spike
     def test_nested_nested_attributes
       recipe = Recipe.new(groups_attributes: { '0' => { ingredients_attributes: { '0' => { name: 'Salt' } } } })
       assert_equal %w{ Salt }, recipe.ingredients.map(&:name)
+    end
+
+    def test_dont_send_embedded_foreign_keys
+      skip 'Not a requirement in api but mongo blows up'
+      recipe = Recipe.new(id: 1, groups_attributes: { '0' => {} })
+      assert_equal({ 'recipe' => { 'title' => nil, 'groups' => [{}] } }, recipe.to_params)
     end
   end
 end

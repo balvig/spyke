@@ -89,5 +89,11 @@ module Spike
       StepImage.create
       assert_requested endpoint
     end
+
+    def test_destroy
+      endpoint = stub_request(:delete, 'http://sushi.com/recipes/1')
+      Recipe.new(id: 1).destroy
+      assert_requested endpoint
+    end
   end
 end

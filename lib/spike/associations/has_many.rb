@@ -8,7 +8,7 @@ module Spike
       def initialize(*args)
         super
         @options[:uri_template] ||= File.join parent.class.model_name.plural, ":#{foreign_key}", klass.model_name.plural, ':id'
-        @params[foreign_key] = parent.try(:id)
+        @params[foreign_key] = parent.id
       end
 
       def activate
@@ -16,6 +16,7 @@ module Spike
       end
 
       def assign_nested_attributes(collection)
+        parent.attributes[name] = []
         collection = collection.values if collection.is_a?(Hash)
         collection.each do |attributes|
           build(attributes)
