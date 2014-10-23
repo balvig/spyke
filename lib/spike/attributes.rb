@@ -10,11 +10,11 @@ module Spike
 
     module ClassMethods
       def attributes(*args)
-        @attributes ||= args
+        @default_attribute_keys ||= args
       end
 
       def default_attributes
-        HashWithIndifferentAccess[Array(@attributes).map {|a| [a, nil]}]
+        HashWithIndifferentAccess[Array(@default_attribute_keys).map {|a| [a, nil]}]
       end
 
       def new_or_collection_from_result(result)
