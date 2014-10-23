@@ -11,6 +11,8 @@ module Spike
     # ActiveModel
     include ActiveModel::Conversion
     include ActiveModel::Model
+    include ActiveModel::Validations
+    include ActiveModel::Validations::Callbacks
     extend ActiveModel::Translation
     extend ActiveModel::Callbacks
 

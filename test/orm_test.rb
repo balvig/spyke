@@ -114,5 +114,10 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_validations
+      assert_equal false, RecipeImage.new.valid?
+      assert_equal true, RecipeImage.new(url: 'bob.jpg').valid?
+    end
+
   end
 end
