@@ -49,6 +49,7 @@ class RecipeImage < Image
   uri_template '/recipes/:recipe_id/image'
   validates :url, presence: true
   attributes :url
+  include_root_in_json false
 end
 
 class Group < Spike::Base

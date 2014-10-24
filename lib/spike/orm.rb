@@ -5,11 +5,18 @@ module Spike
     included do
       define_model_callbacks :create, :update, :save
 
+      class_attribute :include_root
+      self.include_root = true
+
       class_attribute :callback_methods
       self.callback_methods = { create: :post, update: :put }.freeze
     end
 
     module ClassMethods
+      def include_root_in_json(value)
+        self.include_root = value
+      end
+
       def method_for(callback, value = nil)
         self.callback_methods = callback_methods.merge(callback => value) if value
         callback_methods[callback]
@@ -36,7 +43,11 @@ module Spike
     end
 
     def to_params
-      { self.class.model_name.param_key => attributes.except(*uri.path_params) }
+      if include_root?
+        { self.class.model_name.param_key => attributes.except(*uri.path_params) }
+      else
+        attributes.except(*uri.path_params)
+      end
     end
 
     def persisted?

@@ -90,6 +90,10 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_non_nested_params
+      assert_equal({ 'url' => 'bob.jpg' } , RecipeImage.new(url: 'bob.jpg').to_params)
+    end
+
     def test_destroy
       endpoint = stub_request(:delete, 'http://sushi.com/recipes/1')
       Recipe.new(id: 1).destroy
