@@ -1,23 +1,23 @@
 require 'spike/relation'
+require 'spike/scope_registry'
 
 module Spike
   module Scopes
     extend ActiveSupport::Concern
 
-    included do
-      class << self
-        attr_writer :current_scope # TODO: Need to check thread safety for this
-        delegate :all, :find, :where, to: :current_scope
-      end
-    end
-
     module ClassMethods
+      delegate :all, :find, :where, to: :current_scope
+
       def scope(name, code)
         self.class.send :define_method, name, code
       end
 
+      def current_scope=(scope)
+        ScopeRegistry.set_value_for(:current_scope, name, scope)
+      end
+
       def current_scope
-        @current_scope || Relation.new(self, uri_template: uri_template)
+        ScopeRegistry.value_for(:current_scope, name) || Relation.new(self, uri_template: uri_template)
       end
     end
 
