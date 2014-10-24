@@ -8,7 +8,6 @@ module Spike
     METHODS = %i{ get post put patch delete }
 
     module ClassMethods
-
       METHODS.each do |method|
         define_method(method) do |path, params = {}|
           new_or_collection_from_result send("#{method}_raw", path, params)
@@ -38,7 +37,6 @@ module Spike
       def uri_template(uri = File.join('/', model_name.plural, ':id'))
         @uri_template ||= uri
       end
-
     end
 
     METHODS.each do |method|
@@ -56,6 +54,5 @@ module Spike
     def uri
       Path.new(@uri_template, attributes)
     end
-
   end
 end

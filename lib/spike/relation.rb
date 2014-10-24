@@ -62,6 +62,5 @@ module Spike
       ensure
         klass.current_scope = nil
       end
-
   end
 end

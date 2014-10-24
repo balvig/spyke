@@ -66,6 +66,5 @@ module Spike
     def destroy
       delete to_params
     end
-
   end
 end

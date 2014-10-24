@@ -72,9 +72,9 @@ module Spike
       def process_value(value)
         case
         when value.is_a?(Spike::Base)         then process(value.attributes)
-        when value.respond_to?(:content_type) then Faraday::UploadIO.new(value.path, value.content_type)
         when value.is_a?(Hash)                then process(value)
         when value.is_a?(Array)               then value.map { |v| process_value(v) }
+        when value.respond_to?(:content_type) then Faraday::UploadIO.new(value.path, value.content_type)
         else value
         end
       end
@@ -87,19 +87,19 @@ module Spike
 
       def method_missing(name, *args, &block)
         case
-        when has_association?(name) then association(name).run
-        when has_attribute?(name)   then attribute(name)
-        when predicate?(name)       then predicate(name)
-        when setter?(name)          then set_attribute(name, args.first)
+        when association?(name) then association(name).run
+        when attribute?(name)   then attribute(name)
+        when predicate?(name)   then predicate(name)
+        when setter?(name)      then set_attribute(name, args.first)
         else super
         end
       end
 
       def respond_to_missing?(name, include_private = false)
-        has_association?(name) || has_attribute?(name) || predicate?(name) || super
+        association?(name) || attribute?(name) || predicate?(name) || super
       end
 
-      def has_association?(name)
+      def association?(name)
         associations.has_key?(name)
       end
 
@@ -108,7 +108,7 @@ module Spike
         options[:type].new(self, name, options)
       end
 
-      def has_attribute?(name)
+      def attribute?(name)
         attributes.has_key?(name)
       end
 
