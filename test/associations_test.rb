@@ -94,7 +94,7 @@ module Spike
       assert_requested endpoint
     end
 
-    def test_build_association
+    def test_build_has_many_association
       recipe = Recipe.new(id: 1)
       recipe.groups.build
       assert_equal 1, recipe.groups.first.recipe_id
@@ -112,6 +112,13 @@ module Spike
       recipe = User.new(id: 1).recipes.published.build
 
       assert_equal({ 'recipe' => { 'title' => nil, 'status' => 'published' } }, recipe.to_params)
+    end
+
+    def test_build_has_one_association
+      recipe = Recipe.new(id: 1)
+      image = recipe.build_image
+      assert_equal 1, image.recipe_id
+      assert_equal 1, recipe.image.recipe_id
     end
 
     def test_custom_class_name

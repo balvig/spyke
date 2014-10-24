@@ -20,7 +20,16 @@ module Spike
         parent.attributes[name] = new(attributes).attributes
       end
 
+      def build(*args)
+        add_to_parent super
+      end
+
       private
+
+        def add_to_parent(record)
+          parent.attributes[name] = record.attributes
+          record
+        end
 
         def foreign_key
           (@options[:foreign_key] || "#{parent.class.model_name.param_key}_id").to_sym

@@ -20,6 +20,9 @@ module Spike
 
       def has_one(name, options = {})
         self.associations = associations.merge(name => options.merge(type: HasOne))
+        define_method "build_#{name}" do |attributes = nil|
+          association(name).build(attributes)
+        end
       end
 
       def belongs_to(name, options = {})

@@ -23,10 +23,6 @@ module Spike
         end
       end
 
-      def build(*args)
-        add_to_parent super
-      end
-
       private
 
         def add_to_parent(record)
