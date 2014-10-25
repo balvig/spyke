@@ -30,6 +30,22 @@ module Spike
         Result.new_from_response(response)
       end
 
+      def new_or_collection_from_result(result)
+        if result.data.is_a?(Array)
+          new_collection_from_result(result)
+        else
+          new_from_result(result)
+        end
+      end
+
+      def new_from_result(result)
+        new result.data if result.data
+      end
+
+      def new_collection_from_result(result)
+        Collection.new Array(result.data).map { |record| new(record) }, result.metadata
+      end
+
       def connection
         Config.connection
       end

@@ -16,22 +16,6 @@ module Spike
       def default_attributes
         HashWithIndifferentAccess[Array(@default_attribute_keys).map {|a| [a, nil]}]
       end
-
-      def new_or_collection_from_result(result)
-        if result.data.is_a?(Array)
-          new_collection_from_result(result)
-        else
-          new_from_result(result)
-        end
-      end
-
-      def new_from_result(result)
-        new result.data if result.data
-      end
-
-      def new_collection_from_result(result)
-        Collection.new Array(result.data).map { |record| new(record) }, result.metadata
-      end
     end
 
     def initialize(attributes = {})
@@ -135,6 +119,5 @@ module Spike
       def set_attribute(name, value)
         attributes[name.to_s.chomp('=')] = value
       end
-
   end
 end

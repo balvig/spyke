@@ -7,7 +7,6 @@ require 'spike/scopes'
 
 module Spike
   class Base
-
     # ActiveModel
     include ActiveModel::Conversion
     include ActiveModel::Model
@@ -22,6 +21,5 @@ module Spike
     include Http
     include Orm
     include Scopes
-
   end
 end
