@@ -37,16 +37,16 @@ module Spike
       end
 
       def fetch
-        path = new.uri
-        get_raw path, current_scope.params.except(*path.path_params)
+        uri = new.uri
+        get_raw uri, current_scope.params.except(*uri.variables)
       end
     end
 
     def to_params
       if include_root?
-        { self.class.model_name.param_key => attributes.except(*uri.path_params) }
+        { self.class.model_name.param_key => attributes.except(*uri.variables) }
       else
-        attributes.except(*uri.path_params)
+        attributes.except(*uri.variables)
       end
     end
 
