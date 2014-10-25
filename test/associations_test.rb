@@ -207,11 +207,5 @@ module Spike
       recipe = Recipe.new(groups_attributes: { '0' => { ingredients_attributes: { '0' => { name: 'Salt' } } } })
       assert_equal %w{ Salt }, recipe.ingredients.map(&:name)
     end
-
-    def test_dont_send_embedded_foreign_keys
-      skip 'Not a requirement in api but mongo blows up'
-      recipe = Recipe.new(id: 1, groups_attributes: { '0' => {} })
-      assert_equal({ 'recipe' => { 'title' => nil, 'groups' => [{}] } }, recipe.to_params)
-    end
   end
 end
