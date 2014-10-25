@@ -25,7 +25,7 @@ module Spike
 
     def attributes=(new_attributes)
       @attributes ||= default_attributes.merge(current_scope.params)
-      use_setters process(new_attributes) if new_attributes
+      use_setters parse(new_attributes) if new_attributes
     end
 
     def id
@@ -47,17 +47,17 @@ module Spike
         self.class.default_attributes
       end
 
-      def process(attributes)
+      def parse(attributes)
         attributes.each_with_object({}) do |(key, value), parameters|
-          parameters[key] = process_value(value)
+          parameters[key] = parse_value(value)
         end
       end
 
-      def process_value(value)
+      def parse_value(value)
         case
-        when value.is_a?(Spike::Base)         then process(value.attributes)
-        when value.is_a?(Hash)                then process(value)
-        when value.is_a?(Array)               then value.map { |v| process_value(v) }
+        when value.is_a?(Spike::Base)         then parse(value.attributes)
+        when value.is_a?(Hash)                then parse(value)
+        when value.is_a?(Array)               then value.map { |v| parse_value(v) }
         when value.respond_to?(:content_type) then Faraday::UploadIO.new(value.path, value.content_type)
         else value
         end
