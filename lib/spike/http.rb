@@ -46,13 +46,14 @@ module Spike
         Collection.new Array(result.data).map { |record| new(record) }, result.metadata
       end
 
+      def uri_template(uri = "/#{model_name.plural}/:id")
+        @uri_template ||= uri
+      end
+
       def connection
         Config.connection
       end
 
-      def uri_template(uri = File.join('/', model_name.plural, ':id'))
-        @uri_template ||= uri
-      end
     end
 
     METHODS.each do |method|
