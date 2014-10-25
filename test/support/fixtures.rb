@@ -22,10 +22,6 @@ class Recipe < Spike::Base
     end
   end
 
-  def self.recent
-    get '/recipes/recent'
-  end
-
   def ingredients
     groups.first.ingredients
   end
