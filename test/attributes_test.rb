@@ -80,5 +80,10 @@ module Spike
       assert_equal 'UploadIO', recipe.to_params['recipe']['image']['file']
     end
 
+    def test_inspect
+      recipe = Recipe.new(id: 2, title: 'Pizza', description: 'Delicious')
+      assert_equal '#<Recipe(/recipes/2) id: 2 title: "Pizza" description: "Delicious">', recipe.inspect
+    end
+
   end
 end

@@ -36,9 +36,12 @@ module Spike
       attributes[:id] = value if value.present?
     end
 
-
     def ==(other)
       other.is_a?(Spike::Base) && id == other.id
+    end
+
+    def inspect
+      "#<#{self.class}(#{uri}) id: #{id.inspect} #{inspect_attributes}>"
     end
 
     private
@@ -118,6 +121,10 @@ module Spike
 
       def set_attribute(name, value)
         attributes[name.to_s.chomp('=')] = value
+      end
+
+      def inspect_attributes
+        attributes.except(:id).map { |k, v| "#{k}: #{v.inspect}" }.join(' ')
       end
   end
 end
