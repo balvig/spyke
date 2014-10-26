@@ -29,7 +29,7 @@ module Spike
       assert_equal 2, recipe.id
     end
 
-    def test_removing_id_if_blank
+    def test_removing_id_if_blank_string
       recipe = Recipe.new
 
       assert_nil recipe.id

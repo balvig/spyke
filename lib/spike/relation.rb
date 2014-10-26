@@ -20,11 +20,6 @@ module Spike
       self
     end
 
-    def find(id)
-      params[:id] = strip_slug(id)
-      find_one || raise(ResourceNotFound)
-    end
-
     def find_one
       @find_one ||= klass.new_from_result(fetch)
     end
@@ -42,10 +37,6 @@ module Spike
     end
 
     private
-
-      def strip_slug(id)
-        id.to_s.split('-').first
-      end
 
       def method_missing(name, *args, &block)
         if klass.respond_to?(name)

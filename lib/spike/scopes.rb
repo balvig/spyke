@@ -6,7 +6,7 @@ module Spike
     extend ActiveSupport::Concern
 
     module ClassMethods
-      delegate :all, :find, :where, to: :current_scope
+      delegate :all, :where, to: :current_scope
 
       def scope(name, code)
         self.class.send :define_method, name, code

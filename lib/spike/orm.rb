@@ -22,6 +22,16 @@ module Spike
         callback_methods[callback]
       end
 
+      def find(id)
+        id = strip_slug(id)
+        where(id: id).find_one || raise(ResourceNotFound)
+      end
+
+      def fetch
+        uri = new.uri
+        get_raw uri, current_scope.params.except(*uri.variables)
+      end
+
       def create(attributes = {})
         record = new(attributes)
         record.save
@@ -36,10 +46,10 @@ module Spike
         new(attributes)
       end
 
-      def fetch
-        uri = new.uri
-        get_raw uri, current_scope.params.except(*uri.variables)
+      def strip_slug(id)
+        id.to_s.split('-').first
       end
+
     end
 
     def to_params
