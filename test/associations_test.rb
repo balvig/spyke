@@ -69,6 +69,14 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_array_like_behavior
+      stub_request(:get, 'http://sushi.com/recipes/1/groups').to_return_json(data: [{ name: 'Fish' }, { name: 'Fruit' }, { name: 'Bread' }])
+
+      recipe = Recipe.new(id: 1)
+
+      assert_equal %w{ Fish Fruit }, recipe.groups[0..1].map(&:name)
+    end
+
     def test_nil_has_one_association
       stub_request(:get, 'http://sushi.com/recipes/1/image')
 
