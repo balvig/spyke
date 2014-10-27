@@ -167,6 +167,14 @@ module Spike
       assert_requested endpoint
     end
 
+    def test_create_association_with_no_params
+      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: {} })
+
+      Recipe.new(id: 1).groups.create
+
+      assert_requested endpoint
+    end
+
     def test_create_scoped_association
       endpoint = stub_request(:post, 'http://sushi.com/users/1/recipes').with(body: { recipe: { title: 'Sushi', status: 'published' } })
 
