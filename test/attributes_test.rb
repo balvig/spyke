@@ -33,11 +33,11 @@ module Spike
       recipe = Recipe.new
 
       assert_nil recipe.id
-      assert_equal({ 'recipe' => { 'title' => nil } }, recipe.to_params)
+      assert_equal({ 'recipe' => {} }, recipe.to_params)
 
       recipe.id = ''
       assert_nil recipe.id
-      assert_equal({ 'recipe' => { 'title' => nil } }, recipe.to_params)
+      assert_equal({ 'recipe' => {} }, recipe.to_params)
     end
 
     def test_setters

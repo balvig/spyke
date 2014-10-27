@@ -12,7 +12,7 @@ module Spike
 
     def test_initializing_with_has_many_association
       group = Group.new(ingredients: [Ingredient.new(title: 'Water'), Ingredient.new(title: 'Flour')])
-      assert_equal %w{Water Flour}, group.ingredients.map(&:title)
+      assert_equal %w{ Water Flour }, group.ingredients.map(&:title)
       assert_equal({ 'group' => { 'ingredients' => [{ 'title' => 'Water' }, { 'title' => 'Flour' }] } }, group.to_params)
     end
 
@@ -105,13 +105,13 @@ module Spike
       recipe.groups.build(ingredients: [Ingredient.new(name: 'Salt')])
 
       assert_equal %w{ Salt }, recipe.ingredients.map(&:name)
-      assert_equal({ 'recipe' => { 'title' => nil, 'groups' => [{ 'recipe_id' => 1, 'ingredients' => [{ 'name' => 'Salt' }] }] } }, recipe.to_params)
+      assert_equal({ 'recipe' => { 'groups' => [{ 'recipe_id' => 1, 'ingredients' => [{ 'name' => 'Salt' }] }] } }, recipe.to_params)
     end
 
     def test_deep_build_has_many_association_with_scope
       recipe = User.new(id: 1).recipes.published.build
 
-      assert_equal({ 'recipe' => { 'title' => nil, 'status' => 'published' } }, recipe.to_params)
+      assert_equal({ 'recipe' => { 'status' => 'published' } }, recipe.to_params)
     end
 
     def test_build_has_one_association

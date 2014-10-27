@@ -49,7 +49,6 @@ module Spike
       def strip_slug(id)
         id.to_s.split('-').first
       end
-
     end
 
     def to_params

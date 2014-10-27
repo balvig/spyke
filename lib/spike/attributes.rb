@@ -10,11 +10,11 @@ module Spike
 
     module ClassMethods
       def attributes(*args)
-        @default_attribute_keys ||= args
-      end
-
-      def default_attributes
-        HashWithIndifferentAccess[Array(@default_attribute_keys).map {|a| [a, nil]}]
+        args.each do |attr|
+          define_method attr do
+            attribute(attr)
+          end
+        end
       end
     end
 
@@ -24,7 +24,7 @@ module Spike
     end
 
     def attributes=(new_attributes)
-      @attributes ||= default_attributes.merge(current_scope.params)
+      @attributes ||= current_scope.params.with_indifferent_access
       use_setters parse(new_attributes) if new_attributes
     end
 
