@@ -124,7 +124,7 @@ module Spike
 
     def test_build_association_with_ids
       user = User.new(id: 1)
-      user.recipe_ids = [2]
+      user.recipe_ids = ['', 2]
 
       assert_equal [2], user.recipes.map(&:id)
       assert_equal({ 'user' => { 'recipes' => [ { 'user_id' => 1, 'id' => 2 } ] } }, user.to_params)
