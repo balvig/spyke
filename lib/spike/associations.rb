@@ -18,6 +18,7 @@ module Spike
         self.associations = associations.merge(name => options.merge(type: HasMany))
 
         define_method "#{name.to_s.singularize}_ids=" do |ids|
+          attributes[name] = []
           ids.reject(&:blank?).each { |id| association(name).build(id: id) }
         end
 

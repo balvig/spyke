@@ -123,7 +123,7 @@ module Spike
     end
 
     def test_build_association_with_ids
-      user = User.new(id: 1)
+      user = User.new(id: 1, recipes: [{ id: 1 }])
       user.recipe_ids = ['', 2]
 
       assert_equal [2], user.recipes.map(&:id)
