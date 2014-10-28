@@ -122,6 +122,20 @@ module Spike
       assert_equal({ 'recipe' => { 'status' => 'published' } }, recipe.to_params)
     end
 
+    def test_build_association_with_ids
+      user = User.new(id: 1)
+      user.recipe_ids = [2]
+
+      assert_equal [2], user.recipes.map(&:id)
+      assert_equal({ 'user' => { 'recipes' => [ { 'user_id' => 1, 'id' => 2 } ] } }, user.to_params)
+    end
+
+    def test_converting_association_to_ids
+      stub_request(:get, 'http://sushi.com/users/1/recipes').to_return_json(data: [{ id: 2 }])
+      user = User.new(id: 1)
+      assert_equal [2], user.recipe_ids
+    end
+
     def test_build_has_one_association
       recipe = Recipe.new(id: 1)
       image = recipe.build_image

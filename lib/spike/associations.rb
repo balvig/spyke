@@ -16,6 +16,14 @@ module Spike
 
       def has_many(name, options = {})
         self.associations = associations.merge(name => options.merge(type: HasMany))
+
+        define_method "#{name.to_s.singularize}_ids=" do |ids|
+          ids.each { |id| association(name).build(id: id) }
+        end
+
+        define_method "#{name.to_s.singularize}_ids" do
+          association(name).map(&:id)
+        end
       end
 
       def has_one(name, options = {})
