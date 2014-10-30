@@ -85,5 +85,19 @@ module Spike
       assert_equal '#<Recipe(/recipes/2) id: 2 title: "Pizza" description: "Delicious">', recipe.inspect
     end
 
+    def test_rejecting_wrong_number_of_args
+      skip 'wishlisted'
+      stub_request(:any, /.*/)
+      recipe = Recipe.new(description: 'Delicious')
+      assert_raises ArgumentError do
+        recipe.description(2)
+      end
+      assert_raises ArgumentError do
+        recipe.description?(2)
+      end
+      assert_raises ArgumentError do
+        recipe.image(2)
+      end
+    end
   end
 end

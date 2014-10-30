@@ -31,7 +31,6 @@ class Recipe < Spike::Base
     def before_create_callback; end
     def before_update_callback; end
     def before_save_callback; end
-
 end
 
 class Image < Spike::Base
