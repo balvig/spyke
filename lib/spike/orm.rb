@@ -75,5 +75,9 @@ module Spike
     def destroy
       delete
     end
+
+    def reload
+      self.attributes = self.class.find(id).attributes
+    end
   end
 end

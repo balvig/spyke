@@ -15,6 +15,17 @@ module Spike
       assert_equal 'Bob', user.name
     end
 
+    def test_reload
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sushi' })
+
+      recipe = Recipe.find(1)
+      assert_equal 'Sushi', recipe.title
+
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sashimi' })
+      recipe.reload
+      assert_equal 'Sashimi', recipe.title
+    end
+
     def test_find_with_slug
       endpoint = stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1 })
       Recipe.find('1-delicious-soup')
