@@ -75,6 +75,8 @@ module Spike
       recipe = Recipe.new(id: 1)
 
       assert_equal %w{ Fish Fruit }, recipe.groups[0..1].map(&:name)
+      assert_equal 'Bread', recipe.groups.last.name
+      assert_equal 'Fish', recipe.groups.first.name
     end
 
     def test_nil_has_one_association
