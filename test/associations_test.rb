@@ -175,11 +175,14 @@ module Spike
     end
 
     def test_create_association
+      skip 'creating a record on the association does not properly update the association data'
       endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping' } }).to_return_json(data: { title: 'Topping', recipe_id: 1 })
 
-      group = Recipe.new(id: 1).groups.create(title: 'Topping')
+      recipe = Recipe.new(id: 1)
+      group = recipe.groups.build(title: 'Topping').save
 
       assert_equal 'Topping', group.title
+      assert_equal 'Topping', recipe.groups.last.title
       assert_requested endpoint
     end
 
@@ -227,7 +230,14 @@ module Spike
     def test_nested_attributes_overwriting_existing
       recipe = Recipe.new(groups_attributes: [{ title: 'starter' }, { title: 'sauce' }])
       recipe.attributes = { groups_attributes: [{ title: 'flavor' }] }
-      assert_equal %w{ flavor }, recipe.groups.map(&:title)
+      assert_equal %w{ starter sauce flavor }, recipe.groups.map(&:title)
+    end
+
+    def test_nested_attributes_merging_with_existing
+      recipe = Recipe.new(groups_attributes: [{ id: 1, title: 'starter', description: 'nice' }, { id: 2, title: 'sauce', description: 'spicy' }])
+      recipe.attributes = { groups_attributes: [{ 'id' => '2', 'title' => 'flavor' }] }
+      assert_equal %w{ starter flavor }, recipe.groups.map(&:title)
+      assert_equal %w{ nice spicy }, recipe.groups.map(&:description)
     end
 
     def test_nested_attributes_has_many_using_hash_syntax

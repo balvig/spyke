@@ -16,10 +16,17 @@ module Spike
       end
 
       def assign_nested_attributes(collection)
-        parent.attributes[name] = []
+        #TODO: Clean this up!!1
         collection = collection.values if collection.is_a?(Hash)
+
         collection.each do |attributes|
-          build(attributes)
+          existing = Array(parent.attributes[name]).index { |r| r[:id] && r[:id].to_s == attributes.with_indifferent_access[:id].to_s }
+          if existing
+            existing_attributes = parent.attributes[name][existing]
+            parent.attributes[name][existing] = existing_attributes.merge(attributes)
+          else
+            build(attributes)
+          end
         end
       end
 
