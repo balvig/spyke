@@ -20,8 +20,16 @@ module Spike
         parent.attributes[name] = new(attributes).attributes
       end
 
-      def build(*args)
+      def create(attributes = {})
         add_to_parent super
+      end
+
+      def new(*args)
+        add_to_parent super
+      end
+
+      def build(*args)
+        new(*args)
       end
 
       private

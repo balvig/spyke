@@ -110,6 +110,12 @@ module Spike
       assert_equal 1, recipe.groups.first.recipe_id
     end
 
+    def test_new_has_many_association
+      recipe = Recipe.new(id: 1)
+      recipe.groups.new
+      assert_equal 1, recipe.groups.first.recipe_id
+    end
+
     def test_deep_build_has_many_association
       recipe = Recipe.new(id: 1)
       recipe.groups.build(ingredients: [Ingredient.new(name: 'Salt')])
@@ -175,14 +181,15 @@ module Spike
     end
 
     def test_create_association
-      skip 'creating a record on the association does not properly update the association data'
-      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping' } }).to_return_json(data: { title: 'Topping', recipe_id: 1 })
+      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping' } }).to_return_json(data: { title: 'Topping', id: 1, recipe_id: 1 })
 
       recipe = Recipe.new(id: 1)
-      group = recipe.groups.build(title: 'Topping').save
+      group = recipe.groups.create(title: 'Topping')
 
       assert_equal 'Topping', group.title
+      assert_equal 1, group.id
       assert_equal 'Topping', recipe.groups.last.title
+      assert_equal 1, recipe.groups.last.id
       assert_requested endpoint
     end
 
