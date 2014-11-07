@@ -47,6 +47,10 @@ module Spike
           RUBY
         end
       end
+
+      def reflect_on_association(name)
+        Relation.new(name.to_s.classify.constantize) # Just enough to support nested_form gem
+      end
     end
   end
 end

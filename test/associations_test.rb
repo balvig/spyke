@@ -256,5 +256,9 @@ module Spike
       recipe = Recipe.new(groups_attributes: { '0' => { ingredients_attributes: { '0' => { name: 'Salt' } } } })
       assert_equal %w{ Salt }, recipe.ingredients.map(&:name)
     end
+
+    def test_reflect_on_association
+      assert_equal Group, Recipe.reflect_on_association(:group).klass
+    end
   end
 end
