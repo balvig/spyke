@@ -1,5 +1,6 @@
 require 'faraday'
 require 'spike/config'
+require 'spike/path'
 require 'spike/result'
 
 module Spike

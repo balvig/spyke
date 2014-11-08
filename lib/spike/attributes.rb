@@ -74,7 +74,7 @@ module Spike
 
       def method_missing(name, *args, &block)
         case
-        when association?(name) then association(name).run
+        when association?(name) then association(name).load
         when attribute?(name)   then attribute(name)
         when predicate?(name)   then predicate(name)
         when setter?(name)      then set_attribute(name, args.first)
