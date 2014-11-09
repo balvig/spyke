@@ -26,7 +26,7 @@ module Spike
       private
 
         def find_existing_attributes(id)
-          parent.attributes[name].to_a.find { |attr| attr[:id] && attr[:id].to_s == id.to_s }
+          embedded_attributes.to_a.find { |attr| attr[:id] && attr[:id].to_s == id.to_s }
         end
 
         def add_to_parent(record)

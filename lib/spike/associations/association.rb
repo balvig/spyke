@@ -54,7 +54,6 @@ module Spike
         def embedded_attributes
           parent.attributes[name]
         end
-
     end
   end
 end
