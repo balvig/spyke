@@ -8,8 +8,8 @@ module Spike
       attr_reader :parent, :name
 
       def initialize(parent, name, options = {})
-        super (options[:class_name] || name.to_s).classify.constantize
-        @parent, @name, @options = parent, name, options
+        super (options[:class_name] || name.to_s).classify.constantize, options
+        @parent, @name = parent, name
       end
 
       def load
