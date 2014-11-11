@@ -4,7 +4,6 @@ require 'spike/result'
 module Spike
   module Associations
     class Association < Relation
-
       attr_reader :parent, :name
 
       def initialize(parent, name, options = {})

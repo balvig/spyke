@@ -26,6 +26,5 @@ module Spike
       def current_scope
         self.class.current_scope
       end
-
   end
 end

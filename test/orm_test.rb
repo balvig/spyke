@@ -2,7 +2,6 @@ require 'test_helper'
 
 module Spike
   class OrmTest < MiniTest::Test
-
     def test_find
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sushi' })
       stub_request(:get, 'http://sushi.com/users/1').to_return_json(data: { id: 1, name: 'Bob' })
@@ -33,7 +32,7 @@ module Spike
     end
 
     def test_404
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return(status: 404, body: { message: 'Not found' }.to_json )
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return(status: 404, body: { message: 'Not found' }.to_json)
 
       assert_raises ResourceNotFound do
         Recipe.find(1)
@@ -102,7 +101,7 @@ module Spike
     end
 
     def test_non_nested_params
-      assert_equal({ 'url' => 'bob.jpg' } , RecipeImage.new(url: 'bob.jpg').to_params)
+      assert_equal({ 'url' => 'bob.jpg' }, RecipeImage.new(url: 'bob.jpg').to_params)
     end
 
     def test_destroy
@@ -133,6 +132,5 @@ module Spike
       assert_equal false, RecipeImage.new.valid?
       assert_equal true, RecipeImage.new(url: 'bob.jpg').valid?
     end
-
   end
 end

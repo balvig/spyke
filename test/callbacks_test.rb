@@ -2,7 +2,6 @@ require 'test_helper'
 
 module Spike
   class CallbacksTest < MiniTest::Test
-
     def setup
       stub_request(:any, /.*/)
     end
@@ -21,6 +20,5 @@ module Spike
       Recipe.any_instance.expects(:before_update_callback)
       Recipe.new(id: 1).save
     end
-
   end
 end

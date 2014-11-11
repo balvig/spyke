@@ -2,7 +2,6 @@ require 'test_helper'
 
 module Spike
   class AssociationsTest < MiniTest::Test
-
     def test_association_independence
       assert_kind_of Associations::HasMany, Recipe.new.groups
       assert_raises NoMethodError do
@@ -135,7 +134,7 @@ module Spike
       user.recipe_ids = ['', 2]
 
       assert_equal [2], user.recipes.map(&:id)
-      assert_equal({ 'user' => { 'recipes' => [ { 'user_id' => 1, 'id' => 2 } ] } }, user.to_params)
+      assert_equal({ 'user' => { 'recipes' => [{ 'user_id' => 1, 'id' => 2 }] } }, user.to_params)
     end
 
     def test_converting_association_to_ids
@@ -259,7 +258,7 @@ module Spike
 
     def test_reflect_on_association
       assert_equal Group, Recipe.reflect_on_association(:group).klass
-      skip 'wishlisheted'
+      skip 'wishlisted'
       assert_equal Recipe, Recipe.reflect_on_association(:alternate).klass
     end
   end

@@ -13,7 +13,6 @@ module Spike
     end
 
     module ClassMethods
-
       def has_many(name, options = {})
         self.associations = associations.merge(name => options.merge(type: HasMany))
 

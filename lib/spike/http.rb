@@ -54,7 +54,6 @@ module Spike
       def connection
         Config.connection
       end
-
     end
 
     METHODS.each do |method|

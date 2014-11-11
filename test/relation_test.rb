@@ -2,7 +2,6 @@ require 'test_helper'
 
 module Spike
   class RelationTest < MiniTest::Test
-
     def test_all
       stub_request(:get, 'http://sushi.com/recipes').to_return_json(data: [{ id: 1, title: 'Sushi' }, { id: 2, title: 'Nigiri' }], metadata: 'meta')
 
