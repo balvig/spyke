@@ -47,7 +47,11 @@ module Spike
         end
 
         def fetch_embedded
-          Result.new(data: embedded_attributes) if embedded_attributes
+          if embedded_attributes
+            Result.new(data: embedded_attributes)
+          elsif !uri_template
+            Result.new(data: nil)
+          end
         end
 
         def embedded_attributes

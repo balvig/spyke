@@ -261,5 +261,15 @@ module Spike
       skip 'wishlisted'
       assert_equal Recipe, Recipe.reflect_on_association(:alternate).klass
     end
+
+    def test_embed_only_singular_associations
+      assert_nil Recipe.new.background_image
+      assert_equal 'photo.jpg', Recipe.new(background_image: { url: 'photo.jpg' }).background_image.url
+    end
+
+    def test_embed_only_plural_associations
+      assert_equal [], Group.new.ingredients.to_a
+      assert_equal [1], Group.new(ingredients: [{ id: 1 }]).ingredients.map(&:id)
+    end
   end
 end

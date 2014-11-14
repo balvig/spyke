@@ -1,7 +1,7 @@
 class Recipe < Spike::Base
   has_many :groups
   has_one :image
-  has_one :background_image, class_name: 'Image'
+  has_one :background_image, class_name: 'Image', uri_template: nil
   has_one :alternate, class_name: 'Recipe', uri_template: '/recipes/:recipe_id/alternates/recipe'
   belongs_to :user
 
@@ -48,7 +48,7 @@ class RecipeImage < Image
 end
 
 class Group < Spike::Base
-  has_many :ingredients
+  has_many :ingredients, uri_template: nil
   accepts_nested_attributes_for :ingredients
 end
 
