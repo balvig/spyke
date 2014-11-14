@@ -17,7 +17,7 @@ module Spike
       end
 
       def current_scope
-        ScopeRegistry.value_for(:current_scope, name) || Relation.new(self, uri_template: uri_template)
+        ScopeRegistry.value_for(:current_scope, name) || Relation.new(self, uri: uri)
       end
     end
 

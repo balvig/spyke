@@ -20,7 +20,7 @@ module Spike
 
     def initialize(attributes = {})
       self.attributes = attributes
-      @uri_template = current_scope.uri_template
+      @uri_template = current_scope.uri
     end
 
     def attributes=(new_attributes)

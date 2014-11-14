@@ -8,6 +8,9 @@ module Spike
     extend ActiveSupport::Concern
     METHODS = %i{ get post put patch delete }
 
+    included do
+    end
+
     module ClassMethods
       METHODS.each do |method|
         define_method(method) do |path, params = {}|
@@ -47,8 +50,8 @@ module Spike
         Collection.new Array(result.data).map { |record| new(record) }, result.metadata
       end
 
-      def uri_template(uri = "/#{model_name.plural}/:id")
-        @uri_template ||= uri
+      def uri(uri_template = "/#{model_name.plural}/:id")
+        @uri ||= uri_template
       end
 
       def connection

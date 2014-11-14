@@ -3,7 +3,7 @@ module Spike
     class HasOne < Association
       def initialize(*args)
         super
-        @options.reverse_merge!(uri_template: "/#{parent.class.model_name.plural}/:#{foreign_key}/#{klass.model_name.singular}")
+        @options.reverse_merge!(uri: "/#{parent.class.model_name.plural}/:#{foreign_key}/#{klass.model_name.singular}")
         @params[foreign_key] = parent.id
       end
     end

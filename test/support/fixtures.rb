@@ -1,8 +1,8 @@
 class Recipe < Spike::Base
   has_many :groups
   has_one :image
-  has_one :background_image, class_name: 'Image', uri_template: nil
-  has_one :alternate, class_name: 'Recipe', uri_template: '/recipes/:recipe_id/alternates/recipe'
+  has_one :background_image, class_name: 'Image', uri: nil
+  has_one :alternate, class_name: 'Recipe', uri: '/recipes/:recipe_id/alternates/recipe'
   belongs_to :user
 
   scope :published, -> { where(status: 'published') }
@@ -41,19 +41,19 @@ class StepImage < Image
 end
 
 class RecipeImage < Image
-  uri_template '/recipes/:recipe_id/image'
+  uri '/recipes/:recipe_id/image'
   validates :url, presence: true
   attributes :url
   include_root_in_json false
 end
 
 class Group < Spike::Base
-  has_many :ingredients, uri_template: nil
+  has_many :ingredients, uri: nil
   accepts_nested_attributes_for :ingredients
 end
 
 class Ingredient < Spike::Base
-  uri_template '/recipes/:recipe_id/ingredients/:id'
+  uri '/recipes/:recipe_id/ingredients/:id'
 end
 
 class User < Spike::Base
@@ -61,5 +61,5 @@ class User < Spike::Base
 end
 
 class Photo < Spike::Base
-  uri_template '/images/photos/:id'
+  uri '/images/photos/:id'
 end

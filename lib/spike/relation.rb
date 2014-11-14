@@ -32,8 +32,8 @@ module Spike
       find_some.each { |record| yield record }
     end
 
-    def uri_template
-      @options[:uri_template]
+    def uri
+      @options[:uri]
     end
 
     private
