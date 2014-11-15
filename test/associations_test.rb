@@ -246,6 +246,13 @@ module Spike
       assert_equal %w{ nice spicy }, recipe.groups.map(&:description)
     end
 
+    def test_deeply_nested_attributes
+      params = { groups_attributes: [{ id: 1, ingredient_attributes: [{ id: 1, title: 'fish' }]}] }
+      recipe = Recipe.new(params)
+      recipe.attributes = params
+      assert_equal 1, recipe.groups.size
+    end
+
     def test_nested_attributes_has_many_using_hash_syntax
       recipe = Recipe.new(groups_attributes: { '0' => { title: 'starter' }, '1' => { title: 'sauce' } })
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)

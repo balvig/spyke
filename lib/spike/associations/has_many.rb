@@ -15,7 +15,7 @@ module Spike
         collection = collection.values if collection.is_a?(Hash)
 
         collection.each do |attributes|
-          if existing = find_existing_attributes(attributes['id'])
+          if existing = find_existing_attributes(attributes.with_indifferent_access[:id])
             existing.merge!(attributes)
           else
             build(attributes)
