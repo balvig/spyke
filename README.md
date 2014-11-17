@@ -15,12 +15,14 @@ We therefore made Spyke which adds a few fixes/features that we needed for our p
 
 Add this line to your application's Gemfile:
 
-    gem 'spyke'
+```ruby
+gem 'spyke'
+```
 
 Like Her, Spyke uses Faraday to handle requests and expects it to return a hash in the following format:
 
 ```ruby
-{ result: { id: 1, name: 'Bob' }, metadata: {} }
+{ data: { id: 1, name: 'Bob' }, metadata: {} }
 ```
 
 The simplest possible configuration that can work is something like this:
