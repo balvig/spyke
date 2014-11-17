@@ -1,11 +1,11 @@
 require 'active_model'
-require 'spike/associations'
-require 'spike/attributes'
-require 'spike/orm'
-require 'spike/http'
-require 'spike/scopes'
+require 'spyke/associations'
+require 'spyke/attributes'
+require 'spyke/orm'
+require 'spyke/http'
+require 'spyke/scopes'
 
-module Spike
+module Spyke
   class Base
     # ActiveModel
     include ActiveModel::Conversion
@@ -15,7 +15,7 @@ module Spike
     extend ActiveModel::Translation
     extend ActiveModel::Callbacks
 
-    # Spike
+    # Spyke
     include Associations
     include Attributes
     include Http

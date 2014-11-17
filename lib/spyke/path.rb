@@ -1,6 +1,6 @@
 require 'uri_template'
 
-module Spike
+module Spyke
   class Path
     def initialize(uri_template, params = {})
       @uri_template = URITemplate.new(:colon, uri_template)

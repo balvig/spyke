@@ -1,7 +1,7 @@
-require 'spike/relation'
-require 'spike/result'
+require 'spyke/relation'
+require 'spyke/result'
 
-module Spike
+module Spyke
   module Associations
     class Association < Relation
       attr_reader :parent, :name

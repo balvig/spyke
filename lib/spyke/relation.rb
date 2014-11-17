@@ -1,6 +1,6 @@
-require 'spike/exceptions'
+require 'spyke/exceptions'
 
-module Spike
+module Spyke
   class Relation
     include Enumerable
 

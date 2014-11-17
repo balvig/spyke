@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Spike
+module Spyke
   class AttributesTest < MiniTest::Test
     def test_predicate_methods
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sushi' })
@@ -48,7 +48,7 @@ module Spike
     def test_equality
       assert_equal Recipe.new(id: 2, title: 'Fish'), Recipe.new(id: 2, title: 'Fish')
       refute_equal Recipe.new(id: 2, title: 'Fish'), Recipe.new(id: 1, title: 'Fish')
-      refute_equal Recipe.new(id: 2, title: 'Fish'), 'not_a_spike_object'
+      refute_equal Recipe.new(id: 2, title: 'Fish'), 'not_a_spyke_object'
     end
 
     def test_explicit_attributes

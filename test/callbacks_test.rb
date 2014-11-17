@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Spike
+module Spyke
   class CallbacksTest < MiniTest::Test
     def setup
       stub_request(:any, /.*/)

@@ -1,9 +1,9 @@
 require 'faraday'
-require 'spike/config'
-require 'spike/path'
-require 'spike/result'
+require 'spyke/config'
+require 'spyke/path'
+require 'spyke/result'
 
-module Spike
+module Spyke
   module Http
     extend ActiveSupport::Concern
     METHODS = %i{ get post put patch delete }

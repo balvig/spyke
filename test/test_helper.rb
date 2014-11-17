@@ -1,4 +1,4 @@
-require 'spike'
+require 'spyke'
 require 'faraday_middleware'
 require 'minitest/autorun'
 require 'minitest/reporters'

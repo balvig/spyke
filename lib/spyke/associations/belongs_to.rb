@@ -1,4 +1,4 @@
-module Spike
+module Spyke
   module Associations
     class BelongsTo < Association
       def initialize(*args)

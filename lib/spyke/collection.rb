@@ -1,4 +1,4 @@
-module Spike
+module Spyke
   class Collection < ::Array
     attr_reader :metadata
 

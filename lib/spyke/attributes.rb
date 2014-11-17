@@ -1,6 +1,6 @@
-require 'spike/collection'
+require 'spyke/collection'
 
-module Spike
+module Spyke
   module Attributes
     extend ActiveSupport::Concern
 
@@ -37,7 +37,7 @@ module Spike
     end
 
     def ==(other)
-      other.is_a?(Spike::Base) && id == other.id
+      other.is_a?(Spyke::Base) && id == other.id
     end
 
     def inspect
@@ -58,7 +58,7 @@ module Spike
 
       def parse_value(value)
         case
-        when value.is_a?(Spike::Base)         then parse(value.attributes)
+        when value.is_a?(Spyke::Base)         then parse(value.attributes)
         when value.is_a?(Hash)                then parse(value)
         when value.is_a?(Array)               then value.map { |v| parse_value(v) }
         when value.respond_to?(:content_type) then Faraday::UploadIO.new(value.path, value.content_type)

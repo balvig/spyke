@@ -1,4 +1,4 @@
-module Spike
+module Spyke
   class Result
     attr_reader :body
 

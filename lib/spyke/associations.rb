@@ -1,9 +1,9 @@
-require 'spike/associations/association'
-require 'spike/associations/has_many'
-require 'spike/associations/has_one'
-require 'spike/associations/belongs_to'
+require 'spyke/associations/association'
+require 'spyke/associations/has_many'
+require 'spyke/associations/has_one'
+require 'spyke/associations/belongs_to'
 
-module Spike
+module Spyke
   module Associations
     extend ActiveSupport::Concern
 

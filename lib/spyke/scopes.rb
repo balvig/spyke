@@ -1,7 +1,7 @@
-require 'spike/relation'
-require 'spike/scope_registry'
+require 'spyke/relation'
+require 'spyke/scope_registry'
 
-module Spike
+module Spyke
   module Scopes
     extend ActiveSupport::Concern
 

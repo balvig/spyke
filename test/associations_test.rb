@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Spike
+module Spyke
   class AssociationsTest < MiniTest::Test
     def test_association_independence
       assert_kind_of Associations::HasMany, Recipe.new.groups

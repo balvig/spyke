@@ -1,4 +1,4 @@
-module Spike
+module Spyke
   class ScopeRegistry
     extend ActiveSupport::PerThreadRegistry
 

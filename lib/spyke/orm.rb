@@ -1,4 +1,4 @@
-module Spike
+module Spyke
   module Orm
     extend ActiveSupport::Concern
 

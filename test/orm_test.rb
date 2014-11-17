@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Spike
+module Spyke
   class OrmTest < MiniTest::Test
     def test_find
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sushi' })

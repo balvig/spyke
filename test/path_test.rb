@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Spike
+module Spyke
   class PathTest < MiniTest::Test
     def test_collection_path
       assert_equal '/recipes', Path.new('/recipes/:id').to_s

@@ -1,4 +1,4 @@
-module Spike
+module Spyke
   module Associations
     class HasOne < Association
       def initialize(*args)
