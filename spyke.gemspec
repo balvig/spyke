@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["jens@balvig.com"]
   spec.summary       = %q{Interact with REST services in an ActiveRecord-like manner}
   spec.description   = %q{Interact with REST services in an ActiveRecord-like manner}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/balvig/spyke"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -18,10 +18,10 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "activesupport"
-  spec.add_dependency "activemodel"
-  spec.add_dependency "faraday"
-  spec.add_dependency "uri_template"
+  spec.add_dependency 'activesupport', '>= 3.0.0', '< 5.0'
+  spec.add_dependency 'activemodel', '>= 3.0.0', '< 5.0'
+  spec.add_dependency 'faraday', '>= 0.8.0', '< 2.0'
+  spec.add_dependency 'uri_template', '>= 0.7.0', '< 2.0'
 
   spec.add_development_dependency "bundler", "~> 1.6"
   spec.add_development_dependency "faraday_middleware"
