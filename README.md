@@ -17,7 +17,7 @@ Add this line to your application's Gemfile:
 
     gem 'spyke'
 
-Like Her, Spyke uses Faraday to handle requests and expects a hash in the following format:
+Like Her, Spyke uses Faraday to handle requests and expects it to return a hash in the following format:
 
 ```ruby
 { result: { id: 1, name: 'Bob' }, metadata: {} }
