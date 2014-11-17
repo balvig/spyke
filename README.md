@@ -2,7 +2,7 @@
 
 Spyke allows you to interact with remote REST services in an ActiveRecord-like manner.
 
-It basically ~~rips off~~ takes inspiration from :innocent: [Her](https://github.com/remiprev/her), a gem which we sadly had to abandon as it showed significant performance problems and maintenance seemed to had gone stale. 
+It basically ~~rips off~~ takes inspiration :innocent: from [Her](https://github.com/remiprev/her), a gem which we sadly had to abandon as it showed significant performance problems and maintenance seemed to had gone stale. 
 
 We therefore made Spyke which adds a few fixes/features that we needed for our projects:
 
