@@ -3,7 +3,7 @@
 <p align="center">
   <img src="http://upload.wikimedia.org/wikipedia/en/thumb/2/21/Spyke.jpg/392px-Spyke.jpg" width="20%" />
   <br/>
-  Interact with remote <strong>REST services</strong> in an <strong>ActiveRecord-like</strong> manner**.
+  Interact with remote <strong>REST services</strong> in an <strong>ActiveRecord-like</strong> manner.
 </p>
 
 ---
