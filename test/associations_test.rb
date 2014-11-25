@@ -26,7 +26,7 @@ module Spyke
     end
 
     def test_embedded_associations
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { groups: [{ id: 1, name: 'Fish' }] })
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { groups: [{ id: 1, name: 'Fish' }] })
 
       recipe = Recipe.find(1)
 
@@ -34,7 +34,7 @@ module Spyke
     end
 
     def test_nested_embedded_associtations
-      json = { data: { groups: [{ ingredients: [{ id: 1, name: 'Fish' }] }, { ingredients: [] }] } }
+      json = { result: { groups: [{ ingredients: [{ id: 1, name: 'Fish' }] }, { ingredients: [] }] } }
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(json)
 
       recipe = Recipe.find(1)
@@ -43,7 +43,7 @@ module Spyke
     end
 
     def test_singular_associtations
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { image: { url: 'bob.jpg' } })
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { image: { url: 'bob.jpg' } })
 
       recipe = Recipe.find(1)
 
@@ -51,7 +51,7 @@ module Spyke
     end
 
     def test_unloaded_has_many_association
-      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/groups?public=true').to_return_json(data: [{ id: 1 }])
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/groups?public=true').to_return_json(result: [{ id: 1 }])
 
       groups = Recipe.new(id: 1).groups.where(public: true).to_a
 
@@ -60,7 +60,7 @@ module Spyke
     end
 
     def test_unloaded_has_one_association
-      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/image').to_return_json(data: { url: 'bob.jpg' })
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/image').to_return_json(result: { url: 'bob.jpg' })
 
       image = Recipe.new(id: 1).image
 
@@ -69,7 +69,7 @@ module Spyke
     end
 
     def test_array_like_behavior
-      stub_request(:get, 'http://sushi.com/recipes/1/groups').to_return_json(data: [{ name: 'Fish' }, { name: 'Fruit' }, { name: 'Bread' }])
+      stub_request(:get, 'http://sushi.com/recipes/1/groups').to_return_json(result: [{ name: 'Fish' }, { name: 'Fruit' }, { name: 'Bread' }])
 
       recipe = Recipe.new(id: 1)
 
@@ -138,7 +138,7 @@ module Spyke
     end
 
     def test_converting_association_to_ids
-      stub_request(:get, 'http://sushi.com/users/1/recipes').to_return_json(data: [{ id: 2 }])
+      stub_request(:get, 'http://sushi.com/users/1/recipes').to_return_json(result: [{ id: 2 }])
       user = User.new(id: 1)
       assert_equal [2], user.recipe_ids
     end
@@ -151,7 +151,7 @@ module Spyke
     end
 
     def test_custom_class_name
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { background_image: { url: 'bob.jpg' } })
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { background_image: { url: 'bob.jpg' } })
 
       recipe = Recipe.find(1)
 
@@ -180,7 +180,7 @@ module Spyke
     end
 
     def test_create_association
-      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping' } }).to_return_json(data: { title: 'Topping', id: 1, recipe_id: 1 })
+      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping' } }).to_return_json(result: { title: 'Topping', id: 1, recipe_id: 1 })
 
       recipe = Recipe.new(id: 1)
       group = recipe.groups.create(title: 'Topping')
@@ -209,7 +209,7 @@ module Spyke
     end
 
     def test_save_association
-      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping' } }).to_return_json(data: { title: 'Topping', recipe_id: 1 })
+      endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping' } }).to_return_json(result: { title: 'Topping', recipe_id: 1 })
 
       group = Recipe.new(id: 1).groups.build(title: 'Topping')
       group.save

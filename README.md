@@ -8,7 +8,7 @@
 
 ---
 
-Spyke basically ~~rips off~~ takes inspiration :innocent: from [Her](https://github.com/remiprev/her), a gem which we   sadly had to abandon as it showed significant performance problems and maintenance seemed to had gone stale. 
+Spyke basically ~~rips off~~ takes inspiration :innocent: from [Her](https://github.com/remiprev/her), a gem which we sadly had to abandon as it showed significant performance problems and maintenance seemed to had gone stale.
 
 We therefore made Spyke which adds a few fixes/features that we needed for our projects:
 
@@ -43,12 +43,15 @@ class JSONParser < Faraday::Response::Middleware
       data: json[:result],
       metadata: json[:metadata]
     }
+  rescue MultiJson::ParseError => exception
+    { error: exception.cause }
   end
 end
 
 Spyke::Config.connection = Faraday.new(url: 'http://api.com') do |c|
-  c.use JSONParser
-  c.use Faraday::Adapter::NetHttp
+  c.request   :json
+  c.use       JSONParser
+  c.use       Faraday.default_adapter
 end
 ```
 
@@ -72,7 +75,7 @@ You can specify custom URIs on both the class and association level:
 ```ruby
 class User < Spyke::Base
   uri '/v1/users/:id'
-  
+
   has_one :image, uri: nil
   has_many :posts, uri: '/posts/for_user/:user_id'
 end
@@ -88,5 +91,5 @@ Post.find(4) # => GET http://api.com/posts/4
 
 ## Contributing
 
-If possible please take a look at the tests marked "wishlisted"! 
+If possible please take a look at the tests marked "wishlisted"!
 These are features/fixes we want to implement but haven't gotten around to doing yet :)

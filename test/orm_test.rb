@@ -3,8 +3,8 @@ require 'test_helper'
 module Spyke
   class OrmTest < MiniTest::Test
     def test_find
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sushi' })
-      stub_request(:get, 'http://sushi.com/users/1').to_return_json(data: { id: 1, name: 'Bob' })
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1, title: 'Sushi' })
+      stub_request(:get, 'http://sushi.com/users/1').to_return_json(result: { id: 1, name: 'Bob' })
 
       recipe = Recipe.find(1)
       user = User.find(1)
@@ -15,18 +15,18 @@ module Spyke
     end
 
     def test_reload
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sushi' })
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1, title: 'Sushi' })
 
       recipe = Recipe.find(1)
       assert_equal 'Sushi', recipe.title
 
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sashimi' })
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1, title: 'Sashimi' })
       recipe.reload
       assert_equal 'Sashimi', recipe.title
     end
 
     def test_find_with_slug
-      endpoint = stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1 })
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1 })
       Recipe.find('1-delicious-soup')
       assert_requested endpoint
     end
@@ -40,7 +40,7 @@ module Spyke
     end
 
     def test_save_new_record
-      endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { title: 'Sushi' } }).to_return_json(data: { id: 1, title: 'Sushi (created)' })
+      endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { title: 'Sushi' } }).to_return_json(result: { id: 1, title: 'Sushi (created)' })
 
       recipe = Recipe.new(title: 'Sushi')
       recipe.save
@@ -51,7 +51,7 @@ module Spyke
 
     def test_save_persisted_record
       stub_request(:put, /.*/)
-      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').with(body: { recipe: { title: 'Sushi' } }).to_return_json(data: { id: 1, title: 'Sushi (saved)' })
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').with(body: { recipe: { title: 'Sushi' } }).to_return_json(result: { id: 1, title: 'Sushi (saved)' })
 
       recipe = Recipe.new(id: 1, title: 'Sashimi')
       recipe.title = 'Sushi'
@@ -62,7 +62,7 @@ module Spyke
     end
 
     def test_create
-      endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { title: 'Sushi' } }).to_return_json(data: { id: 1, title: 'Sushi' })
+      endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { title: 'Sushi' } }).to_return_json(result: { id: 1, title: 'Sushi' })
 
       recipe = Recipe.create(title: 'Sushi')
 
@@ -71,7 +71,7 @@ module Spyke
     end
 
     def test_find_using_custom_uri_template
-      endpoint = stub_request(:get, 'http://sushi.com/images/photos/1').to_return_json(data: { id: 1 })
+      endpoint = stub_request(:get, 'http://sushi.com/images/photos/1').to_return_json(result: { id: 1 })
       Photo.find(1)
       assert_requested endpoint
     end

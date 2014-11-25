@@ -3,7 +3,7 @@ require 'test_helper'
 module Spyke
   class AttributesTest < MiniTest::Test
     def test_predicate_methods
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, title: 'Sushi' })
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1, title: 'Sushi' })
 
       recipe = Recipe.find(1)
 
@@ -12,7 +12,7 @@ module Spyke
     end
 
     def test_respond_to
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(data: { id: 1, serves: 3 })
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1, serves: 3 })
 
       recipe = Recipe.find(1)
 
