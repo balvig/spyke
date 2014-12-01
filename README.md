@@ -95,6 +95,13 @@ Spyke comes with Faraday middleware for Rails that will output helpful
 ActiveRecord-like output to the main log as well as keep a record of
 request/responses in  `/log/faraday.log`.
 
+```bash
+Started GET "/posts" for 127.0.0.1 at 2014-12-01 14:31:20 +0000
+Processing by PostsController#index as HTML
+  Parameters: {}
+  GET http://api.com/posts [200]
+```
+
 To use it, simply add it to the stack of middleware:
 
 ```ruby
