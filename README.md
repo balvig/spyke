@@ -89,6 +89,23 @@ user.posts # => GET http://api.com/posts/for_user/3
 Post.find(4) # => GET http://api.com/posts/4
 ```
 
+### Logging/Debugging
+
+Spyke comes with Faraday middleware for Rails that will output helpful
+ActiveRecord-like output to the main log as well as keep a record of
+request/responses in  `/log/faraday.log`.
+
+To use it, simply add it to the stack of middleware:
+
+```ruby
+Spyke::Config.connection = Faraday.new(url: 'http://api.com') do |c|
+  c.request   :json
+  c.use       JSONParser
+  c.use       Spyke::Middleware::RailsLogger if Rails.env.development?
+  c.use       Faraday.default_adapter
+end
+```
+
 ## Contributing
 
 If possible please take a look at the tests marked "wishlisted"!
