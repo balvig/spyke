@@ -34,9 +34,9 @@ module Spyke
     def test_404
       stub_request(:get, 'http://sushi.com/recipes/1').to_return(status: 404, body: { message: 'Not found' }.to_json)
 
-      assert_raises ResourceNotFound do
-        Recipe.find(1)
-      end
+      assert_raises(ResourceNotFound) { Recipe.find(1) }
+      assert_raises(ResourceNotFound) { Recipe.find(nil) }
+      assert_raises(ResourceNotFound) { Recipe.find('') }
     end
 
     def test_save_new_record

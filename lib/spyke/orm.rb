@@ -23,6 +23,7 @@ module Spyke
       end
 
       def find(id)
+        raise ResourceNotFound if id.blank?
         id = strip_slug(id)
         where(id: id).find_one || raise(ResourceNotFound)
       end
