@@ -33,7 +33,7 @@ module Spyke
       assert_equal %w{ Fish }, recipe.groups.map(&:name)
     end
 
-    def test_nested_embedded_associtations
+    def test_nested_embedded_associations
       json = { result: { groups: [{ ingredients: [{ id: 1, name: 'Fish' }] }, { ingredients: [] }] } }
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(json)
 
@@ -42,7 +42,7 @@ module Spyke
       assert_equal %w{ Fish }, recipe.ingredients.map(&:name)
     end
 
-    def test_singular_associtations
+    def test_singular_associations
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { image: { url: 'bob.jpg' } })
 
       recipe = Recipe.find(1)
@@ -57,6 +57,15 @@ module Spyke
 
       assert_equal 1, groups.first.id
       assert_requested endpoint
+    end
+
+    def test_find_on_has_many_association
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/groups/1').to_return_json(result: { id: 1 })
+
+      group = Recipe.new(id: 1).groups.find(1)
+
+      assert_requested endpoint
+      assert_equal 1, group.id
     end
 
     def test_unloaded_has_one_association

@@ -20,6 +20,11 @@ module Spyke
       self
     end
 
+    # Overrides Enumerable find
+    def find(id)
+      scoping { klass.find(id) }
+    end
+
     def find_one
       @find_one ||= klass.new_from_result(fetch)
     end

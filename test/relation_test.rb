@@ -12,6 +12,14 @@ module Spyke
       assert_equal 'meta', recipes.metadata
     end
 
+    def test_scope_with_find
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1?status=published').to_return_json(result: { id: 1 })
+
+      Recipe.where(status: 'published').find(1)
+
+      assert_requested endpoint
+    end
+
     def test_chainable_where
       endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
 
