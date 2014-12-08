@@ -4,6 +4,10 @@
   <img src="http://upload.wikimedia.org/wikipedia/en/thumb/2/21/Spyke.jpg/392px-Spyke.jpg" width="20%" />
   <br/>
   Interact with remote <strong>REST services</strong> in an <strong>ActiveRecord-like</strong> manner.
+  <br /><br />
+  <a href="http://badge.fury.io/rb/spyke"><img src="https://badge.fury.io/rb/spyke.svg" alt="Gem Version" height="18"></a>
+  <a href="https://codeclimate.com/github/balvig/spyke"><img src="https://codeclimate.com/github/balvig/spyke/badges/gpa.svg" /></a>
+  <a href="https://circleci.com/gh/balvig/spyke"><img src="https://circleci.com/gh/balvig/spyke.svg?style=svg" /></a>
 </p>
 
 ---
