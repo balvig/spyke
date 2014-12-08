@@ -7,6 +7,7 @@
   <br /><br />
   <a href="http://badge.fury.io/rb/spyke"><img src="https://badge.fury.io/rb/spyke.svg" alt="Gem Version" height="18"></a>
   <a href="https://codeclimate.com/github/balvig/spyke"><img src="https://codeclimate.com/github/balvig/spyke/badges/gpa.svg" /></a>
+  <a href='https://gemnasium.com/balvig/spyke'><img src="http://img.shields.io/gemnasium/balvig/spyke.svg" /></a>
   <a href="https://circleci.com/gh/balvig/spyke"><img src="https://circleci.com/gh/balvig/spyke.svg?style=svg" /></a>
 </p>
 
