@@ -8,7 +8,8 @@
   <a href="http://badge.fury.io/rb/spyke"><img src="https://badge.fury.io/rb/spyke.svg" alt="Gem Version" height="18"></a>
   <a href="https://codeclimate.com/github/balvig/spyke"><img src="https://codeclimate.com/github/balvig/spyke/badges/gpa.svg" /></a>
   <a href='https://gemnasium.com/balvig/spyke'><img src="http://img.shields.io/gemnasium/balvig/spyke.svg" /></a>
-  <a href="https://circleci.com/gh/balvig/spyke"><img src="https://circleci.com/gh/balvig/spyke.svg?style=svg" /></a>
+  <a href='https://coveralls.io/r/balvig/spyke?branch=master'><img src='https://coveralls.io/repos/balvig/spyke/badge.png?branch=master' /></a>
+  <a href="https://travis-ci.org/balvig/spyke"><img src="https://travis-ci.org/balvig/spyke.svg?branch=master" /></a>
 </p>
 
 ---
