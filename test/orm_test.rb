@@ -50,12 +50,21 @@ module Spyke
     end
 
     def test_save_persisted_record
-      stub_request(:put, /.*/)
       endpoint = stub_request(:put, 'http://sushi.com/recipes/1').with(body: { recipe: { title: 'Sushi' } }).to_return_json(result: { id: 1, title: 'Sushi (saved)' })
 
       recipe = Recipe.new(id: 1, title: 'Sashimi')
       recipe.title = 'Sushi'
       recipe.save
+
+      assert_equal 'Sushi (saved)', recipe.title
+      assert_requested endpoint
+    end
+
+    def test_update_attributes
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').with(body: { recipe: { title: 'Sushi' } }).to_return_json(result: { id: 1, title: 'Sushi (saved)' })
+
+      recipe = Recipe.new(id: 1, title: 'Sashimi')
+      recipe.update_attributes(title: 'Sushi')
 
       assert_equal 'Sushi (saved)', recipe.title
       assert_requested endpoint

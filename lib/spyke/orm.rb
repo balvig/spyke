@@ -77,6 +77,11 @@ module Spyke
       delete
     end
 
+    def update_attributes(new_attributes)
+      self.attributes = new_attributes
+      save
+    end
+
     def reload
       self.attributes = self.class.find(id).attributes
     end
