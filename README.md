@@ -72,6 +72,8 @@ end
 
 user = User.find(3) # => GET http://api.com/users/3
 user.posts # => find embedded in user or GET http://api.com/users/3/posts
+user = User.create(name: 'Bob') # => POST http://api.com/users - { user: { name: 'Bob' } }
+user.destroy # => DELETE http://api.com/users/3
 ```
 
 ### Custom URIs
