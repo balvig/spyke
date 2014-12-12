@@ -51,6 +51,16 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_scope_class_method_doesnt_get_overridden
+      recipe_endpoint = stub_request(:get, 'http://sushi.com/recipes?approved=true')
+      comment_endpoint = stub_request(:get, 'http://sushi.com/comments?comment_approved=true')
+
+      Recipe.approved.to_a
+      assert_requested recipe_endpoint
+      Comment.approved.to_a
+      assert_requested comment_endpoint
+    end
+
     def test_scope_doesnt_get_stuck
       endpoint_1 = stub_request(:get, 'http://sushi.com/recipes?per_page=3&status=published')
       endpoint_2 = stub_request(:get, 'http://sushi.com/recipes?status=published')

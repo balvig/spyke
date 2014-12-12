@@ -6,6 +6,7 @@ class Recipe < Spyke::Base
   belongs_to :user
 
   scope :published, -> { where(status: 'published') }
+  scope :approved, -> { where(approved: true) }
   attributes :title
 
   before_save :before_save_callback
@@ -62,4 +63,8 @@ end
 
 class Photo < Spyke::Base
   uri '/images/photos/:id'
+end
+
+class Comment < Spyke::Base
+  scope :approved, -> { where(comment_approved: true) }
 end
