@@ -9,7 +9,7 @@ module Spyke
       delegate :all, :where, to: :current_scope
 
       def scope(name, code)
-        (class << self; self end).send :define_method, name, code
+        define_singleton_method name, code
       end
 
       def current_scope=(scope)
