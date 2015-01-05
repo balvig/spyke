@@ -19,7 +19,7 @@ module Spyke
     end
 
     def errors
-      body[:errors]
+      body[:errors] || []
     end
   end
 end

@@ -62,17 +62,27 @@ module Spyke
     METHODS.each do |method|
       define_method(method) do |action = nil, params = {}|
         params = action if action.is_a?(Hash)
-        path = case action
-               when Symbol then uri.join(action)
-               when String then Path.new(action, attributes)
-               else uri
-               end
-        self.attributes = self.class.send("#{method}_raw", path, params).data
+        path = resolve_path_from_action(action)
+
+        result = self.class.send("#{method}_raw", path, params)
+
+        result.errors.each { |error| errors.add(:base, error) }
+        self.attributes = result.data
       end
     end
 
     def uri
       Path.new(@uri_template, attributes)
     end
+
+    private
+
+      def resolve_path_from_action(action)
+        case action
+        when Symbol then uri.join(action)
+        when String then Path.new(action, attributes)
+        else uri
+        end
+      end
   end
 end

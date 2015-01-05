@@ -79,6 +79,16 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_create_with_server_failure
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').to_return_json(id: 'write_error:400', message: 'Unable to save recipe')
+
+      recipe = Recipe.create(id: 1, title: 'Sushi')
+
+      assert_equal 'Sushi', recipe.title
+      assert_equal ['Unable to save recipe'], recipe.errors[:base]
+      assert_requested endpoint
+    end
+
     def test_find_using_custom_uri_template
       endpoint = stub_request(:get, 'http://sushi.com/images/photos/1').to_return_json(result: { id: 1 })
       Photo.find(1)

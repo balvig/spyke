@@ -47,10 +47,11 @@ class JSONParser < Faraday::Response::Middleware
     json = MultiJson.load(body, symbolize_keys: true)
     {
       data: json[:result],
-      metadata: json[:metadata]
+      metadata: json[:metadata],
+      errors: [json[:message]]
     }
   rescue MultiJson::ParseError => exception
-    { error: exception.cause }
+    { errors: [exception.cause] }
   end
 end
 
@@ -70,19 +71,19 @@ class User < Spyke::Base
   has_many :posts
 end
 
-user = User.find(3) 
+user = User.find(3)
 # => GET http://api.com/users/3
 
-user.posts 
+user.posts
 # => find embedded in returned JSON or GET http://api.com/users/3/posts
 
-user.update_attributes(name: 'Alice') 
+user.update_attributes(name: 'Alice')
 # => PUT http://api.com/users/3 - { user: { name: 'Alice' } }
 
-user.destroy 
+user.destroy
 # => DELETE http://api.com/users/3
 
-User.create(name: 'Bob') 
+User.create(name: 'Bob')
 # => POST http://api.com/users - { user: { name: 'Bob' } }
 ```
 
