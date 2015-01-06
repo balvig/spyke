@@ -242,21 +242,30 @@ module Spyke
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
 
-    def test_nested_attributes_overwriting_existing
+    def test_nested_attributes_replacing_existing_when_no_ids_present
       recipe = Recipe.new(groups_attributes: [{ title: 'starter' }, { title: 'sauce' }])
       recipe.attributes = { groups_attributes: [{ title: 'flavor' }] }
-      assert_equal %w{ starter sauce flavor }, recipe.groups.map(&:title)
+      assert_equal %w{ flavor }, recipe.groups.map(&:title)
     end
 
-    def test_nested_attributes_merging_with_existing
+    def test_nested_attributes_merging_with_existing_when_ids_present?
       recipe = Recipe.new(groups_attributes: [{ id: 1, title: 'starter', description: 'nice' }, { id: 2, title: 'sauce', description: 'spicy' }])
       recipe.attributes = { groups_attributes: [{ 'id' => '2', 'title' => 'flavor' }] }
       assert_equal %w{ starter flavor }, recipe.groups.map(&:title)
       assert_equal %w{ nice spicy }, recipe.groups.map(&:description)
     end
 
-    def test_deeply_nested_attributes
-      params = { groups_attributes: [{ id: 1, ingredient_attributes: [{ id: 1, title: 'fish' }]}] }
+    def test_deeply_nested_attributes_using_array_style
+      params = { groups_attributes: [{ id: 1, ingredient_attributes: [{ title: 'fish' }, { title: 'sauce' } ]}] }
+      recipe = Recipe.new(params)
+      recipe.attributes = params
+      assert_equal 1, recipe.groups.size
+      skip "ingredients don't get built properly it seems?"
+      assert_equal 'fish', recipe.groups.first.ingredients.first.title
+    end
+
+    def test_deeply_nested_attributes_with_no_ids
+      params = { groups_attributes: [{ ingredient_attributes: [{ title: 'fish' }, { title: 'sauce' }]}] }
       recipe = Recipe.new(params)
       recipe.attributes = params
       assert_equal 1, recipe.groups.size
@@ -267,9 +276,9 @@ module Spyke
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
 
-    def test_nested_nested_attributes
-      recipe = Recipe.new(groups_attributes: { '0' => { ingredients_attributes: { '0' => { name: 'Salt' } } } })
-      assert_equal %w{ Salt }, recipe.ingredients.map(&:name)
+    def test_deeply_nested_attributes_with_blank_ids
+      recipe = Recipe.new(groups_attributes: { '0' => { ingredients_attributes: { '0' => { id: '', name: 'Salt' }, '1' => { id: '', name: 'Pepper' } } } })
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
     end
 
     def test_reflect_on_association
