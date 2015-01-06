@@ -5,7 +5,7 @@
   <br/>
   Interact with remote <strong>REST services</strong> in an <strong>ActiveRecord-like</strong> manner.
   <br /><br />
-  <a href="https://rubygems.org/gems/spyke"><img src="https://badge.fury.io/rb/spyke.svg?style=flat" alt="Gem Version" height="18"></a>
+  <a href="https://rubygems.org/gems/spyke"><img src="https://badge.fury.io/rb/spyke.svg?style=flat" alt="Gem Version"></a>
   <a href='https://gemnasium.com/balvig/spyke'><img src="https://gemnasium.com/balvig/spyke.svg" /></a>
   <a href="https://codeclimate.com/github/balvig/spyke"><img src="https://codeclimate.com/github/balvig/spyke/badges/gpa.svg" /></a>
   <a href='https://coveralls.io/r/balvig/spyke?branch=master'><img src='https://img.shields.io/coveralls/balvig/spyke.svg?style=flat' /></a>
