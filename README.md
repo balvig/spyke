@@ -14,7 +14,7 @@
 
 ---
 
-Spyke basically ~~rips off~~ takes inspiration :innocent: from [Her](https://github.com/remiprev/her), a gem which we sadly had to abandon as it showed significant performance problems and maintenance seemed to had gone stale.
+Spyke basically ~~rips off~~ takes inspiration :innocent: from [Her](https://github.com/remiprev/her), a gem which we sadly had to abandon as it gave us some performance problems and maintenance seemed to had gone stale.
 
 We therefore made Spyke which adds a few fixes/features that we needed for our projects:
 
@@ -34,7 +34,7 @@ gem 'spyke'
 Like Her, Spyke uses Faraday to handle requests and expects it to return a hash in the following format:
 
 ```ruby
-{ data: { id: 1, name: 'Bob' }, metadata: {} }
+{ data: { id: 1, name: 'Bob' }, metadata: {}, errors: [] }
 ```
 
 The simplest possible configuration that can work is something like this:
