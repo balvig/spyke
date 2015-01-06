@@ -43,10 +43,6 @@ module Spyke
         new(id: id).destroy
       end
 
-      def build(attributes = {})
-        new(attributes)
-      end
-
       def strip_slug(id)
         id.to_s.split('-').first
       end

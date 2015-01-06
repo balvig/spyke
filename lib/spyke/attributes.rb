@@ -46,10 +46,6 @@ module Spyke
 
     private
 
-      def default_attributes
-        self.class.default_attributes
-      end
-
       def parse(attributes)
         attributes.each_with_object({}) do |(key, value), parameters|
           parameters[key] = parse_value(value)

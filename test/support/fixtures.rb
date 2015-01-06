@@ -16,11 +16,7 @@ class Recipe < Spyke::Base
   accepts_nested_attributes_for :image, :user, :groups
 
   def self.page(number)
-    if number.present?
-      where(page: number)
-    else
-      all
-    end
+    where(page: number)
   end
 
   def ingredients
