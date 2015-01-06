@@ -10,9 +10,9 @@ module Spyke
     end
 
     def test_initializing_with_has_many_association
-      group = Group.new(ingredients: [Ingredient.new(title: 'Water'), Ingredient.new(title: 'Flour')])
-      assert_equal %w{ Water Flour }, group.ingredients.map(&:title)
-      assert_equal({ 'group' => { 'ingredients' => [{ 'title' => 'Water' }, { 'title' => 'Flour' }] } }, group.to_params)
+      group = Group.new(ingredients: [Ingredient.new(name: 'Water'), Ingredient.new(name: 'Flour')])
+      assert_equal %w{ Water Flour }, group.ingredients.map(&:name)
+      assert_equal({ 'group' => { 'ingredients' => [{ 'name' => 'Water' }, { 'name' => 'Flour' }] } }, group.to_params)
     end
 
     def test_initializing_with_has_one_association
@@ -255,29 +255,40 @@ module Spyke
       assert_equal %w{ nice spicy }, recipe.groups.map(&:description)
     end
 
-    def test_deeply_nested_attributes_using_array_style
-      params = { groups_attributes: [{ id: 1, ingredient_attributes: [{ title: 'fish' }, { title: 'sauce' } ]}] }
-      recipe = Recipe.new(params)
-      recipe.attributes = params
-      assert_equal 1, recipe.groups.size
-      skip "ingredients don't get built properly it seems?"
-      assert_equal 'fish', recipe.groups.first.ingredients.first.title
-    end
-
-    def test_deeply_nested_attributes_with_no_ids
-      params = { groups_attributes: [{ ingredient_attributes: [{ title: 'fish' }, { title: 'sauce' }]}] }
-      recipe = Recipe.new(params)
-      recipe.attributes = params
-      assert_equal 1, recipe.groups.size
-    end
-
     def test_nested_attributes_has_many_using_hash_syntax
       recipe = Recipe.new(groups_attributes: { '0' => { title: 'starter' }, '1' => { title: 'sauce' } })
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
 
-    def test_deeply_nested_attributes_with_blank_ids
-      recipe = Recipe.new(groups_attributes: { '0' => { ingredients_attributes: { '0' => { id: '', name: 'Salt' }, '1' => { id: '', name: 'Pepper' } } } })
+    def test_deeply_nested_attributes_has_many_using_array_syntax
+      params = { groups_attributes: [{ id: 1, ingredients_attributes: [{ id: 1, name: 'Salt' }, { id: 2, name: 'Pepper' } ]}] }
+      recipe = Recipe.new(params)
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+      recipe.attributes = params
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+    end
+
+    def test_deeply_nested_attributes_has_many_using_hash_syntax
+      params = { groups_attributes: { '0' => { id: 1, ingredients_attributes: { '0' => { id: 1, name: 'Salt' }, '1' => { id: 2, name: 'Pepper' } } } } }
+      recipe = Recipe.new(params)
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+      recipe.attributes = params
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+    end
+
+    def test_deeply_nested_attributes_has_many_with_blank_ids_using_array_syntax
+      params = { groups_attributes: [{ ingredients_attributes: [{ name: 'Salt' }, { name: 'Pepper' }]}] }
+      recipe = Recipe.new(params)
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+      recipe.attributes = params
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+    end
+
+    def test_deeply_nested_attributes_has_many_with_blank_ids_using_hash_syntax
+      params = { groups_attributes: { '0' => { ingredients_attributes: { '0' => { id: '', name: 'Salt' }, '1' => { id: '', name: 'Pepper' } } } } }
+      recipe = Recipe.new(params)
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+      recipe.attributes = params
       assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
     end
 
