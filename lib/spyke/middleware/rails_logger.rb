@@ -13,7 +13,6 @@ module Spyke
         logger.debug "\n  Body: #{env[:body]}" if env[:body]
 
         @app.call(env).on_complete do
-          Rails.logger.debug "  #{BOLD}#{MAGENTA}#{env[:method].upcase} #{env[:url]} [#{env[:status]}]#{CLEAR}"
           logger.debug "\n\nCompleted #{env[:status]}"
           logger.debug "\n  Headers: #{env[:response_headers]}"
           logger.debug "\n  Body: #{truncate_binary_values env[:body]}" if env[:body]

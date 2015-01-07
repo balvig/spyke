@@ -23,15 +23,19 @@ module Spyke
       end
 
       def request(method, path, params = {})
-        response = connection.send(method) do |request|
-          if method == :get
-            request.url path.to_s, params
-          else
-            request.url path.to_s
-            request.body = params
+        ActiveSupport::Notifications.instrument('request.spyke', method: method) do |payload|
+          response = connection.send(method) do |request|
+            if method == :get
+              request.url path.to_s, params
+            else
+              request.url path.to_s
+              request.body = params
+            end
           end
+          payload[:url] = response.env.url
+          payload[:status] = response.status
+          Result.new_from_response(response)
         end
-        Result.new_from_response(response)
       end
 
       def new_or_collection_from_result(result)
@@ -62,12 +66,12 @@ module Spyke
     METHODS.each do |method|
       define_method(method) do |action = nil, params = {}|
         params = action if action.is_a?(Hash)
-        path = resolve_path_from_action(action)
+      path = resolve_path_from_action(action)
 
-        result = self.class.send("#{method}_raw", path, params)
+      result = self.class.send("#{method}_raw", path, params)
 
-        result.errors.each { |error| errors.add(:base, error) }
-        self.attributes = result.data
+      result.errors.each { |error| errors.add(:base, error) }
+      self.attributes = result.data
       end
     end
 
