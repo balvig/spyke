@@ -108,7 +108,7 @@ user.posts # => GET http://api.com/posts/for_user/3
 Post.find(4) # => GET http://api.com/posts/4
 ```
 
-### Logging/Debugging
+### Log output
 
 When used with Rails, Spyke will automatically output helpful
 ActiveRecord-like messages to the main log:
@@ -119,18 +119,6 @@ Processing by PostsController#index as HTML
   Parameters: {}
   Spyke (40.3ms)  GET http://api.com/posts [200]
 Completed 200 OK in 75ms (Views: 64.6ms | Spyke: 40.3ms | ActiveRecord: 0ms)
-```
-
-Spyke also comes with Faraday middleware to debug the details of
-requests. To use it, simply add it to the stack of middleware:
-
-```ruby
-Spyke::Config.connection = Faraday.new(url: 'http://api.com') do |c|
-  c.request   :json
-  c.use       JSONParser
-  c.use       Spyke::Middleware::Logger, Logger.new(Rails.root.join('log', 'faraday.log')) if Rails.env.development?
-  c.use       Faraday.default_adapter
-end
 ```
 
 ## Contributing
