@@ -23,6 +23,4 @@ module Spyke
       end
     end
   end
-
-  Spyke::Instrumentation::LogSubscriber.attach_to :spyke
 end

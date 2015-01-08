@@ -35,8 +35,4 @@ module Spyke
         end
     end
   end
-
-  ActiveSupport.on_load(:action_controller) do
-    include Spyke::Instrumentation::ControllerRuntime
-  end
 end

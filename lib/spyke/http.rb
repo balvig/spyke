@@ -32,8 +32,7 @@ module Spyke
               request.body = params
             end
           end
-          payload[:url] = response.env.url
-          payload[:status] = response.status
+          payload[:url], payload[:status] = response.env.url, response.status
           Result.new_from_response(response)
         end
       end
