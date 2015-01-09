@@ -65,12 +65,12 @@ module Spyke
     METHODS.each do |method|
       define_method(method) do |action = nil, params = {}|
         params = action if action.is_a?(Hash)
-      path = resolve_path_from_action(action)
+        path = resolve_path_from_action(action)
 
-      result = self.class.send("#{method}_raw", path, params)
+        result = self.class.send("#{method}_raw", path, params)
 
-      result.errors.each { |error| errors.add(:base, error) }
-      self.attributes = result.data
+        result.errors.each { |error| errors.add(:base, error) }
+        self.attributes = result.data
       end
     end
 
