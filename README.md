@@ -69,7 +69,18 @@ Adding a class and inheriting from `Spyke::Base` will allow you to interact with
 ```ruby
 class User < Spyke::Base
   has_many :posts
+
+  scope :active, -> { where(active: true) }
 end
+
+User.all
+# => GET http://api.com/users
+
+User.active
+# => GET http://api.com/users?active=true
+
+User.where(age: 3).active
+# => GET http://api.com/users?active=true&age=3
 
 user = User.find(3)
 # => GET http://api.com/users/3
