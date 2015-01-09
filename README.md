@@ -69,7 +69,18 @@ Adding a class and inheriting from `Spyke::Base` will allow you to interact with
 ```ruby
 class User < Spyke::Base
   has_many :posts
+
+  scope :active, -> { where(active: true) }
 end
+
+User.all
+# => GET http://api.com/users
+
+User.active
+# => GET http://api.com/users?active=true
+
+User.where(age: 3).active
+# => GET http://api.com/users?active=true&age=3
 
 user = User.find(3)
 # => GET http://api.com/users/3
@@ -108,28 +119,17 @@ user.posts # => GET http://api.com/posts/for_user/3
 Post.find(4) # => GET http://api.com/posts/4
 ```
 
-### Logging/Debugging
+### Log output
 
-Spyke comes with Faraday middleware for Rails that will output helpful
-ActiveRecord-like output to the main log as well as keep a record of
-request/responses in  `/log/faraday.log`.
+When used with Rails, Spyke will automatically output helpful
+ActiveRecord-like messages to the main log:
 
 ```bash
 Started GET "/posts" for 127.0.0.1 at 2014-12-01 14:31:20 +0000
 Processing by PostsController#index as HTML
   Parameters: {}
-  GET http://api.com/posts [200]
-```
-
-To use it, simply add it to the stack of middleware:
-
-```ruby
-Spyke::Config.connection = Faraday.new(url: 'http://api.com') do |c|
-  c.request   :json
-  c.use       JSONParser
-  c.use       Spyke::Middleware::RailsLogger if Rails.env.development?
-  c.use       Faraday.default_adapter
-end
+  Spyke (40.3ms)  GET http://api.com/posts [200]
+Completed 200 OK in 75ms (Views: 64.6ms | Spyke: 40.3ms | ActiveRecord: 0ms)
 ```
 
 ## Contributing

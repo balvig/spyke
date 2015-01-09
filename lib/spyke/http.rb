@@ -23,15 +23,18 @@ module Spyke
       end
 
       def request(method, path, params = {})
-        response = connection.send(method) do |request|
-          if method == :get
-            request.url path.to_s, params
-          else
-            request.url path.to_s
-            request.body = params
+        ActiveSupport::Notifications.instrument('request.spyke', method: method) do |payload|
+          response = connection.send(method) do |request|
+            if method == :get
+              request.url path.to_s, params
+            else
+              request.url path.to_s
+              request.body = params
+            end
           end
+          payload[:url], payload[:status] = response.env.url, response.status
+          Result.new_from_response(response)
         end
-        Result.new_from_response(response)
       end
 
       def new_or_collection_from_result(result)
