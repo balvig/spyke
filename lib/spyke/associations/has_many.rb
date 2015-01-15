@@ -11,36 +11,44 @@ module Spyke
         self
       end
 
-      def assign_nested_attributes(collection)
-        collection = collection.values if collection.is_a?(Hash)
-        replace_existing! unless primary_keys_present?
-
-        collection.each do |attributes|
-          if existing = find_existing_attributes(attributes.with_indifferent_access[:id])
-            existing.merge!(attributes)
-          else
-            build(attributes)
-          end
+      def assign_nested_attributes(incoming)
+        incoming = incoming.values if incoming.is_a?(Hash)
+        combined_attributes = combine_with_existing(incoming)
+        clear_existing!
+        combined_attributes.each do |attributes|
+          build(attributes)
         end
       end
 
       private
 
-        def find_existing_attributes(id)
-          embedded_attributes.to_a.find { |attr| attr[:id] && attr[:id].to_s == id.to_s }
+        def combine_with_existing(incoming)
+          return incoming unless primary_keys_present_in_existing?
+          combined = embedded_params + incoming
+          group_by_primary_key(combined).flat_map do |primary_key, hashes|
+            if primary_key.present?
+              hashes.reduce(:merge)
+            else
+              hashes
+            end
+          end
         end
 
-        def primary_keys_present?
-          embedded_attributes && embedded_attributes.any? { |attr| attr.has_key?(:id) }
+        def group_by_primary_key(array)
+          array.group_by { |h| h.with_indifferent_access[:id].to_s }
         end
 
-        def replace_existing!
-          parent.attributes[name] = []
+        def primary_keys_present_in_existing?
+          embedded_params && embedded_params.any? { |attr| attr.has_key?('id') }
+        end
+
+        def clear_existing!
+          update_parent []
         end
 
         def add_to_parent(record)
           parent.attributes[name] ||= []
-          parent.attributes[name] << record.attributes
+          parent.attributes[name] << record
           record
         end
     end

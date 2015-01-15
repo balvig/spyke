@@ -1,9 +1,10 @@
 require 'active_model'
 require 'spyke/associations'
-require 'spyke/attributes'
+require 'spyke/attribute_assignment'
 require 'spyke/orm'
 require 'spyke/http'
-require 'spyke/scopes'
+require 'spyke/scoping'
+
 
 module Spyke
   class Base
@@ -17,9 +18,9 @@ module Spyke
 
     # Spyke
     include Associations
-    include Attributes
+    include AttributeAssignment
     include Http
     include Orm
-    include Scopes
+    include Scoping
   end
 end

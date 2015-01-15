@@ -5,19 +5,17 @@ module Spyke
     include Enumerable
 
     attr_reader :klass, :params
+    attr_writer :params
     delegate :to_ary, :[], :empty?, :last, :size, :metadata, to: :find_some
 
     def initialize(klass, options = {})
       @klass, @options, @params = klass, options, {}
     end
 
-    def all
-      where
-    end
-
     def where(conditions = {})
-      @params.merge!(conditions)
-      self
+      relation = clone
+      relation.params = params.merge(conditions)
+      relation
     end
 
     # Overrides Enumerable find
@@ -53,10 +51,10 @@ module Spyke
 
       # Keep hold of current scope while running a method on the class
       def scoping
-        klass.current_scope = self
+        previous, klass.current_scope = klass.current_scope, self
         yield
       ensure
-        klass.current_scope = nil
+        klass.current_scope = previous
       end
   end
 end

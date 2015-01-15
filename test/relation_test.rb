@@ -12,6 +12,32 @@ module Spyke
       assert_equal 'meta', recipes.metadata
     end
 
+    def test_scope_independence
+      endpoint = stub_request(:get, 'http://sushi.com/recipes?query=chicken')
+      wrong_endpoint = stub_request(:get, 'http://sushi.com/recipes?query=chicken&page=1')
+
+      search = Search.new('chicken')
+      variant = search.recipes.where(page: 1)
+      original = search.recipes
+
+      refute_same variant, original
+
+      original.to_a
+
+      assert_not_requested wrong_endpoint
+      assert_requested endpoint, times: 1
+    end
+
+    def test_scope_not_firing_twice_for_duplicate_scope
+      endpoint = stub_request(:get, 'http://sushi.com/recipes?query=chicken')
+
+      search = Search.new('chicken')
+      search.recipes.page.to_a
+      search.suggestions
+
+      assert_requested endpoint, times: 1
+    end
+
     def test_scope_with_find
       endpoint = stub_request(:get, 'http://sushi.com/recipes/1?status=published').to_return_json(result: { id: 1 })
 
