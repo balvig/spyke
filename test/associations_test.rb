@@ -132,6 +132,16 @@ module Spyke
       assert_equal({ 'recipe' => { 'groups' => [{ 'recipe_id' => 1, 'ingredients' => [{ 'name' => 'Salt' }] }] } }, recipe.to_params)
     end
 
+    def test_sequential_deep_build_has_many_association
+      skip 'wishlisted'
+      recipe = Recipe.new(id: 1)
+      recipe.groups.build
+      recipe.groups.first.ingredients.build(name: 'Salt')
+
+      assert_equal %w{ Salt }, recipe.ingredients.map(&:name)
+      assert_equal({ 'recipe' => { 'groups' => [{ 'recipe_id' => 1, 'ingredients' => [{ 'name' => 'Salt' }] }] } }, recipe.to_params)
+    end
+
     def test_deep_build_has_many_association_with_scope
       recipe = User.new(id: 1).recipes.published.build
 
