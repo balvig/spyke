@@ -58,7 +58,7 @@ end
 Spyke::Config.connection = Faraday.new(url: 'http://api.com') do |c|
   c.request   :json
   c.use       JSONParser
-  c.use       Faraday.default_adapter
+  c.adapter   Faraday.default_adapter
 end
 ```
 
