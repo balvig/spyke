@@ -8,9 +8,6 @@ module Spyke
     extend ActiveSupport::Concern
     METHODS = %i{ get post put patch delete }
 
-    included do
-    end
-
     module ClassMethods
       METHODS.each do |method|
         define_method(method) do |path, params = {}|
