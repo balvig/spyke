@@ -87,3 +87,13 @@ class Search
     recipes.metadata[:suggestions]
   end
 end
+
+module Cookbook
+  class Tip < Spyke::Base
+    uri '/tips/:id'
+    has_many :likes, class_name: 'Cookbook::Like', uri: '/tips/:cookbook_tip_id/likes/:id'
+  end
+
+  class Like < Spyke::Base
+  end
+end
