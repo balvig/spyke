@@ -59,7 +59,7 @@ class Group < Spyke::Base
 end
 
 class Ingredient < Spyke::Base
-  uri '/recipes/:recipe_id/ingredients/:id'
+  uri '/recipes/:recipe_id/ingredients/(:id)'
 end
 
 class User < Spyke::Base
@@ -67,7 +67,7 @@ class User < Spyke::Base
 end
 
 class Photo < Spyke::Base
-  uri '/images/photos/:id'
+  uri '/images/photos/(:id)'
 end
 
 class Comment < Spyke::Base
@@ -90,8 +90,8 @@ end
 
 module Cookbook
   class Tip < Spyke::Base
-    uri '/tips/:id'
-    has_many :likes, class_name: 'Cookbook::Like', uri: '/tips/:cookbook_tip_id/likes/:id'
+    uri '/tips/(:id)'
+    has_many :likes, class_name: 'Cookbook::Like', uri: '/tips/:cookbook_tip_id/likes/(:id)'
   end
 
   class Like < Spyke::Base
