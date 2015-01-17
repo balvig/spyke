@@ -107,8 +107,8 @@ You can specify custom URIs on both the class and association level:
 class User < Spyke::Base
   uri '/v1/users/(:id)' # id optional, both /v1/users and /v1/users/4 are valid
 
-  has_one :image, uri: nil
   has_many :posts, uri: '/posts/for_user/:user_id' # user_id is required
+  has_one :image, uri: nil # only use embedded JSON
 end
 
 class Post < Spyke::Base
