@@ -104,7 +104,7 @@ You can specify custom URIs on both the class and association level:
 
 ```ruby
 class User < Spyke::Base
-  uri '/v1/users/:id'
+  uri '/v1/users/(:id)'
 
   has_one :image, uri: nil
   has_many :posts, uri: '/posts/for_user/:user_id'

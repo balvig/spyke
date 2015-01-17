@@ -50,7 +50,7 @@ module Spyke
         Collection.new Array(result.data).map { |record| new(record) }, result.metadata
       end
 
-      def uri(uri_template = "/#{model_name.plural}/:id")
+      def uri(uri_template = "/#{model_name.plural}/(:id)")
         @uri ||= uri_template
       end
 
