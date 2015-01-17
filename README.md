@@ -32,13 +32,19 @@ Add this line to your application's Gemfile:
 gem 'spyke'
 ```
 
-Like Her, Spyke uses Faraday to handle requests and expects it to return a hash in the following format:
+Spyke uses Faraday to handle requests and expects it to parse the response body into a hash in the following format:
 
 ```ruby
 { data: { id: 1, name: 'Bob' }, metadata: {}, errors: [] }
 ```
 
-The simplest possible configuration that can work is something like this:
+So, for example for an API that returns JSON in the following format:
+
+```json
+{ "result": { "id": 1, "name": "Bob" }, "metadata": {}, "message": "" }
+```
+
+...the simplest possible configuration that could work is something like this:
 
 ```ruby
 # config/initializers/spyke.rb
