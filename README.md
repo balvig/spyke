@@ -14,13 +14,14 @@
 
 ---
 
-Spyke basically ~~rips off~~ takes inspiration :innocent: from [Her](https://github.com/remiprev/her), a gem which we sadly had to abandon as it gave us some performance problems and maintenance seemed to had gone stale.
+Spyke basically ~~rips off~~ takes inspiration :innocent: from [Her](https://github.com/remiprev/her), a gem which we sadly had to abandon as it gave us some performance problems and maintenance seemed to have gone stale.
 
-We therefore made Spyke which adds a few fixes/features that we needed for our projects:
+We therefore made Spyke which adds a few fixes/features needed for our projects:
 
 - Fast handling of even large amounts of JSON
 - Proper support for scopes
 - Ability to define custom URIs for associations
+- ActiveRecord-like log output
 - Googlable name! :)
 
 ## Configuration
@@ -104,7 +105,7 @@ You can specify custom URIs on both the class and association level:
 
 ```ruby
 class User < Spyke::Base
-  uri '/v1/users/(:id)' # id optional, both /v1/users and /v1/users/4 are usable
+  uri '/v1/users/(:id)' # id optional, both /v1/users and /v1/users/4 are valid
 
   has_one :image, uri: nil
   has_many :posts, uri: '/posts/for_user/:user_id' # user_id is required
@@ -134,5 +135,5 @@ Completed 200 OK in 75ms (Views: 64.6ms | Spyke: 40.3ms | ActiveRecord: 0ms)
 
 ## Contributing
 
-If possible please take a look at the tests marked "wishlisted"!
+If possible please take a look at the [tests marked "wishlisted"](https://github.com/balvig/spyke/search?utf8=%E2%9C%93&q=wishlisted)!
 These are features/fixes we want to implement but haven't gotten around to doing yet :)
