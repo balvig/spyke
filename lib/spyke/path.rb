@@ -43,7 +43,13 @@ module Spyke
       end
 
       def missing_required_params
-        required_params - @params.keys
+        required_params - params_with_values
+      end
+
+      def params_with_values
+        @params.map do |key, value|
+          key if value.present?
+        end.compact
       end
 
       def required_params

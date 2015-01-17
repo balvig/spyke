@@ -124,5 +124,11 @@ module Spyke
       assert_requested tip_endpoint
       assert_requested likes_endpoint
     end
+
+    def test_path_validation
+      assert_raises Spyke::InvalidPathError do
+        Recipe.new.groups.to_a
+      end
+    end
   end
 end
