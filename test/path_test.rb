@@ -25,5 +25,11 @@ module Spyke
         Path.new('/users/:user_id/recipes/(:id)', id: 2).to_s
       end
     end
+
+    def test_optional_params_with_extension
+      skip 'wishlisted'
+      assert_equal '/1/profiles/2.json', Path.new('/1/profiles(/:id).json', id: 2).to_s
+      assert_equal '/1/profiles.json', Path.new('/1/profiles(/:id).json').to_s
+    end
   end
 end
