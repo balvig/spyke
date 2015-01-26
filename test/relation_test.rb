@@ -12,6 +12,13 @@ module Spyke
       assert_equal 'meta', recipes.metadata
     end
 
+    def test_any?
+      endpoint = stub_request(:get, 'http://sushi.com/recipes').to_return_json(result: [{ id: 1 }])
+
+      assert_equal true, Recipe.any?
+      assert_requested endpoint
+    end
+
     def test_scope_independence
       endpoint = stub_request(:get, 'http://sushi.com/recipes?query=chicken')
       wrong_endpoint = stub_request(:get, 'http://sushi.com/recipes?query=chicken&page=1')

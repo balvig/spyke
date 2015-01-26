@@ -6,7 +6,7 @@ module Spyke
     extend ActiveSupport::Concern
 
     module ClassMethods
-      delegate :where, :build, to: :all
+      delegate :where, :build, :any?, :empty?, to: :all
 
       def all
         current_scope || Relation.new(self, uri: uri)
