@@ -156,5 +156,5 @@ show errors returned from the server in forms and f.ex using
 
 ## Contributing
 
-If possible please take a look at the [tests marked "wishlisted"](https://github.com/balvig/spyke/search?utf8=%E2%9C%93&q=wishlisted)!
+If possible please take a look at the [tests marked "wishlisted"](https://github.com/balvig/spyke/search?l=ruby&q=wishlisted&utf8=%E2%9C%93)!
 These are features/fixes we want to implement but haven't gotten around to doing yet :)
