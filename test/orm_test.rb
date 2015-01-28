@@ -79,13 +79,13 @@ module Spyke
       assert_requested endpoint
     end
 
-    def test_create_with_server_failure
-      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').to_return_json(id: 'write_error:400', message: 'Unable to save recipe')
+    def test_create_with_server_returning_validation_errors
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').to_return_json(id: 'write_error:400', errors: { title: [{ error: 'too_short', count: 4 }] })
 
-      recipe = Recipe.create(id: 1, title: 'Sushi')
+      recipe = Recipe.create(id: 1, title: 'sus')
 
-      assert_equal 'Sushi', recipe.title
-      assert_equal ['Unable to save recipe'], recipe.errors[:base]
+      assert_equal 'sus', recipe.title
+      assert_equal ['Title is too short (minimum is 4 characters)'], recipe.errors.full_messages
       assert_requested endpoint
     end
 
@@ -145,11 +145,6 @@ module Spyke
       endpoint = stub_request(:delete, 'http://sushi.com/recipes/1/image')
       RecipeImage.where(recipe_id: 1).destroy
       assert_requested endpoint
-    end
-
-    def test_validations
-      assert_equal false, RecipeImage.new.valid?
-      assert_equal true, RecipeImage.new(url: 'bob.jpg').valid?
     end
   end
 end

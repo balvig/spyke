@@ -22,6 +22,7 @@ We therefore made Spyke which adds a few fixes/features needed for our projects:
 - Proper support for scopes
 - Ability to define custom URIs for associations
 - ActiveRecord-like log output
+- Handling of server side validations
 - Googlable name! :)
 
 ## Configuration
@@ -41,7 +42,7 @@ Spyke uses Faraday to handle requests and expects it to parse the response body 
 So, for example for an API that returns JSON in the following format:
 
 ```json
-{ "result": { "id": 1, "name": "Bob" }, "metadata": {}, "message": "" }
+{ "result": { "id": 1, "name": "Bob" }, "extra": {}, "errors": {} }
 ```
 
 ...the simplest possible configuration that could work is something like this:
@@ -54,11 +55,11 @@ class JSONParser < Faraday::Response::Middleware
     json = MultiJson.load(body, symbolize_keys: true)
     {
       data: json[:result],
-      metadata: json[:metadata],
-      errors: [json[:message]]
+      metadata: json[:extra],
+      errors: json[:errors]
     }
   rescue MultiJson::ParseError => exception
-    { errors: [exception.cause] }
+    { errors: { base: [ error: exception.message ] } }
   end
 end
 
@@ -138,6 +139,20 @@ Processing by PostsController#index as HTML
   Spyke (40.3ms)  GET http://api.com/posts [200]
 Completed 200 OK in 75ms (Views: 64.6ms | Spyke: 40.3ms | ActiveRecord: 0ms)
 ```
+
+### Server-side validations
+
+Spyke expects errors to be formatted in the same way as the
+ActiveModel::Errors hash, ie:
+
+```ruby
+{ title: [{ error: 'blank'}, { error: 'too_short', count: 10 }]}
+```
+
+If the API you're using returns errors in a different format you can
+remap it in Faraday to match the above. Doing this will allow you to
+show errors returned from the server in forms and f.ex using
+`@post.errors.full_messages` just like ActiveRecord.
 
 ## Contributing
 

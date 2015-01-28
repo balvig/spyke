@@ -5,10 +5,10 @@ class JSONParser < Faraday::Response::Middleware
     {
       data: json[:result],
       metadata: json[:metadata],
-      errors: [json[:message]]
+      errors: json[:errors]
     }
   rescue MultiJson::ParseError => exception
-    { errors: [exception.cause] }
+    { errors: { base: [ error: exception.message ] } }
   end
 end
 

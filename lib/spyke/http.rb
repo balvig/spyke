@@ -66,7 +66,7 @@ module Spyke
 
         result = self.class.send("#{method}_raw", path, params)
 
-        result.errors.each { |error| errors.add(:base, error) }
+        add_errors_to_model(result.errors)
         self.attributes = result.data
       end
     end
@@ -76,6 +76,15 @@ module Spyke
     end
 
     private
+
+      def add_errors_to_model(errors_hash)
+        errors_hash.each do |field, field_errors|
+          field_errors.each do |attributes|
+            error_name = attributes.delete(:error).to_sym
+            errors.add(field.to_sym, error_name, attributes.symbolize_keys)
+          end
+        end
+      end
 
       def resolve_path_from_action(action)
         case action
