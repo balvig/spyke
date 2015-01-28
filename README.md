@@ -36,10 +36,10 @@ gem 'spyke'
 Spyke uses Faraday to handle requests and expects it to parse the response body into a hash in the following format:
 
 ```ruby
-{ data: { id: 1, name: 'Bob' }, metadata: {}, errors: [] }
+{ data: { id: 1, name: 'Bob' }, metadata: {}, errors: {} }
 ```
 
-So, for example for an API that returns JSON in the following format:
+So, for example for an API that returns JSON like this:
 
 ```json
 { "result": { "id": 1, "name": "Bob" }, "extra": {}, "errors": {} }
