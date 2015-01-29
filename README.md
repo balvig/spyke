@@ -22,7 +22,7 @@ We therefore made Spyke which adds a few fixes/features needed for our projects:
 - Proper support for scopes
 - Ability to define custom URIs for associations
 - ActiveRecord-like log output
-- Handling of server side validations
+- Handling of API-side validations
 - Googlable name! :)
 
 ## Configuration
@@ -140,7 +140,7 @@ Processing by PostsController#index as HTML
 Completed 200 OK in 75ms (Views: 64.6ms | Spyke: 40.3ms | ActiveRecord: 0ms)
 ```
 
-### Server-side validations
+### API-side validations
 
 Spyke expects errors to be formatted in the same way as the
 ActiveModel::Errors hash, ie:
