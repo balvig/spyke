@@ -3,7 +3,16 @@ require 'test_helper'
 module Spyke
   class AttributesTest < MiniTest::Test
 
-    def test_basics
+    def test_block_initialization
+      recipe = Recipe.new do |r|
+        r.title = 'Sushi'
+        r.description = 'Tasty'
+      end
+      assert_equal 'Sushi', recipe.title
+      assert_equal 'Tasty', recipe.description
+    end
+
+    def test_to_params
       attr = Attributes.new(id: 3, 'title' => 'Fish', groups: [ Group.new(name: 'Starter'), { name: 'Dessert' } ])
       assert_equal({ 'id' => 3 , 'title' => 'Fish', 'groups' => [{ 'name' => 'Starter' }, { 'name' => 'Dessert' }] }, attr.to_params)
     end

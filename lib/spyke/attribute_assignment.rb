@@ -22,6 +22,7 @@ module Spyke
     def initialize(attributes = {})
       self.attributes = attributes
       @uri_template = scope.uri
+      yield self if block_given?
     end
 
     def attributes=(new_attributes)
