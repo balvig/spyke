@@ -118,6 +118,19 @@ module Spyke
       assert_equal 1, recipe.groups.first.recipe_id
     end
 
+    def test_build_belongs_to_association
+      recipe = Recipe.new(id: 1)
+      recipe.build_user(name: 'Alice')
+      assert_equal recipe.user.name, 'Alice'
+    end
+
+    def test_build_has_one_association
+      recipe = Recipe.new(id: 1)
+      image = recipe.build_image
+      assert_equal 1, image.recipe_id
+      assert_equal 1, recipe.image.recipe_id
+    end
+
     def test_multiple_builds
       recipe = Recipe.new
       recipe.groups.build(name: 'Condiments')
@@ -185,13 +198,6 @@ module Spyke
       stub_request(:get, 'http://sushi.com/users/1/recipes').to_return_json(result: [{ id: 2 }])
       user = User.new(id: 1)
       assert_equal [2], user.recipe_ids
-    end
-
-    def test_build_has_one_association
-      recipe = Recipe.new(id: 1)
-      image = recipe.build_image
-      assert_equal 1, image.recipe_id
-      assert_equal 1, recipe.image.recipe_id
     end
 
     def test_custom_class_name

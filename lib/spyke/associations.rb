@@ -36,6 +36,10 @@ module Spyke
 
       def belongs_to(name, options = {})
         self.associations = associations.merge(name => options.merge(type: BelongsTo))
+
+        define_method "build_#{name}" do |attributes = nil|
+          association(name).build(attributes)
+        end
       end
 
       def accepts_nested_attributes_for(*names)
