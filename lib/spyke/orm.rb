@@ -49,7 +49,9 @@ module Spyke
     end
 
     def to_params
-      if include_root?
+      if include_root.is_a? String
+        { include_root => attributes.to_params.except(*uri.variables)}
+      elsif include_root?
         { self.class.model_name.param_key => attributes.to_params.except(*uri.variables)}
       else
         attributes.to_params.except(*uri.variables)

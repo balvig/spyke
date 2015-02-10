@@ -123,6 +123,11 @@ module Spyke
       assert_equal({ 'url' => 'bob.jpg' }, RecipeImage.new(url: 'bob.jpg').to_params)
     end
 
+    def test_non_nested_params_with_included_root
+      assert_equal({ 'step_image_root' => { 'url' => 'bob.jpg' } }, StepImage.new(url: 'bob.jpg').
+                                           to_params)
+    end
+
     def test_destroy
       endpoint = stub_request(:delete, 'http://sushi.com/recipes/1')
       Recipe.new(id: 1).destroy

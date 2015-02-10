@@ -37,12 +37,14 @@ class Image < Spyke::Base
 end
 
 class StepImage < Image
+  include_root_in_json "step_image_root"
 end
 
 class RecipeImage < Image
   uri '/recipes/:recipe_id/image'
   validates :url, presence: true
   attributes :url
+
   include_root_in_json false
 end
 
