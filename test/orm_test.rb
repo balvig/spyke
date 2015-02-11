@@ -119,13 +119,12 @@ module Spyke
       assert_requested endpoint
     end
 
-    def test_non_nested_params
+    def test_to_params_without_root
       assert_equal({ 'url' => 'bob.jpg' }, RecipeImage.new(url: 'bob.jpg').to_params)
     end
 
-    def test_non_nested_params_with_included_root
-      assert_equal({ 'step_image_root' => { 'url' => 'bob.jpg' } }, StepImage.new(url: 'bob.jpg').
-                                           to_params)
+    def test_to_params_with_custom_root
+      assert_equal({ 'step_image_root' => { 'url' => 'bob.jpg' } }, StepImage.new(url: 'bob.jpg').to_params)
     end
 
     def test_destroy

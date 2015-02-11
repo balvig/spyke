@@ -37,7 +37,7 @@ class Image < Spyke::Base
 end
 
 class StepImage < Image
-  include_root_in_json "step_image_root"
+  include_root_in_json 'step_image_root'
 end
 
 class RecipeImage < Image
