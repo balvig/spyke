@@ -80,10 +80,18 @@ module Spyke
       def add_errors_to_model(errors_hash)
         errors_hash.each do |field, field_errors|
           field_errors.each do |attributes|
-            error_name = attributes.delete(:error).to_sym
-            errors.add(field.to_sym, error_name, attributes.symbolize_keys)
+            message, options = extract_message(attributes)
+            errors.add(field.to_sym, message, options)
           end
         end
+      end
+
+      def extract_message(attributes)
+        use_i18n = attributes.reverse_merge(use_i18n: true).delete(:use_i18n)
+        error = attributes.delete(:error)
+        message = use_i18n ? error.to_sym : error
+
+        [message, attributes.symbolize_keys]
       end
 
       def resolve_path_from_action(action)

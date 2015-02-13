@@ -80,12 +80,12 @@ module Spyke
     end
 
     def test_create_with_server_returning_validation_errors
-      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').to_return_json(id: 'write_error:400', errors: { title: [{ error: 'too_short', count: 4 }], groups: [{ error: 'blank' }] })
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').to_return_json(id: 'write_error:400',
+        errors: { title: [{ error: :too_short, count: 4 }, { error: 'plain text', use_i18n: false }], groups: [{ error: 'blank' }] })
 
       recipe = Recipe.create(id: 1, title: 'sus')
-
       assert_equal 'sus', recipe.title
-      assert_equal ['Title is too short (minimum is 4 characters)', "Groups can't be blank"], recipe.errors.full_messages
+      assert_equal ['Title is too short (minimum is 4 characters)', 'Title plain text', "Groups can't be blank"], recipe.errors.full_messages
       assert_requested endpoint
     end
 
