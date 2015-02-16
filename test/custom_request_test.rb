@@ -19,7 +19,7 @@ module Spyke
     def test_get_request_with_appended_scope
       skip 'wishlisted'
       endpoint = stub_request(:get, 'http://sushi.com/recipes/recent?status=published')
-      Recipe.get('/recipes/recent').published.fetch
+      Recipe.get('/recipes/recent').published.to_a
       assert_requested endpoint
     end
 

@@ -113,9 +113,15 @@ module Spyke
       assert_requested endpoint
     end
 
-    def test_inheritance_using_custom_method
-      endpoint = stub_request(:put, 'http://sushi.com/step_images')
+    def test_inheritance_passes_on_custom_method_and_uri
+      endpoint = stub_request(:put, 'http://sushi.com/images')
       StepImage.create
+      assert_requested endpoint
+    end
+
+    def test_inheritance_not_overwriting_custom_uri
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1/image')
+      RecipeImage.where(recipe_id: 1).create
       assert_requested endpoint
     end
 

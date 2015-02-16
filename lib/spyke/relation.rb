@@ -24,7 +24,7 @@ module Spyke
     end
 
     def find_one
-      @find_one ||= klass.new_from_result(fetch)
+      @find_one ||= klass.new_instance_from_result(fetch)
     end
 
     def find_some
