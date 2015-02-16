@@ -11,7 +11,7 @@ module Spyke
     module ClassMethods
       METHODS.each do |method|
         define_method(method) do |path, params = {}|
-          new_or_collection_from_result send("#{method}_raw", path, params)
+          new_instance_or_collection_from_result send("#{method}_raw", path, params)
         end
 
         define_method("#{method}_raw") do |path, params = {}|
@@ -19,30 +19,7 @@ module Spyke
         end
       end
 
-      def request(method, path, params = {})
-        ActiveSupport::Notifications.instrument('request.spyke', method: method) do |payload|
-          response = connection.send(method) do |request|
-            if method == :get
-              request.url path.to_s, params
-            else
-              request.url path.to_s
-              request.body = params
-            end
-          end
-          payload[:url], payload[:status] = response.env.url, response.status
-          Result.new_from_response(response)
-        end
-      end
-
-      def new_or_collection_from_result(result)
-        if result.data.is_a?(Array)
-          new_collection_from_result(result)
-        else
-          new_from_result(result)
-        end
-      end
-
-      def new_from_result(result)
+      def new_instance_from_result(result)
         new result.data if result.data
       end
 
@@ -50,13 +27,46 @@ module Spyke
         Collection.new Array(result.data).map { |record| new(record) }, result.metadata
       end
 
-      def uri(uri_template = "/#{model_name.plural}/(:id)")
-        @uri ||= uri_template
+      def uri(uri_template = nil)
+        @uri ||= uri_template || superclass_uri || default_uri
       end
 
       def connection
         Config.connection
       end
+
+      private
+
+        def request(method, path, params = {})
+          ActiveSupport::Notifications.instrument('request.spyke', method: method) do |payload|
+            response = connection.send(method) do |request|
+              if method == :get
+                request.url path.to_s, params
+              else
+                request.url path.to_s
+                request.body = params
+              end
+            end
+            payload[:url], payload[:status] = response.env.url, response.status
+            Result.new_from_response(response)
+          end
+        end
+
+        def new_instance_or_collection_from_result(result)
+          if result.data.is_a?(Array)
+            new_collection_from_result(result)
+          else
+            new_instance_from_result(result)
+          end
+        end
+
+        def superclass_uri
+          superclass.uri.dup.freeze if superclass != Base
+        end
+
+        def default_uri
+          "/#{model_name.plural}/(:id)"
+        end
     end
 
     METHODS.each do |method|
