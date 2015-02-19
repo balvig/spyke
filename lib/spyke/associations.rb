@@ -53,7 +53,9 @@ module Spyke
       end
 
       def reflect_on_association(name)
-        Relation.new(name.to_s.classify.constantize) # Just enough to support nested_form gem
+        # Just enough to support nested_form gem
+        assoc = associations[name] || associations[name.to_s.pluralize.to_sym]
+        Association.new(nil, name, assoc)
       end
     end
   end

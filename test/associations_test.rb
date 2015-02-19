@@ -144,6 +144,13 @@ module Spyke
       assert_equal 1, recipe.groups.first.recipe_id
     end
 
+    def test_destroy_has_many_association
+      endpoint = stub_request(:delete, 'http://sushi.com/recipes/1/groups/2')
+      recipe = Recipe.new(id: 1)
+      recipe.groups.destroy(2)
+      assert_requested endpoint
+    end
+
     def test_changing_attributes_directly_after_build_on_has_many_association
       recipe = Recipe.new(id: 1)
       recipe.groups.build(name: 'Dessert')
@@ -341,7 +348,7 @@ module Spyke
 
     def test_reflect_on_association
       assert_equal Group, Recipe.reflect_on_association(:group).klass
-      skip 'wishlisted'
+      assert_equal Cookbook::Like, Cookbook::Tip.reflect_on_association(:like).klass
       assert_equal Recipe, Recipe.reflect_on_association(:alternate).klass
     end
 
