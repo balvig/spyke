@@ -370,5 +370,24 @@ module Spyke
       assert_equal %w{ Condiments Tools }, recipe.groups.map(&:name)
       assert_equal %w{ Salt Spoon }, recipe.ingredients.map(&:name)
     end
+
+    def test_namespaced_model
+      tip_endpoint = stub_request(:get, 'http://sushi.com/tips/1').to_return_json(result: { id: 1 })
+      likes_endpoint = stub_request(:get, 'http://sushi.com/tips/1/likes')
+      Cookbook::Tip.find(1).likes.first
+      assert_requested tip_endpoint
+      assert_requested likes_endpoint
+    end
+
+    def test_namespaced_association_class_auto_detect
+      favorite = Cookbook::Tip.new.favorites.build
+      assert_equal Cookbook::Favorite, favorite.class
+    end
+
+    def test_raising_exception_if_class_not_found
+      assert_raises NameError do
+        Cookbook::Tip.new.votes
+      end
+    end
   end
 end

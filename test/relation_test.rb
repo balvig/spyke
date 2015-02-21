@@ -124,17 +124,15 @@ module Spyke
       assert_requested endpoint_2, times: 1
     end
 
-    def test_namespaced_model
-      tip_endpoint = stub_request(:get, 'http://sushi.com/tips/1').to_return_json(result: { id: 1 })
-      likes_endpoint = stub_request(:get, 'http://sushi.com/tips/1/likes')
-      Cookbook::Tip.find(1).likes.first
-      assert_requested tip_endpoint
-      assert_requested likes_endpoint
-    end
-
     def test_path_validation
       assert_raises Spyke::InvalidPathError do
         Recipe.new.groups.to_a
+      end
+    end
+
+    def test_raise_no_method_error
+      assert_raises NoMethodError do
+        Recipe.new.groups.unknown_method
       end
     end
   end

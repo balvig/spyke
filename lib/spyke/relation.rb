@@ -4,8 +4,8 @@ module Spyke
   class Relation
     include Enumerable
 
-    attr_reader :klass, :params
-    attr_writer :params
+    attr_reader :klass
+    attr_accessor :params
     delegate :to_ary, :[], :any?, :empty?, :last, :size, :metadata, to: :find_some
 
     def initialize(klass, options = {})

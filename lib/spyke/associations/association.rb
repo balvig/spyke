@@ -6,8 +6,8 @@ module Spyke
     class Association < Relation
       attr_reader :parent, :name
 
-      def initialize(parent, name, options = {})
-        super (options[:class_name] || name.to_s).classify.constantize, options
+      def initialize(klass, parent, name, options = {})
+        super(klass, options)
         @parent, @name = parent, name
       end
 
