@@ -1,4 +1,5 @@
 require 'spyke/associations/association'
+require 'spyke/associations/builder'
 require 'spyke/associations/has_many'
 require 'spyke/associations/has_one'
 require 'spyke/associations/belongs_to'
@@ -14,7 +15,7 @@ module Spyke
 
     module ClassMethods
       def has_many(name, options = {})
-        self.associations = associations.merge(name => options.merge(type: HasMany))
+        create_association(name, HasMany, options)
 
         define_method "#{name.to_s.singularize}_ids=" do |ids|
           attributes[name] = []
@@ -27,7 +28,7 @@ module Spyke
       end
 
       def has_one(name, options = {})
-        self.associations = associations.merge(name => options.merge(type: HasOne))
+        create_association(name, HasOne, options)
 
         define_method "build_#{name}" do |attributes = nil|
           association(name).build(attributes)
@@ -35,7 +36,7 @@ module Spyke
       end
 
       def belongs_to(name, options = {})
-        self.associations = associations.merge(name => options.merge(type: BelongsTo))
+        create_association(name, BelongsTo, options)
 
         define_method "build_#{name}" do |attributes = nil|
           association(name).build(attributes)
@@ -54,9 +55,14 @@ module Spyke
 
       def reflect_on_association(name)
         # Just enough to support nested_form gem
-        assoc = associations[name] || associations[name.to_s.pluralize.to_sym]
-        Association.new(nil, name, assoc)
+        associations[name] || associations[name.to_s.pluralize.to_sym]
       end
+
+      private
+
+        def create_association(name, type, options)
+          self.associations = associations.merge(name => Builder.new(self, name, type, options))
+        end
     end
   end
 end

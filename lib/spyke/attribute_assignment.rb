@@ -73,8 +73,7 @@ module Spyke
       end
 
       def association(name)
-        options = associations[name]
-        options[:type].new(self, name, options)
+        associations[name].build(self)
       end
 
       def attribute?(name)

@@ -1,6 +1,10 @@
 # Coverage
 require 'coveralls'
 Coveralls.wear!
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+SimpleCov.start do
+  add_filter 'test'
+end
 
 require 'spyke'
 require 'faraday_middleware'
