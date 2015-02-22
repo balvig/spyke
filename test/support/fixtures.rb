@@ -96,11 +96,15 @@ module Cookbook
     has_many :likes, class_name: 'Cookbook::Like', uri: '/tips/:cookbook_tip_id/likes/(:id)'
     has_many :favorites
     has_many :votes
+    has_many :photos, class_name: 'Photo'
   end
 
   class Like < Spyke::Base
   end
 
   class Favorite < Spyke::Base
+  end
+
+  class Photo < Spyke::Base
   end
 end

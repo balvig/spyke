@@ -384,6 +384,11 @@ module Spyke
       assert_equal Cookbook::Favorite, favorite.class
     end
 
+    def test_specifying_class_outside_of_namespace
+      photo = Cookbook::Tip.new.photos.build
+      assert_equal Photo, photo.class
+    end
+
     def test_raising_exception_if_class_not_found
       assert_raises NameError do
         Cookbook::Tip.new.votes

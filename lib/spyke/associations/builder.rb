@@ -10,10 +10,14 @@ module Spyke
       end
 
       def klass
-        @klass ||= compute_class(@options[:class_name] || @name)
+        @klass ||= custom_class || compute_class(@name)
       end
 
       private
+
+        def custom_class
+          @options[:class_name].constantize if @options[:class_name]
+        end
 
         # https://github.com/rails/rails/blob/70ac072976c8cc6f013f0df3777e54ccae3f4f8c/activerecord/lib/active_record/inheritance.rb#L132-L150
         def compute_class(type_name)
