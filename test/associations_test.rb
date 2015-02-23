@@ -236,6 +236,12 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_path_inferred_from_name
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/gallery_images')
+      Recipe.new(id: 1).gallery_images.to_a
+      assert_requested endpoint
+    end
+
     def test_create_association
       endpoint = stub_request(:post, 'http://sushi.com/recipes/1/groups').with(body: { group: { title: 'Topping' } }).to_return_json(result: { title: 'Topping', id: 1, recipe_id: 1 })
 
