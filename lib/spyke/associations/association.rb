@@ -15,17 +15,6 @@ module Spyke
         find_one # Override for plural associations that return an association object
       end
 
-      def find_one
-        result = super
-        update_parent(result) if result
-      end
-
-      def find_some
-        result = super
-        update_parent(result) if result.any?
-        result
-      end
-
       def assign_nested_attributes(attributes)
         update_parent new(attributes)
       end
@@ -55,15 +44,15 @@ module Spyke
         end
 
         def fetch_embedded
-          if embedded_params
-            Result.new(data: embedded_params)
+          if embedded
+            Result.new(data: embedded)
           elsif !uri
             Result.new(data: nil)
           end
         end
 
-        def embedded_params
-          @embedded_params ||= parent.attributes.to_params[name]
+        def embedded
+          parent.attributes[name]
         end
 
         def update_parent(value)

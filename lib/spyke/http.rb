@@ -20,11 +20,11 @@ module Spyke
       end
 
       def new_instance_from_result(result)
-        new result.data if result.data
+        new_or_return result.data if result.data
       end
 
       def new_collection_from_result(result)
-        Collection.new Array(result.data).map { |record| new(record) }, result.metadata
+        Collection.new Array(result.data).map { |record| new_or_return(record) }, result.metadata
       end
 
       def uri(uri_template = nil)
@@ -60,6 +60,14 @@ module Spyke
           end
         end
 
+        def new_or_return(attributes_or_object)
+          if attributes_or_object.is_a?(Spyke::Base)
+            attributes_or_object
+          else
+            new attributes_or_object
+          end
+        end
+
         def superclass_uri
           superclass.uri.dup.freeze if superclass != Base
         end
@@ -82,7 +90,7 @@ module Spyke
     end
 
     def uri
-      Path.new(@uri_template, attributes)
+      Path.new(@uri_template, attributes) if @uri_template
     end
 
     private

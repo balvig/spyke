@@ -184,7 +184,7 @@ module Spyke
 
       assert_equal %w{ Salt }, recipe.ingredients.map(&:name)
       assert_equal({ 'recipe' => { 'groups' => [{ 'recipe_id' => 1, 'ingredients' => [{ 'group_id' => nil, 'name' => 'Salt' }] }] } }, recipe.to_params)
-      assert_equal({ 'group' => { 'recipe_id' => 1, 'ingredients' => [{ 'group_id' => nil, 'name' => 'Salt' }] } }, recipe.groups.first.to_params)
+      assert_equal({ 'group' => { 'ingredients' => [{ 'group_id' => nil, 'name' => 'Salt' }] } }, recipe.groups.first.to_params)
     end
 
     def test_deep_build_has_many_association_with_scope
@@ -375,6 +375,18 @@ module Spyke
       assert_equal({ 'recipe' => { 'groups' => [{ 'recipe_id' => nil, 'name' => 'Condiments', 'ingredients' => [{ 'group_id' => nil, 'name' => 'Salt' }] }, { 'recipe_id' => nil, 'name' => 'Tools', 'ingredients' => [{ 'group_id' => nil, 'name' => 'Spoon' }] }] } }, recipe.to_params)
       assert_equal %w{ Condiments Tools }, recipe.groups.map(&:name)
       assert_equal %w{ Salt Spoon }, recipe.ingredients.map(&:name)
+    end
+
+    def test_not_caching_result_with_different_params
+      endpoint_1 = stub_request(:get, 'http://sushi.com/recipes/1/groups/1').to_return_json(result: { id: 1 })
+      endpoint_2 = stub_request(:get, 'http://sushi.com/recipes/1/groups/2').to_return_json(result: { id: 2 })
+
+      recipe = Recipe.new(id: 1)
+      recipe.groups.find(1)
+      recipe.groups.find(2)
+
+      assert_requested endpoint_1, times: 1
+      assert_requested endpoint_2, times: 1
     end
 
     def test_namespaced_model
