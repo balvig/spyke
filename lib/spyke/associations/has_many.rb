@@ -24,7 +24,7 @@ module Spyke
 
         def combine_with_existing(incoming)
           return incoming unless primary_keys_present_in_existing?
-          combined = embedded_params + incoming
+          combined = embedded_attributes + incoming
           group_by_primary_key(combined).flat_map do |primary_key, hashes|
             if primary_key.present?
               hashes.reduce(:merge)
@@ -39,11 +39,15 @@ module Spyke
         end
 
         def primary_keys_present_in_existing?
-          embedded_params && embedded_params.any? { |attr| attr.has_key?('id') }
+          embedded_attributes && embedded_attributes.any? { |attr| attr.has_key?('id') }
         end
 
         def clear_existing!
           update_parent []
+        end
+
+        def embedded_attributes
+          @embedded_attributes ||= parent.attributes.to_params[name]
         end
 
         def add_to_parent(record)
