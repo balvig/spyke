@@ -3,7 +3,7 @@ class Recipe < Spyke::Base
   has_many :gallery_images, class_name: 'Image'
   has_one :image
   has_one :background_image, class_name: 'Image', uri: nil
-  has_one :alternate, class_name: 'Recipe', uri: '/recipes/:recipe_id/alternates/recipe'
+  has_one :alternate, class_name: 'Recipe', uri: 'recipes/:recipe_id/alternates/recipe'
   belongs_to :user
 
   scope :published, -> { where(status: 'published') }
@@ -48,7 +48,7 @@ class StepImage < Image
 end
 
 class RecipeImage < Image
-  uri '/recipes/:recipe_id/image'
+  uri 'recipes/:recipe_id/image'
   validates :url, presence: true
   attributes :url
 
@@ -68,7 +68,7 @@ class Group < Spyke::Base
 end
 
 class Ingredient < Spyke::Base
-  uri '/recipes/:recipe_id/ingredients/(:id)'
+  uri 'recipes/:recipe_id/ingredients/(:id)'
 end
 
 class User < Spyke::Base
@@ -76,7 +76,7 @@ class User < Spyke::Base
 end
 
 class Photo < Spyke::Base
-  uri '/images/photos/(:id)'
+  uri 'images/photos/(:id)'
 end
 
 class Comment < Spyke::Base
@@ -99,8 +99,8 @@ end
 
 module Cookbook
   class Tip < Spyke::Base
-    uri '/tips/(:id)'
-    has_many :likes, class_name: 'Cookbook::Like', uri: '/tips/:cookbook_tip_id/likes/(:id)'
+    uri 'tips/(:id)'
+    has_many :likes, class_name: 'Cookbook::Like', uri: 'tips/:cookbook_tip_id/likes/(:id)'
     has_many :favorites
     has_many :votes
     has_many :photos, class_name: 'Photo'

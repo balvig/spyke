@@ -111,7 +111,7 @@ module Spyke
 
     def test_inspect
       recipe = Recipe.new(id: 2, title: 'Pizza', description: 'Delicious')
-      assert_equal '#<Recipe(/recipes/2) id: 2 title: "Pizza" description: "Delicious">', recipe.inspect
+      assert_equal '#<Recipe(recipes/2) id: 2 title: "Pizza" description: "Delicious">', recipe.inspect
     end
 
     def test_rejecting_wrong_number_of_args

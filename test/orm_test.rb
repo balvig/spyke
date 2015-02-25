@@ -156,5 +156,16 @@ module Spyke
       RecipeImage.where(recipe_id: 1).destroy
       assert_requested endpoint
     end
+
+    def test_relative_uris
+      previous = Spyke::Config.connection.url_prefix
+      Spyke::Config.connection.url_prefix = 'http://sushi.com/api/v2/'
+
+      endpoint = stub_request(:get, 'http://sushi.com/api/v2/recipes')
+      Recipe.all.to_a
+      assert_requested endpoint
+
+      Spyke::Config.connection.url_prefix = previous
+    end
   end
 end
