@@ -112,16 +112,16 @@ You can specify custom URIs on both the class and association level:
 
 ```ruby
 class User < Spyke::Base
-  uri '/v1/users/(:id)' # id optional, both /v1/users and /v1/users/4 are valid
+  uri 'people/(:id)' # id optional, both /people and /people/4 are valid
 
-  has_many :posts, uri: '/posts/for_user/:user_id' # user_id is required
+  has_many :posts, uri: 'posts/for_user/:user_id' # user_id is required
   has_one :image, uri: nil # only use embedded JSON
 end
 
 class Post < Spyke::Base
 end
 
-user = User.find(3) # => GET http://api.com/v1/users/3
+user = User.find(3) # => GET http://api.com/people/3
 user.image # Will only use embedded JSON and never call out to api
 user.posts # => GET http://api.com/posts/for_user/3
 Post.find(4) # => GET http://api.com/posts/4
