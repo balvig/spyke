@@ -10,10 +10,22 @@ module Spyke
     end
 
     module ClassMethods
-      def attributes(*args)
-        args.each do |attr|
-          define_method attr do
-            attribute(attr)
+      # Copy/paste http://thepugautomatic.com/2013/dsom/
+      MODULE_NAME = :DynamicAttributes
+
+      def attributes(*names)
+        if const_defined?(MODULE_NAME, _search_ancestors = false)
+          mod = const_get(MODULE_NAME)
+        else
+          mod = const_set(MODULE_NAME, Module.new)
+          include mod
+        end
+
+        names.each do |name|
+          mod.module_eval do
+            define_method(name) do
+              attribute(name)
+            end
           end
         end
       end

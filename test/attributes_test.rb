@@ -70,11 +70,15 @@ module Spyke
       recipe = Recipe.new
       assert_equal nil, recipe.title
       assert_raises NoMethodError do
-        recipe.description
+        recipe.not_set
       end
 
       recipe = Recipe.new(title: 'Fish')
       assert_equal 'Fish', recipe.title
+    end
+
+    def test_super_with_explicit_attributes
+      assert_equal nil, Recipe.new.description
     end
 
     def test_converting_files_to_faraday_io

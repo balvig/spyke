@@ -8,7 +8,7 @@ class Recipe < Spyke::Base
 
   scope :published, -> { where(status: 'published') }
   scope :approved, -> { where(approved: true) }
-  attributes :title
+  attributes :title, :description
 
   before_save :before_save_callback
   before_create :before_create_callback
@@ -20,6 +20,10 @@ class Recipe < Spyke::Base
     result = all
     result = result.where(page: number) if number
     result
+  end
+
+  def description
+    super
   end
 
   def ingredients
