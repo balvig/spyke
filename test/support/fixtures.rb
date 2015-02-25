@@ -39,10 +39,12 @@ end
 
 class Image < Spyke::Base
   method_for :create, :put
+  attributes :description, :caption
 end
 
 class StepImage < Image
   include_root_in_json 'step_image_root'
+  attributes :note
 end
 
 class RecipeImage < Image

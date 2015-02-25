@@ -10,19 +10,17 @@ module Spyke
     end
 
     module ClassMethods
-      # Copy/paste http://thepugautomatic.com/2013/dsom/
-      MODULE_NAME = :DynamicAttributes
-
+      # By adding instance methods via an included module,
+      # they become overridable with "super".
+      # http://thepugautomatic.com/2013/dsom/
       def attributes(*names)
-        if const_defined?(MODULE_NAME, _search_ancestors = false)
-          mod = const_get(MODULE_NAME)
-        else
-          mod = const_set(MODULE_NAME, Module.new)
-          include mod
+        unless @spyke_instance_method_container
+          @spyke_instance_method_container = Module.new
+          include @spyke_instance_method_container
         end
 
-        names.each do |name|
-          mod.module_eval do
+        @spyke_instance_method_container.module_eval do
+          names.each do |name|
             define_method(name) do
               attribute(name)
             end
