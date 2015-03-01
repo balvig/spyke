@@ -58,8 +58,6 @@ class JSONParser < Faraday::Response::Middleware
       metadata: json[:extra],
       errors: json[:errors]
     }
-  rescue MultiJson::ParseError => exception
-    { errors: { base: [ error: exception.message ] } }
   end
 end
 
@@ -77,7 +75,6 @@ Adding a class and inheriting from `Spyke::Base` will allow you to interact with
 ```ruby
 class User < Spyke::Base
   has_many :posts
-
   scope :active, -> { where(active: true) }
 end
 
@@ -108,7 +105,9 @@ User.create(name: 'Bob')
 
 ### Custom URIs
 
-You can specify custom URIs on both the class and association level:
+You can specify custom URIs on both the class and association level.
+Set uri to `nil` for associations you only want to use embedded JSON
+and never call out to the API.
 
 ```ruby
 class User < Spyke::Base
@@ -127,17 +126,31 @@ user.posts # => GET http://api.com/posts/for_user/3
 Post.find(4) # => GET http://api.com/posts/4
 ```
 
-### Log output
+### Custom requests
 
-When used with Rails, Spyke will automatically output helpful
-ActiveRecord-like messages to the main log:
+Custom request methods and the `using` scope methods allow you to
+perform requests for non-REST actions:
 
-```bash
-Started GET "/posts" for 127.0.0.1 at 2014-12-01 14:31:20 +0000
-Processing by PostsController#index as HTML
-  Parameters: {}
-  Spyke (40.3ms)  GET http://api.com/posts [200]
-Completed 200 OK in 75ms (Views: 64.6ms | Spyke: 40.3ms | ActiveRecord: 0ms)
+##### The `.using` scope
+
+```ruby
+Post.using('posts/recent') # => GET http://api.com/posts/recent
+Post.using(:recent) # => GET http://api.com/posts/recent
+Post.using(:recent).where(status: 'draft') # => GET http://api.com/posts/recent?status=draft
+Post.using(:recent).post # => POST http://api.com/posts/recent
+```
+
+##### Custom requests from instance
+
+```ruby
+Post.find(3).put(:publish) # => PUT http://api.com/posts/3/publish
+```
+
+##### Arbitrary requests (returns plain Result object)
+
+```ruby
+Post.request(:post, 'posts/3/log', time: '12:00')
+# => POST http://api.com/posts/3/log - { time: '12:00' }
 ```
 
 ### API-side validations
@@ -154,7 +167,20 @@ remap it in Faraday to match the above. Doing this will allow you to
 show errors returned from the server in forms and f.ex using
 `@post.errors.full_messages` just like ActiveRecord.
 
+### Log output
+
+When used with Rails, Spyke will automatically output helpful
+ActiveRecord-like messages to the main log:
+
+```bash
+Started GET "/posts" for 127.0.0.1 at 2014-12-01 14:31:20 +0000
+Processing by PostsController#index as HTML
+  Parameters: {}
+  Spyke (40.3ms)  GET http://api.com/posts [200]
+Completed 200 OK in 75ms (Views: 64.6ms | Spyke: 40.3ms | ActiveRecord: 0ms)
+```
+
 ## Contributing
 
 If possible please take a look at the [tests marked "wishlisted"](https://github.com/balvig/spyke/search?l=ruby&q=wishlisted&utf8=%E2%9C%93)!
-These are features/fixes we want to implement but haven't gotten around to doing yet :)
+These are features/fixes I'd like to implement but haven't gotten around to doing yet :)

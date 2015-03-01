@@ -29,8 +29,7 @@ module Spyke
       end
 
       def fetch
-        uri = new.uri
-        get_raw uri, current_scope.params.except(*uri.variables)
+        scoped_request :get
       end
 
       def create(attributes = {})

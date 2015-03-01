@@ -11,12 +11,23 @@ module Spyke
 
     module ClassMethods
       METHODS.each do |method|
-        define_method(method) do |path, params = {}|
-          new_instance_or_collection_from_result send("#{method}_raw", path, params)
+        define_method(method) do
+          new_instance_or_collection_from_result scoped_request(method)
         end
+      end
 
-        define_method("#{method}_raw") do |path, params = {}|
-          request(method, path, params)
+      def request(method, path, params = {})
+        ActiveSupport::Notifications.instrument('request.spyke', method: method) do |payload|
+          response = connection.send(method) do |request|
+            if method == :get
+              request.url path.to_s, params
+            else
+              request.url path.to_s
+              request.body = params
+            end
+          end
+          payload[:url], payload[:status] = response.env.url, response.status
+          Result.new_from_response(response)
         end
       end
 
@@ -38,19 +49,10 @@ module Spyke
 
       private
 
-        def request(method, path, params = {})
-          ActiveSupport::Notifications.instrument('request.spyke', method: method) do |payload|
-            response = connection.send(method) do |request|
-              if method == :get
-                request.url path.to_s, params
-              else
-                request.url path.to_s
-                request.body = params
-              end
-            end
-            payload[:url], payload[:status] = response.env.url, response.status
-            Result.new_from_response(response)
-          end
+        def scoped_request(method)
+          uri = new.uri
+          params = current_scope.params.except(*uri.variables)
+          request(method, uri, params)
         end
 
         def new_instance_or_collection_from_result(result)
@@ -83,7 +85,7 @@ module Spyke
         params = action if action.is_a?(Hash)
         path = resolve_path_from_action(action)
 
-        result = self.class.send("#{method}_raw", path, params)
+        result = self.class.request(method, path, params)
 
         add_errors_to_model(result.errors)
         self.attributes = result.data
