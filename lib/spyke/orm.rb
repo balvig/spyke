@@ -50,9 +50,9 @@ module Spyke
 
     def to_params
       if param_root
-        { param_root => attributes.to_params.except(*uri.variables)}
+        { param_root => params_not_embedded_in_url }
       else
-        attributes.to_params.except(*uri.variables)
+        params_not_embedded_in_url
       end
     end
 
@@ -90,6 +90,10 @@ module Spyke
         elsif include_root?
           self.class.model_name.param_key
         end
+      end
+
+      def params_not_embedded_in_url
+        attributes.to_params.except(*uri.variables)
       end
   end
 end
