@@ -1,4 +1,5 @@
 require 'faraday'
+require 'faraday_middleware'
 require 'spyke/config'
 require 'spyke/path'
 require 'spyke/result'
