@@ -143,7 +143,7 @@ Completed 200 OK in 75ms (Views: 64.6ms | Spyke: 40.3ms | ActiveRecord: 0ms)
 ### API-side validations
 
 Spyke expects errors to be formatted in the same way as the
-ActiveModel::Errors hash, ie:
+[ActiveModel::Errors details hash](https://cowbell-labs.com/2015-01-22-active-model-errors-details.html), ie:
 
 ```ruby
 { title: [{ error: 'blank'}, { error: 'too_short', count: 10 }]}
