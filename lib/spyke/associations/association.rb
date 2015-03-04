@@ -36,7 +36,7 @@ module Spyke
         end
 
         def foreign_key
-          (@options[:foreign_key] || "#{parent.class.model_name.param_key}_id").to_sym
+          (@options[:foreign_key] || "#{parent.class.model_name.element}_id").to_sym
         end
 
         def fetch

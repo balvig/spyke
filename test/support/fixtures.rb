@@ -130,13 +130,14 @@ end
 module Cookbook
   class Tip < Spyke::Base
     uri 'tips/(:id)'
-    has_many :likes, class_name: 'Cookbook::Like', uri: 'tips/:cookbook_tip_id/likes/(:id)'
+    has_many :likes, class_name: 'Cookbook::Like'
     has_many :favorites
     has_many :votes
     has_many :photos, class_name: 'Photo'
   end
 
   class Like < Spyke::Base
+    belongs_to :tip
   end
 
   class Favorite < Spyke::Base

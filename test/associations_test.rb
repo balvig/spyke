@@ -391,10 +391,21 @@ module Spyke
 
     def test_namespaced_model
       tip_endpoint = stub_request(:get, 'http://sushi.com/tips/1').to_return_json(result: { id: 1 })
-      likes_endpoint = stub_request(:get, 'http://sushi.com/tips/1/likes')
-      Cookbook::Tip.find(1).likes.first
+      nested_likes_endpoint = stub_request(:get, 'http://sushi.com/tips/1/likes')
+      likes_endpoint = stub_request(:get, 'http://sushi.com/likes')
+
+      Cookbook::Tip.new(id: 1).likes.first
+      Cookbook::Like.new(tip_id: 1).tip
+      Cookbook::Like.all.to_a
+
       assert_requested tip_endpoint
+      assert_requested nested_likes_endpoint
       assert_requested likes_endpoint
+    end
+
+    def test_namespaced_foreign_key
+      like = Cookbook::Tip.new(id: 1).likes.build
+      assert_equal 1, like.tip_id
     end
 
     def test_namespaced_association_class_auto_detect

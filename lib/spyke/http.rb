@@ -72,7 +72,7 @@ module Spyke
         end
 
         def default_uri
-          "#{model_name.plural}/(:id)"
+          "#{model_name.element.pluralize}/(:id)"
         end
     end
 
