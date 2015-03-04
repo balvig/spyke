@@ -167,6 +167,24 @@ remap it in Faraday to match the above. Doing this will allow you to
 show errors returned from the server in forms and f.ex using
 `@post.errors.full_messages` just like ActiveRecord.
 
+### Attributes-wrapping
+
+Spyke, like Rails, by default wraps sent attributes in a root element,
+but this can be disabled or customized:
+
+```ruby
+class Article < Spyke::Base
+  # Default
+  include_root_in_json  true # { article: { title: ...} }
+
+  # Custom
+  include_root_in_json :post # { post: { title: ...} }
+
+  # Disabled
+  include_root_in_json false # { title: ... }
+end
+```
+
 ### Using multiple APIs
 
 If you need to use different APIs, instead of configuring `Spyke::Base`
