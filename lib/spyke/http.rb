@@ -9,6 +9,10 @@ module Spyke
     extend ActiveSupport::Concern
     METHODS = %i{ get post put patch delete }
 
+    included do
+      class_attribute :connection, instance_accessor: false
+    end
+
     module ClassMethods
       METHODS.each do |method|
         define_method(method) do
@@ -40,11 +44,7 @@ module Spyke
       end
 
       def uri(uri_template = nil)
-        @uri ||= uri_template || superclass_uri || default_uri
-      end
-
-      def connection
-        Config.connection
+        @uri ||= uri_template || default_uri
       end
 
       private
@@ -69,10 +69,6 @@ module Spyke
           else
             new attributes_or_object
           end
-        end
-
-        def superclass_uri
-          superclass.uri.dup.freeze if superclass != Base
         end
 
         def default_uri

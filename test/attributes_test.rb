@@ -2,7 +2,6 @@ require 'test_helper'
 
 module Spyke
   class AttributesTest < MiniTest::Test
-
     def test_block_initialization
       recipe = Recipe.new do |r|
         r.title = 'Sushi'

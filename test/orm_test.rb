@@ -113,12 +113,6 @@ module Spyke
       assert_requested endpoint
     end
 
-    def test_inheritance_passes_on_custom_method_and_uri
-      endpoint = stub_request(:put, 'http://sushi.com/images')
-      StepImage.create
-      assert_requested endpoint
-    end
-
     def test_inheritance_not_overwriting_custom_uri
       endpoint = stub_request(:put, 'http://sushi.com/recipes/1/image')
       RecipeImage.where(recipe_id: 1).create
@@ -158,14 +152,14 @@ module Spyke
     end
 
     def test_relative_uris
-      previous = Spyke::Config.connection.url_prefix
-      Spyke::Config.connection.url_prefix = 'http://sushi.com/api/v2/'
+      previous = Spyke::Base.connection.url_prefix
+      Spyke::Base.connection.url_prefix = 'http://sushi.com/api/v2/'
 
       endpoint = stub_request(:get, 'http://sushi.com/api/v2/recipes')
       Recipe.all.to_a
       assert_requested endpoint
 
-      Spyke::Config.connection.url_prefix = previous
+      Spyke::Base.connection.url_prefix = previous
     end
   end
 end

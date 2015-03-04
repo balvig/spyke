@@ -54,5 +54,11 @@ module Spyke
       recipe.put(:draft)
       assert_requested endpoint
     end
+
+    def test_multiple_apis
+      endpoint = stub_request(:get, 'http://sashimi.com/other_recipes')
+      OtherRecipe.all.to_a
+      assert_requested endpoint
+    end
   end
 end

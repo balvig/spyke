@@ -61,7 +61,7 @@ class JSONParser < Faraday::Response::Middleware
   end
 end
 
-Spyke::Config.connection = Faraday.new(url: 'http://api.com') do |c|
+Spyke::Base.connection = Faraday.new(url: 'http://api.com') do |c|
   c.request   :json
   c.use       JSONParser
   c.adapter   Faraday.default_adapter
@@ -131,7 +131,7 @@ Post.find(4) # => GET http://api.com/posts/4
 Custom request methods and the `using` scope methods allow you to
 perform requests for non-REST actions:
 
-##### The `.using` scope
+The `.using` scope:
 
 ```ruby
 Post.using('posts/recent') # => GET http://api.com/posts/recent
@@ -140,13 +140,13 @@ Post.using(:recent).where(status: 'draft') # => GET http://api.com/posts/recent?
 Post.using(:recent).post # => POST http://api.com/posts/recent
 ```
 
-##### Custom requests from instance
+Custom requests from instance:
 
 ```ruby
 Post.find(3).put(:publish) # => PUT http://api.com/posts/3/publish
 ```
 
-##### Arbitrary requests (returns plain Result object)
+Arbitrary requests (returns plain Result object):
 
 ```ruby
 Post.request(:post, 'posts/3/log', time: '12:00')
@@ -167,6 +167,19 @@ remap it in Faraday to match the above. Doing this will allow you to
 show errors returned from the server in forms and f.ex using
 `@post.errors.full_messages` just like ActiveRecord.
 
+### Using multiple APIs
+
+If you need to use different APIs, instead of configuring `Spyke::Base`
+you can configure each class individually:
+
+```ruby
+class Post < Spyke::Base
+  self.connection = Faraday.new(url: 'http://sashimi.com') do |faraday|
+    # middleware
+  end
+end
+```
+
 ### Log output
 
 When used with Rails, Spyke will automatically output helpful
@@ -179,6 +192,12 @@ Processing by PostsController#index as HTML
   Spyke (40.3ms)  GET http://api.com/posts [200]
 Completed 200 OK in 75ms (Views: 64.6ms | Spyke: 40.3ms | ActiveRecord: 0ms)
 ```
+
+### Other examples
+
+For more examples of how Spyke can be used, check out [fixtures.rb](https://github.com/balvig/spyke/blob/master/test/support/fixtures.rb) and the
+[test suite](https://github.com/balvig/spyke/tree/master/test).
+
 
 ## Contributing
 
