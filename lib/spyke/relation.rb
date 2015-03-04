@@ -18,6 +18,15 @@ module Spyke
       relation
     end
 
+    def using(uri)
+      if uri.is_a? Symbol
+        @options[:uri] = File.join @options[:uri], uri.to_s
+      else
+        @options[:uri] = uri
+      end
+      where
+    end
+
     # Overrides Enumerable find
     def find(id)
       scoping { klass.find(id) }

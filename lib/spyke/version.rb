@@ -1,3 +1,3 @@
 module Spyke
-  VERSION = '1.8.11'
+  VERSION = '2.0.0'
 end

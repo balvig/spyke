@@ -8,7 +8,7 @@ module Spyke
       class_attribute :include_root
       self.include_root = true
 
-      class_attribute :callback_methods
+      class_attribute :callback_methods, instance_accessor: false
       self.callback_methods = { create: :post, update: :put }.freeze
     end
 
@@ -29,8 +29,7 @@ module Spyke
       end
 
       def fetch
-        uri = new.uri
-        get_raw uri, current_scope.params.except(*uri.variables)
+        scoped_request :get
       end
 
       def create(attributes = {})
