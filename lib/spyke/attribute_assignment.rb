@@ -48,9 +48,14 @@ module Spyke
       attributes[:id] = value if value.present?
     end
 
-    def ==(other)
-      other.is_a?(Spyke::Base) && id == other.id
+    def hash
+      id.hash
     end
+
+    def ==(other)
+      other.instance_of?(self.class) && id? && id == other.id
+    end
+    alias :eql? :==
 
     def inspect
       "#<#{self.class}(#{uri}) id: #{id.inspect} #{inspect_attributes}>"

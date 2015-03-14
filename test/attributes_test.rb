@@ -63,6 +63,18 @@ module Spyke
       assert_equal Recipe.new(id: 2, title: 'Fish'), Recipe.new(id: 2, title: 'Fish')
       refute_equal Recipe.new(id: 2, title: 'Fish'), Recipe.new(id: 1, title: 'Fish')
       refute_equal Recipe.new(id: 2, title: 'Fish'), 'not_a_spyke_object'
+      refute_equal Recipe.new(id: 2, title: 'Fish'), Image.new(id: 2, title: 'Fish')
+      refute_equal Recipe.new, Recipe.new
+      refute_equal StepImage.new(id: 1), Image.new(id: 1)
+    end
+
+    def test_uniqueness
+      recipe_1 = Recipe.new(id: 1)
+      recipe_2 = Recipe.new(id: 1)
+      recipe_3 = Recipe.new(id: 2)
+      image_1 = Image.new(id: 2)
+      records = [recipe_1, recipe_2, recipe_3, image_1]
+      assert_equal [recipe_1, recipe_3, image_1], records.uniq
     end
 
     def test_explicit_attributes
