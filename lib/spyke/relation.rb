@@ -18,7 +18,7 @@ module Spyke
       relation
     end
 
-    def using(uri)
+    def with(uri)
       if uri.is_a? Symbol
         @options[:uri] = File.join @options[:uri], uri.to_s
       else
