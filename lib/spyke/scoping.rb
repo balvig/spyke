@@ -7,7 +7,7 @@ module Spyke
 
     module ClassMethods
       delegate :where, :build, :any?, :empty?, to: :all
-      delegate :using, to: :all
+      delegate :with, to: :all
 
       def all
         current_scope || Relation.new(self, uri: uri)

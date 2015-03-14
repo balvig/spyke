@@ -128,16 +128,16 @@ Post.find(4) # => GET http://api.com/posts/4
 
 ### Custom requests
 
-Custom request methods and the `using` scope methods allow you to
+Custom request methods and the `with` scope methods allow you to
 perform requests for non-REST actions:
 
-The `.using` scope:
+The `.with` scope:
 
 ```ruby
-Post.using('posts/recent') # => GET http://api.com/posts/recent
-Post.using(:recent) # => GET http://api.com/posts/recent
-Post.using(:recent).where(status: 'draft') # => GET http://api.com/posts/recent?status=draft
-Post.using(:recent).post # => POST http://api.com/posts/recent
+Post.with('posts/recent') # => GET http://api.com/posts/recent
+Post.with(:recent) # => GET http://api.com/posts/recent
+Post.with(:recent).where(status: 'draft') # => GET http://api.com/posts/recent?status=draft
+Post.with(:recent).post # => POST http://api.com/posts/recent
 ```
 
 Custom requests from instance:
