@@ -7,6 +7,7 @@ module Spyke
 
     included do
       attr_reader :attributes
+      delegate :[], :[]=, to: :attributes
     end
 
     module ClassMethods

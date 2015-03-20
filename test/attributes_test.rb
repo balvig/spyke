@@ -59,6 +59,19 @@ module Spyke
       assert_equal 'Sushi', recipe.title
     end
 
+    def test_attributes_element_reference
+      recipe = Recipe.new(title: 'Chicken Soup')
+
+      assert_equal 'Chicken Soup', recipe[:title]
+    end
+
+    def test_attributes_element_assignment
+      recipe = Recipe.new
+      recipe[:title] = 'Beef Brisket'
+
+      assert_equal 'Beef Brisket', recipe.title
+    end
+
     def test_equality
       assert_equal Recipe.new(id: 2, title: 'Fish'), Recipe.new(id: 2, title: 'Fish')
       refute_equal Recipe.new(id: 2, title: 'Fish'), Recipe.new(id: 1, title: 'Fish')
