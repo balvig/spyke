@@ -75,7 +75,7 @@ module Spyke
         return attribute(name)         if attribute?(name)   && args.length == 0
         return predicate(name)         if predicate?(name)   && args.length == 0
         return set_attribute(name, args.first) if setter?(name) && args.length == 1
-        raise(ArgumentError) if (association?(name) || attribute?(name) || predicate?(name) || set_attribute(name, args.first))
+        raise(ArgumentError) if (association?(name) || attribute?(name) || predicate?(name) || setter?(name))
         super
       end
 
