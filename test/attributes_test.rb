@@ -143,7 +143,6 @@ module Spyke
       recipe = Recipe.new(description: 'Delicious')
       assert_raises ArgumentError do
         recipe.description(2)
-        puts recipe.description(2)
       end
       assert_raises ArgumentError do
         recipe.description?(2)
