@@ -13,7 +13,7 @@ module Spyke
     module ClassMethods
       # By adding instance methods via an included module,
       # they become overridable with "super".
-      # http://thepugautomatic.com/2013/dsom/
+      # http://thepugautomatic.com/2013/07/dsom/
       def attributes(*names)
         unless @spyke_instance_method_container
           @spyke_instance_method_container = Module.new
