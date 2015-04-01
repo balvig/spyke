@@ -23,6 +23,7 @@ class Recipe < Spyke::Base
   has_many :groups
   has_many :gallery_images, class_name: 'Image'
   has_one :image
+  has_many :step_images
   has_one :background_image, class_name: 'Image', uri: nil
   has_one :alternate, class_name: 'Recipe', uri: 'recipes/:recipe_id/alternates/recipe'
   belongs_to :user
@@ -144,5 +145,6 @@ module Cookbook
   end
 
   class Photo < Spyke::Base
+    include_root_in_json :foto
   end
 end

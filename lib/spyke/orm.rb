@@ -84,8 +84,8 @@ module Spyke
     private
 
       def param_root
-        if include_root.is_a? String
-          include_root
+        if [String, Symbol].include?(include_root.class)
+          include_root.to_s
         elsif include_root?
           self.class.model_name.param_key
         end

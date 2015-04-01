@@ -125,6 +125,7 @@ module Spyke
 
     def test_to_params_with_custom_root
       assert_equal({ 'step_image_root' => { 'url' => 'bob.jpg' } }, StepImage.new(url: 'bob.jpg').to_params)
+      assert_equal({ 'foto' => { 'url' => 'bob.jpg' } }, Cookbook::Photo.new(url: 'bob.jpg').to_params)
     end
 
     def test_destroy
