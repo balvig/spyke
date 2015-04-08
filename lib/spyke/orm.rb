@@ -69,7 +69,7 @@ module Spyke
     end
 
     def destroy
-      delete
+      self.attributes = delete
     end
 
     def update_attributes(new_attributes)

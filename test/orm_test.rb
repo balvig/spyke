@@ -129,8 +129,10 @@ module Spyke
     end
 
     def test_destroy
-      endpoint = stub_request(:delete, 'http://sushi.com/recipes/1')
-      Recipe.new(id: 1).destroy
+      endpoint = stub_request(:delete, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1, deleted: true })
+      recipe = Recipe.new(id: 1)
+      recipe.destroy
+      assert recipe.deleted
       assert_requested endpoint
     end
 
