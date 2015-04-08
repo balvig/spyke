@@ -55,6 +55,13 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_custom_put_in_context_of_association
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1/groups/2/draft')
+      recipe = Recipe.new(id: 1)
+      recipe.groups.build(id: 2).put(:draft)
+      assert_requested endpoint
+    end
+
     def test_multiple_apis
       endpoint = stub_request(:get, 'http://sashimi.com/other_recipes')
       OtherRecipe.all.to_a
