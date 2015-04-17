@@ -59,7 +59,7 @@ module Spyke
     alias :eql? :==
 
     def inspect
-      "#<#{self.class}(#{uri}) id: #{id.inspect} #{inspect_attributes}>"
+      "#<#{self.class}(#{@uri_template}) id: #{id.inspect} #{inspect_attributes}>"
     end
 
     private
