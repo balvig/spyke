@@ -135,7 +135,13 @@ module Spyke
 
     def test_inspect
       recipe = Recipe.new(id: 2, title: 'Pizza', description: 'Delicious')
-      assert_equal '#<Recipe(recipes/2) id: 2 title: "Pizza" description: "Delicious">', recipe.inspect
+      assert_equal '#<Recipe(recipes/(:id)) id: 2 title: "Pizza" description: "Delicious">', recipe.inspect
+      recipe = Recipe.new
+      assert_equal '#<Recipe(recipes/(:id)) id: nil >', recipe.inspect
+      user = Recipe.new.build_user
+      assert_equal '#<User(users/:id) id: nil >', user.inspect
+      group = Recipe.new.groups.build
+      assert_equal '#<Group(recipes/:recipe_id/groups/(:id)) id: nil recipe_id: nil>', group.inspect
     end
 
     def test_rejecting_wrong_number_of_args
