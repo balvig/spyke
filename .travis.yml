@@ -2,3 +2,4 @@ notifications:
   email: false
 rvm:
   - 2.1.5
+sudo: false
