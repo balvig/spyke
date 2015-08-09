@@ -40,9 +40,9 @@ module Spyke
     end
 
     def test_custom_put_request_from_instance
-      endpoint = stub_request(:put, 'http://sushi.com/recipes/1/publish').to_return_json(result: { id: 1, status: 'published' })
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1/publish').with(body: { time: '11:00' }).to_return_json(result: { id: 1, status: 'published' })
       recipe = Recipe.new(id: 1, status: 'unpublished')
-      recipe.put('/recipes/:id/publish')
+      recipe.put('/recipes/:id/publish', time: '11:00')
 
       assert_equal 'published', recipe.status
       assert_requested endpoint
