@@ -40,8 +40,8 @@ module Spyke
       @find_some ||= klass.new_collection_from_result(fetch)
     end
 
-    def each
-      find_some.each { |record| yield record }
+    def each(&block)
+      find_some.each(&block)
     end
 
     def uri

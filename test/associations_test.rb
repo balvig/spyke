@@ -9,6 +9,11 @@ module Spyke
       end
     end
 
+    def test_association_get_ingredients_with_index
+      group = Group.new(ingredients: [Ingredient.new(name: 'Water'), Ingredient.new(name: 'Flour')])
+      assert_equal [['Water', 0], ['Flour', 1]], group.ingredients.each.with_index.map {|ingredient, idx| [ingredient.name, idx]}
+    end
+
     def test_initializing_with_has_many_association
       group = Group.new(ingredients: [Ingredient.new(name: 'Water'), Ingredient.new(name: 'Flour')])
       assert_equal %w{ Water Flour }, group.ingredients.map(&:name)
