@@ -15,7 +15,7 @@ module Spyke
       assert_kind_of Enumerator, Recipe.new(id: 1).groups.each
     end
 
-    def test_association_get_
+    def test_association_get_ingredients_with_index
       group = Group.new(ingredients: [Ingredient.new(name: 'Water'), Ingredient.new(name: 'Flour')])
       expected_ingredients_with_index = [['Water', 0], ['Flour', 1]]
       actual_ingredients_with_index = group.ingredients.each.with_index.map {|ingredient, idx| [ingredient.name, idx]}
