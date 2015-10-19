@@ -9,6 +9,20 @@ module Spyke
       end
     end
 
+    def test_association_each_returns_enumerator
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { groups: [{ id: 1, name: 'Fish' }] })
+
+      assert_kind_of Enumerator, Recipe.new(id: 1).groups.each
+    end
+
+    def test_association_get_ingredients_with_index
+      group = Group.new(ingredients: [Ingredient.new(name: 'Water'), Ingredient.new(name: 'Flour')])
+      expected_ingredients_with_index = [['Water', 0], ['Flour', 1]]
+      actual_ingredients_with_index = group.ingredients.each.with_index.map {|ingredient, idx| [ingredient.name, idx]}
+
+      assert_equal expected_ingredients_with_index, actual_ingredients_with_index
+    end
+
     def test_initializing_with_has_many_association
       group = Group.new(ingredients: [Ingredient.new(name: 'Water'), Ingredient.new(name: 'Flour')])
       assert_equal %w{ Water Flour }, group.ingredients.map(&:name)
