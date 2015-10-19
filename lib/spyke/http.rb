@@ -10,7 +10,7 @@ module Spyke
     METHODS = %i{ get post put patch delete }
 
     included do
-      class_attribute :connection, instance_accessor: false
+      class_attribute :connection_pool, instance_accessor: false
     end
 
     module ClassMethods
@@ -20,18 +20,28 @@ module Spyke
         end
       end
 
+      def connection(&blk)
+        connection_pool.with(&blk)
+      end
+
+      def connection=(connection)
+        self.connection_pool = ConnectionPool.new(size: 1) { connection }
+      end
+
       def request(method, path, params = {})
         ActiveSupport::Notifications.instrument('request.spyke', method: method) do |payload|
-          response = connection.send(method) do |request|
-            if method == :get
-              request.url path.to_s, params
-            else
-              request.url path.to_s
-              request.body = params
+          connection do |conn|
+            response = conn.send(method) do |request|
+              if method == :get
+                request.url path.to_s, params
+              else
+                request.url path.to_s
+                request.body = params
+              end
             end
+            payload[:url], payload[:status] = response.env.url, response.status
+            Result.new_from_response(response)
           end
-          payload[:url], payload[:status] = response.env.url, response.status
-          Result.new_from_response(response)
         end
       end
 
