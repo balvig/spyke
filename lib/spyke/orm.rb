@@ -42,9 +42,16 @@ module Spyke
         new(id: id).destroy
       end
 
-      def strip_slug(id)
-        id.to_s.split('-').first
-      end
+      private
+
+        def strip_slug(id)
+          id = id.to_s
+          is_uuid?(id) ? id : id.split('-').first
+        end
+  
+        def is_uuid?(string)
+          (/\A[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}/i =~ string) != nil
+        end
     end
 
     def to_params

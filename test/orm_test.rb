@@ -31,6 +31,12 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_find_with_uuid
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/6EB3A9B6-4097-11E5-80EB-0357A0D4F70A').to_return_json(result: { id: '6EB3A9B6-4097-11E5-80EB-0357A0D4F70A' })
+      Recipe.find('6EB3A9B6-4097-11E5-80EB-0357A0D4F70A')
+      assert_requested endpoint
+    end
+
     def test_404
       stub_request(:get, 'http://sushi.com/recipes/1').to_return(status: 404, body: { message: 'Not found' }.to_json)
 
