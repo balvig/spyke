@@ -20,18 +20,14 @@ module Spyke
         end
       end
 
-      def connection(&blk)
-        connection_pool.with(&blk)
-      end
-
       def connection=(connection)
         self.connection_pool = ConnectionPool.new(size: 1) { connection }
       end
 
       def request(method, path, params = {})
         ActiveSupport::Notifications.instrument('request.spyke', method: method) do |payload|
-          connection do |conn|
-            response = conn.send(method) do |request|
+          connection_pool.with do |connection|
+            response = connection.send(method) do |request|
               if method == :get
                 request.url path.to_s, params
               else
