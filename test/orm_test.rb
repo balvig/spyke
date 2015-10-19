@@ -159,14 +159,14 @@ module Spyke
     end
 
     def test_relative_uris
-      previous = Spyke::Base.connection.url_prefix
-      Spyke::Base.connection.url_prefix = 'http://sushi.com/api/v2/'
+      previous = Spyke::TestConnection.url_prefix
+      Spyke::TestConnection.url_prefix = 'http://sushi.com/api/v2/'
 
       endpoint = stub_request(:get, 'http://sushi.com/api/v2/recipes')
       Recipe.all.to_a
       assert_requested endpoint
 
-      Spyke::Base.connection.url_prefix = previous
+      Spyke::TestConnection.url_prefix = previous
     end
 
     def test_custom_primary_key_on_collection
