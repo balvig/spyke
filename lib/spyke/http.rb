@@ -1,3 +1,4 @@
+require 'connection_pool'
 require 'faraday'
 require 'faraday_middleware'
 require 'spyke/config'
