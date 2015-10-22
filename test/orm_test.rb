@@ -25,12 +25,6 @@ module Spyke
       assert_equal 'Sashimi', recipe.title
     end
 
-    def test_find_with_slug
-      endpoint = stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1 })
-      Recipe.find('1-delicious-soup')
-      assert_requested endpoint
-    end
-
     def test_404
       stub_request(:get, 'http://sushi.com/recipes/1').to_return(status: 404, body: { message: 'Not found' }.to_json)
 

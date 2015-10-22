@@ -24,7 +24,6 @@ module Spyke
 
       def find(id)
         raise ResourceNotFound if id.blank?
-        id = strip_slug(id)
         where(id: id).find_one || raise(ResourceNotFound)
       end
 
@@ -40,10 +39,6 @@ module Spyke
 
       def destroy(id = nil)
         new(id: id).destroy
-      end
-
-      def strip_slug(id)
-        id.to_s.split('-').first
       end
     end
 
