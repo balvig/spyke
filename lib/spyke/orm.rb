@@ -72,10 +72,11 @@ module Spyke
       self.attributes = delete
     end
 
-    def update_attributes(new_attributes)
+    def update(new_attributes)
       self.attributes = new_attributes
       save
     end
+    alias :update_attributes :update
 
     def reload
       self.attributes = self.class.find(id).attributes

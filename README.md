@@ -93,7 +93,7 @@ user = User.find(3)
 user.posts
 # => find embedded in returned JSON or GET http://api.com/users/3/posts
 
-user.update_attributes(name: 'Alice')
+user.update(name: 'Alice')
 # => PUT http://api.com/users/3 - { user: { name: 'Alice' } }
 
 user.destroy

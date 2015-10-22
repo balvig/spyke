@@ -70,6 +70,16 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_update
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').with(body: { recipe: { title: 'Sushi' } }).to_return_json(result: { id: 1, title: 'Sushi (saved)' })
+
+      recipe = Recipe.new(id: 1, title: 'Sashimi')
+      recipe.update(title: 'Sushi')
+
+      assert_equal 'Sushi (saved)', recipe.title
+      assert_requested endpoint
+    end
+
     def test_create
       endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { title: 'Sushi' } }).to_return_json(result: { id: 1, title: 'Sushi' })
 
