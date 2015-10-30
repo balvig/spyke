@@ -62,6 +62,10 @@ module Spyke
       "#<#{self.class}(#{@uri_template}) id: #{id.inspect} #{inspect_attributes}>"
     end
 
+    def as_json(options = nil)
+      attributes.as_json(options)
+    end
+
     private
 
       def use_setters(attributes)

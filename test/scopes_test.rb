@@ -135,5 +135,10 @@ module Spyke
         Recipe.new.groups.unknown_method
       end
     end
+
+    def test_to_json
+      stub_request(:get, 'http://sushi.com/recipes').to_return_json(result: [{ id: 1, title: 'Sushi' }])
+      assert_equal '[{"id":1,"title":"Sushi"}]', Recipe.all.to_json
+    end
   end
 end
