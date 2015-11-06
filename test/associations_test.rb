@@ -188,8 +188,8 @@ module Spyke
       recipe.groups.first.ingredients.build(name: 'Salt')
 
       assert_equal %w{ Salt }, recipe.ingredients.map(&:name)
-      assert_equal({ 'recipe' => { 'groups' => [{ 'recipe_id' => 1, 'ingredients' => [{ 'group_id' => nil, 'name' => 'Salt' }] }] } }, recipe.to_params)
-      assert_equal({ 'group' => { 'ingredients' => [{ 'group_id' => nil, 'name' => 'Salt' }] } }, recipe.groups.first.to_params)
+      assert_equal({ 'recipe' => { 'groups' => [{ 'recipe_id' => 1, 'ingredients' => [{ 'name' => 'Salt' }] }] } }, recipe.to_params)
+      assert_equal({ 'group' => { 'ingredients' => [{ 'name' => 'Salt' }] } }, recipe.groups.first.to_params)
     end
 
     def test_deep_build_has_many_association_with_scope
@@ -368,16 +368,28 @@ module Spyke
       assert_equal 'photo.jpg', Recipe.new(background_image: { url: 'photo.jpg' }).background_image.url
     end
 
+    def test_build_with_embed_only_singular_associations
+      recipe = Recipe.new(id: 1)
+      recipe.build_background_image(caption: 'Stir')
+      assert_equal({ 'recipe' => { 'background_image' => { 'caption' => 'Stir' } } }, recipe.to_params)
+    end
+
     def test_embed_only_plural_associations
       assert_equal [], Group.new.ingredients.to_a
       assert_equal [1], Group.new(ingredients: [{ id: 1 }]).ingredients.map(&:id)
+    end
+
+    def test_build_with_embed_only_plural_associations
+      group = Group.new(id: 1)
+      group.ingredients.build(name: 'Salt')
+      assert_equal({ 'group' => { 'ingredients' => [{ 'name' => 'Salt' }] } }, group.to_params)
     end
 
     def test_class_methods_for_associations
       recipe = Recipe.new
       recipe.groups.build_default
 
-      assert_equal({ 'recipe' => { 'groups' => [{ 'recipe_id' => nil, 'name' => 'Condiments', 'ingredients' => [{ 'group_id' => nil, 'name' => 'Salt' }] }, { 'recipe_id' => nil, 'name' => 'Tools', 'ingredients' => [{ 'group_id' => nil, 'name' => 'Spoon' }] }] } }, recipe.to_params)
+      assert_equal({ 'recipe' => { 'groups' => [{ 'recipe_id' => nil, 'name' => 'Condiments', 'ingredients' => [{ 'name' => 'Salt' }] }, { 'recipe_id' => nil, 'name' => 'Tools', 'ingredients' => [{ 'name' => 'Spoon' }] }] } }, recipe.to_params)
       assert_equal %w{ Condiments Tools }, recipe.groups.map(&:name)
       assert_equal %w{ Salt Spoon }, recipe.ingredients.map(&:name)
     end

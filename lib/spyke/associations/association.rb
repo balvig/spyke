@@ -55,6 +55,10 @@ module Spyke
           parent.attributes[name]
         end
 
+        def embed_only?
+          @options[:uri].blank?
+        end
+
         def update_parent(value)
           parent.attributes[name] = value
         end
