@@ -18,6 +18,18 @@ module Spyke
       relation
     end
 
+    def limit(number)
+      relation = clone
+      relation.params.merge!(limit: number)
+      relation
+    end
+
+    def offset(number)
+      relation = clone
+      relation.params.merge!(offset: number)
+      relation
+    end
+
     def with(uri)
       if uri.is_a? Symbol
         @options[:uri] = File.join @options[:uri], uri.to_s

@@ -6,7 +6,7 @@ module Spyke
     extend ActiveSupport::Concern
 
     module ClassMethods
-      delegate :where, :build, :any?, :empty?, to: :all
+      delegate :where, :limit, :offset, :build, :any?, :empty?, to: :all
       delegate :with, to: :all
 
       def all
