@@ -168,5 +168,9 @@ module Spyke
 
       Spyke::Base.connection.url_prefix = previous
     end
+
+    def test_custom_id_key
+      assert_equal 'users/(:user_id)', User.uri
+    end
   end
 end

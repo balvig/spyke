@@ -94,6 +94,7 @@ class Ingredient < Spyke::Base
 end
 
 class User < Spyke::Base
+  self.id_key = :user_id
   has_many :recipes
 end
 

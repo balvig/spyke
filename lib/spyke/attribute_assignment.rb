@@ -42,11 +42,11 @@ module Spyke
     end
 
     def id
-      attributes[:id]
+      attributes[self.class.id_key]
     end
 
     def id=(value)
-      attributes[:id] = value if value.present?
+      attributes[self.class.id_key] = value if value.present?
     end
 
     def hash
@@ -125,7 +125,7 @@ module Spyke
       end
 
       def inspect_attributes
-        attributes.except(:id).map { |k, v| "#{k}: #{v.inspect}" }.join(' ')
+        attributes.except(self.class.id_key).map { |k, v| "#{k}: #{v.inspect}" }.join(' ')
       end
   end
 end
