@@ -307,14 +307,14 @@ module Spyke
       assert_equal %w{ flavor }, recipe.groups.map(&:title)
     end
 
-    def test_nested_attributes_merging_with_existing_when_ids_present?
+    def test_nested_attributes_merging_with_existing_when_ids_present
       recipe = Recipe.new(groups_attributes: [{ id: 1, title: 'starter', description: 'nice' }, { id: 2, title: 'sauce', description: 'spicy' }])
       recipe.attributes = { groups_attributes: [{ 'id' => '2', 'title' => 'flavor' }, { 'title' => 'spices', 'description' => 'lovely' }, { 'title' => 'sweetener', 'description' => 'sweet' }] }
       assert_equal %w{ starter flavor spices sweetener }, recipe.groups.map(&:title)
       assert_equal %w{ nice spicy lovely sweet }, recipe.groups.map(&:description)
     end
 
-    def test_nested_attributes_appending_to_existing_when_ids_present?
+    def test_nested_attributes_appending_to_existing_when_ids_present
       recipe = Recipe.new(groups_attributes: [{ id: 1, title: 'starter' }, { id: 2, title: 'sauce' }])
       recipe.attributes = { groups_attributes: [{ title: 'flavor' }] }
       assert_equal %w{ starter sauce flavor }, recipe.groups.map(&:title)
@@ -427,6 +427,28 @@ module Spyke
       assert_raises NameError do
         Cookbook::Tip.new.votes
       end
+    end
+
+    def test_custom_primary_key_for_belongs_to
+      comment_endpoint = stub_request(:get, 'http://sushi.com/comments/1').to_return_json(result: { user_id: 1 })
+      user_endpoint = stub_request(:get, 'http://sushi.com/users/1').to_return_json(result: { id: 2 })
+      user = Comment.find(1).user
+      assert_equal 2, user.id
+      assert_requested comment_endpoint
+      assert_requested user_endpoint
+    end
+
+    def test_custom_primary_key_for_has_many
+      stub_request(:get, 'http://sushi.com/comments/1').to_return_json(result: { users: [{ id: 1 }] })
+      comment = Comment.find(1)
+      assert_equal 1, comment.users.first.id
+    end
+
+    def test_custom_primary_key_with_nested_attributes
+      comment = Comment.new(users_attributes: [{ uuid: 1, name: "user_1" }])
+      comment.attributes = { users_attributes: [{ uuid: 1, name: "user_1_new_name"}] }
+      assert_equal %w{ user_1_new_name }, comment.users.map(&:name)
+      assert_equal [1], comment.users.map(&:id)
     end
   end
 end

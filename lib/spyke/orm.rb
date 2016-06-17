@@ -10,6 +10,9 @@ module Spyke
 
       class_attribute :callback_methods, instance_accessor: false
       self.callback_methods = { create: :post, update: :put }.freeze
+
+      class_attribute :primary_key
+      self.primary_key = :id
     end
 
     module ClassMethods
@@ -24,7 +27,7 @@ module Spyke
 
       def find(id)
         raise ResourceNotFound if id.blank?
-        where(id: id).find_one || raise(ResourceNotFound)
+        where(primary_key => id).find_one || raise(ResourceNotFound)
       end
 
       def fetch
@@ -38,7 +41,7 @@ module Spyke
       end
 
       def destroy(id = nil)
-        new(id: id).destroy
+        new(primary_key => id).destroy
       end
     end
 

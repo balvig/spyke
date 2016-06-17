@@ -42,11 +42,11 @@ module Spyke
     end
 
     def id
-      attributes[:id]
+      attributes[primary_key]
     end
 
     def id=(value)
-      attributes[:id] = value if value.present?
+      attributes[primary_key] = value if value.present?
     end
 
     def hash
@@ -69,9 +69,16 @@ module Spyke
     private
 
       def use_setters(attributes)
+        # Set id attribute directly if using a custom primary key alongside an attribute named "id" to avoid clobbering
+        set_attribute :id, attributes.delete(:id) if conflicting_ids?(attributes)
+
         attributes.each do |key, value|
           send "#{key}=", value
         end
+      end
+
+      def conflicting_ids?(attributes)
+        primary_key != :id && attributes.key?(:id) && attributes.key?(primary_key)
       end
 
       def method_missing(name, *args, &block)
@@ -125,7 +132,7 @@ module Spyke
       end
 
       def inspect_attributes
-        attributes.except(:id).map { |k, v| "#{k}: #{v.inspect}" }.join(' ')
+        attributes.except(primary_key).map { |k, v| "#{k}: #{v.inspect}" }.join(' ')
       end
   end
 end

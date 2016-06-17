@@ -3,7 +3,7 @@ module Spyke
     class HasMany < Association
       def initialize(*args)
         super
-        @options.reverse_merge!(uri: "#{parent.class.model_name.element.pluralize}/:#{foreign_key}/#{@name}/(:id)")
+        @options.reverse_merge!(uri: "#{parent_path}/:#{foreign_key}/#{@name}/(:#{primary_key})")
         @params[foreign_key] = parent.id
       end
 
@@ -22,6 +22,10 @@ module Spyke
 
       private
 
+        def parent_path
+          parent.class.model_name.element.pluralize
+        end
+
         def combine_with_existing(incoming)
           return incoming unless primary_keys_present_in_existing?
           combined = embedded_attributes + incoming
@@ -35,11 +39,11 @@ module Spyke
         end
 
         def group_by_primary_key(array)
-          array.group_by { |h| h.with_indifferent_access[:id].to_s }
+          array.group_by { |h| h.with_indifferent_access[primary_key].to_s }
         end
 
         def primary_keys_present_in_existing?
-          embedded_attributes && embedded_attributes.any? { |attr| attr.has_key?('id') }
+          embedded_attributes && embedded_attributes.any? { |attr| attr.has_key?(primary_key) }
         end
 
         def clear_existing!
