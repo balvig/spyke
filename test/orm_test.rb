@@ -169,8 +169,11 @@ module Spyke
       Spyke::Base.connection.url_prefix = previous
     end
 
-    def test_custom_id_key
-      assert_equal 'users/(:user_id)', User.uri
+    def test_custom_primary_key_on_find
+      endpoint = stub_request(:get, 'http://sushi.com/users').to_return_json(result: [{ user_id: 1 }])
+      users = User.all.to_a
+      assert_requested endpoint
+      assert_equal 1, users.first.id
     end
   end
 end

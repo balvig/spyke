@@ -103,7 +103,10 @@ class Photo < Spyke::Base
 end
 
 class Comment < Spyke::Base
+  belongs_to :user
+  has_many :users
   scope :approved, -> { where(comment_approved: true) }
+  accepts_nested_attributes_for :users
 end
 
 class OtherApi < Spyke::Base
