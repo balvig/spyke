@@ -17,9 +17,9 @@ module Spyke
         self.include_root = value
       end
 
-      attr_writer :id_key
-      def id_key
-        @id_key ||= :id
+      attr_writer :primary_key
+      def primary_key
+        @primary_key ||= :id
       end
 
       def method_for(callback, value = nil)
@@ -29,7 +29,7 @@ module Spyke
 
       def find(id)
         raise ResourceNotFound if id.blank?
-        where(id_key => id).find_one || raise(ResourceNotFound)
+        where(primary_key => id).find_one || raise(ResourceNotFound)
       end
 
       def fetch
@@ -43,7 +43,7 @@ module Spyke
       end
 
       def destroy(id = nil)
-        new(id_key => id).destroy
+        new(primary_key => id).destroy
       end
     end
 

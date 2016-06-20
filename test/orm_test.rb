@@ -192,7 +192,7 @@ module Spyke
 
       assert_equal 1, user.id
       assert_equal user.id, user.user_id
-      assert_equal 1, user[User.id_key]
+      assert_equal 1, user[User.primary_key]
       assert_equal 42, user[:id]
     end
   end
