@@ -439,14 +439,15 @@ module Spyke
     end
 
     def test_custom_primary_key_for_has_many
-      stub_request(:get, 'http://sushi.com/comments/1').to_return_json(result: { users: [{ user_id: 1 }] })
+      stub_request(:get, 'http://sushi.com/comments/1').to_return_json(result: { users: [{ id: 1 }] })
       comment = Comment.find(1)
       assert_equal 1, comment.users.first.id
     end
 
     def test_custom_primary_key_with_nested_attributes
-      comment = Comment.new(users_attributes: [{ id: 1, name: "user_1" }])
-      comment.attributes = { users_attributes: [{ id: 1, name: "user_1_new_name"}] }
+      comment = Comment.new(users_attributes: [{ user_id: 1, name: "user_1" }])
+#      binding.pry
+      comment.attributes = { users_attributes: [{ user_id: 1, name: "user_1_new_name"}] }
       assert_equal %w{ user_1_new_name}, comment.users.map(&:name)
     end
   end

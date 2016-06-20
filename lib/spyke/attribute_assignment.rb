@@ -69,9 +69,28 @@ module Spyke
     private
 
       def use_setters(attributes)
+        # NOTE: special treatment for :id key, a resource can be identified by
+        # :id or by user defined id_key (default is :id) but in the case where
+        # both id_key and ':id' are passed, :id is treated as attribute
+        # independent of id_key and  primary_key will be id_key
+        # user can acess the data in :id using resource[:id]
+
+        if conflicting_ids?(attributes)
+          id_key = self.class.id_key
+          @attributes[:id] = attributes.delete(:id)
+          @attributes[id_key] = attributes.delete(id_key)
+        end
+
         attributes.each do |key, value|
           send "#{key}=", value
         end
+      end
+
+      def conflicting_ids?(attributes)
+        id_key = self.class.id_key
+        id_key != :id &&
+          attributes.key?(:id) &&
+          attributes.key?(id_key)
       end
 
       def method_missing(name, *args, &block)
