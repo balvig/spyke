@@ -42,11 +42,11 @@ module Spyke
     end
 
     def id
-      attributes[:id]
+      attributes[self.class.primary_key]
     end
 
     def id=(value)
-      attributes[:id] = value if value.present?
+      attributes[self.class.primary_key] = value if value.present?
     end
 
     def hash
@@ -69,9 +69,28 @@ module Spyke
     private
 
       def use_setters(attributes)
+        # NOTE: special treatment for :id key, a resource can be identified by
+        # :id or by user defined primary_key (default is :id) but in the case where
+        # both primary_key and ':id' are passed, :id is treated as attribute
+        # independent of primary_key and  primary_key will be primary_key
+        # user can acess the data in :id using resource[:id]
+
+        if conflicting_ids?(attributes)
+          primary_key = self.class.primary_key
+          @attributes[:id] = attributes.delete(:id)
+          @attributes[primary_key] = attributes.delete(primary_key)
+        end
+
         attributes.each do |key, value|
           send "#{key}=", value
         end
+      end
+
+      def conflicting_ids?(attributes)
+        primary_key = self.class.primary_key
+        primary_key != :id &&
+          attributes.key?(:id) &&
+          attributes.key?(primary_key)
       end
 
       def method_missing(name, *args, &block)
@@ -125,7 +144,7 @@ module Spyke
       end
 
       def inspect_attributes
-        attributes.except(:id).map { |k, v| "#{k}: #{v.inspect}" }.join(' ')
+        attributes.except(self.class.primary_key).map { |k, v| "#{k}: #{v.inspect}" }.join(' ')
       end
   end
 end

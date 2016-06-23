@@ -168,5 +168,32 @@ module Spyke
 
       Spyke::Base.connection.url_prefix = previous
     end
+
+    def test_custom_primary_key_on_find
+      endpoint = stub_request(:get, 'http://sushi.com/users').to_return_json(result: [{ user_id: 1 }])
+      users = User.all.to_a
+      assert_requested endpoint
+      assert_equal 1, users.first.id
+      assert_equal 1, users.first.user_id
+    end
+
+    def test_custom_primary_key_and_id_are_the_same
+      endpoint = stub_request(:get, 'http://sushi.com/users').to_return_json(result: [{ user_id: 1 }])
+      user = User.all.to_a.first
+      assert_requested endpoint
+      assert_equal 1, user.id
+      assert_equal user.user_id, user.id
+    end
+
+    def test_custom_primary_key_but_has_id_attribute
+      endpoint = stub_request(:get, 'http://sushi.com/users').to_return_json(result: [{ user_id: 1, id: 42 }])
+      user = User.all.to_a.first
+      assert_requested endpoint
+
+      assert_equal 1, user.id
+      assert_equal user.id, user.user_id
+      assert_equal 1, user[User.primary_key]
+      assert_equal 42, user[:id]
+    end
   end
 end

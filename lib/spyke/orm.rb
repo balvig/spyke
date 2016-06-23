@@ -17,6 +17,10 @@ module Spyke
         self.include_root = value
       end
 
+      def primary_key(value = nil)
+        @primary_key ||= value || :id
+      end
+
       def method_for(callback, value = nil)
         self.callback_methods = callback_methods.merge(callback => value) if value
         callback_methods[callback]
@@ -24,7 +28,7 @@ module Spyke
 
       def find(id)
         raise ResourceNotFound if id.blank?
-        where(id: id).find_one || raise(ResourceNotFound)
+        where(primary_key => id).find_one || raise(ResourceNotFound)
       end
 
       def fetch
@@ -38,7 +42,7 @@ module Spyke
       end
 
       def destroy(id = nil)
-        new(id: id).destroy
+        new(primary_key => id).destroy
       end
     end
 

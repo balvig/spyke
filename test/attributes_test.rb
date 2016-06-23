@@ -139,7 +139,7 @@ module Spyke
       recipe = Recipe.new
       assert_equal '#<Recipe(recipes/(:id)) id: nil >', recipe.inspect
       user = Recipe.new.build_user
-      assert_equal '#<User(users/:id) id: nil >', user.inspect
+      assert_equal '#<User(users/:user_id) id: nil >', user.inspect
       group = Recipe.new.groups.build
       assert_equal '#<Group(recipes/:recipe_id/groups/(:id)) id: nil recipe_id: nil>', group.inspect
     end
