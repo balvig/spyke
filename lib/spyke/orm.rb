@@ -17,9 +17,8 @@ module Spyke
         self.include_root = value
       end
 
-      attr_writer :primary_key
-      def primary_key
-        @primary_key ||= :id
+      def primary_key(value = nil)
+        @primary_key ||= value || :id
       end
 
       def method_for(callback, value = nil)
