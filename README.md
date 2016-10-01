@@ -68,23 +68,10 @@ Spyke::Base.connection = Faraday.new(url: 'http://api.com') do |c|
 end
 ```
 
-You can also assign a connection pool instead of a plain connection with
-something like:
+Spyke automatically creates a connection pool with a size of 1, but
+you can manually configure this by assigning a connection pool manually:
 
 ```ruby
-# config/initializers/spyke.rb
-
-class JSONParser < Faraday::Response::Middleware
-  def parse(body)
-    json = MultiJson.load(body, symbolize_keys: true)
-    {
-      data: json[:result],
-      metadata: json[:extra],
-      errors: json[:errors]
-    }
-  end
-end
-
 Spyke::Base.connection_pool = ConnectionPool.new(size: 5, timeout: 5) do
   Faraday.new(url: 'http://api.com') do |c|
     c.request   :json
