@@ -12,13 +12,11 @@ class JSONParser < Faraday::Response::Middleware
   end
 end
 
-Spyke::TestConnection = Faraday.new(url: 'http://sushi.com') do |faraday|
+Spyke::Base.connection = Faraday.new(url: 'http://sushi.com') do |faraday|
   faraday.request   :json
   faraday.use       JSONParser
   faraday.adapter   Faraday.default_adapter
 end
-
-Spyke::Base.connection = Spyke::TestConnection
 
 # Test classes
 class Recipe < Spyke::Base
@@ -112,7 +110,7 @@ class Comment < Spyke::Base
 end
 
 class OtherApi < Spyke::Base
-  self.connection = Faraday.new(url: 'http://sashimi.com') do |faraday|
+  self.connection = Faraday.new(url: 'http://sushi.com/api/v2/') do |faraday|
     faraday.use       JSONParser
     faraday.adapter   Faraday.default_adapter
   end

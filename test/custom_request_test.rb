@@ -63,7 +63,7 @@ module Spyke
     end
 
     def test_multiple_apis
-      endpoint = stub_request(:get, 'http://sashimi.com/other_recipes')
+      endpoint = stub_request(:get, 'http://sushi.com/api/v2/other_recipes')
       OtherRecipe.all.to_a
       assert_requested endpoint
     end
