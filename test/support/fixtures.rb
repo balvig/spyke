@@ -98,6 +98,23 @@ class User < Spyke::Base
   has_many :recipes
 end
 
+class Book < Spyke::Base
+  self.primary_key = :isbn
+
+  def initialize(attributes = {})
+    defaults = {isbn: nil}.with_indifferent_access
+    super(defaults.merge(attributes || {}))
+  end
+end
+
+class BookWithDefault < Spyke::Base
+  attributes :isbn, :title
+
+  def isbn
+    attributes[:isbn] || "123"
+  end
+end
+
 class Photo < Spyke::Base
   uri 'images/photos/(:id)'
 end

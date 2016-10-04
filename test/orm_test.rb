@@ -5,13 +5,16 @@ module Spyke
     def test_find
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1, title: 'Sushi' })
       stub_request(:get, 'http://sushi.com/users/1').to_return_json(result: { id: 1, name: 'Bob' })
+      stub_request(:get, 'http://sushi.com/books/978-3').to_return_json(result: { isbn: "978-3", title: 'Recipe Book'})
 
       recipe = Recipe.find(1)
       user = User.find(1)
+      book = Book.find("978-3")
 
       assert_equal 1, recipe.id
       assert_equal 'Sushi', recipe.title
       assert_equal 'Bob', user.name
+      assert_equal 'Recipe Book', book.title
     end
 
     def test_reload
@@ -80,6 +83,14 @@ module Spyke
       recipe = Recipe.create(title: 'Sushi')
 
       assert_equal 'Sushi', recipe.title
+      assert_requested endpoint
+    end
+
+    def test_create_with_defaults
+      endpoint = stub_request(:post, 'http://sushi.com/book_with_defaults').with(body: { book_with_defaults: { isbn: '123', title: 'Best of Sushi' } }).to_return_json(result: { id: 1, title: 'Best of Sushi', isbn: '123' })
+
+      book = BookWithDefault.create(title: 'Best of Sushi')
+
       assert_requested endpoint
     end
 

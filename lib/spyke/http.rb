@@ -50,7 +50,7 @@ module Spyke
       private
 
         def scoped_request(method)
-          uri = new.uri
+          uri = new(current_scope.params).uri
           params = current_scope.params.except(*uri.variables)
           request(method, uri, params)
         end
