@@ -107,6 +107,14 @@ class Book < Spyke::Base
   end
 end
 
+class BookWithDefault < Spyke::Base
+  attributes :isbn, :title
+
+  def isbn
+    attributes[:isbn] || "123"
+  end
+end
+
 class Photo < Spyke::Base
   uri 'images/photos/(:id)'
 end

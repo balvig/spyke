@@ -86,6 +86,14 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_create_with_defaults
+      endpoint = stub_request(:post, 'http://sushi.com/book_with_defaults').with(body: { book_with_defaults: { isbn: '123', title: 'Best of Sushi' } }).to_return_json(result: { id: 1, title: 'Best of Sushi', isbn: '123' })
+
+      book = BookWithDefault.create(title: 'Best of Sushi')
+
+      assert_requested endpoint
+    end
+
     def test_create_with_server_returning_validation_errors
       endpoint = stub_request(:put, 'http://sushi.com/recipes/1').to_return_json(id: 'write_error:400', errors: { title: [{ error: 'too_short', count: 4 }], groups: [{ error: 'blank' }] })
 
