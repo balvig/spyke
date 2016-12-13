@@ -61,6 +61,14 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_limit_and_offset
+      endpoint = stub_request(:get, 'http://sushi.com/recipes?limit=10&offset=5')
+
+      Recipe.limit(10).offset(5).to_a
+
+      assert_requested endpoint
+    end
+
     def test_chainable_class_method
       endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
 
