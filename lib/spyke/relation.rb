@@ -9,7 +9,10 @@ module Spyke
     delegate :to_ary, :[], :any?, :empty?, :last, :size, :metadata, to: :find_some
 
     def initialize(klass, options = {})
-      @klass, @options, @params = klass, options, {}
+      @klass = klass
+      @options = options
+      @params = {}
+      @should_fallback = false
     end
 
     def where(conditions = {})
@@ -27,6 +30,12 @@ module Spyke
       where
     end
 
+    def with_fallback(fallback = nil)
+      @should_fallback = true
+      @fallback = fallback
+      where
+    end
+
     # Overrides Enumerable find
     def find(id)
       scoping { klass.find(id) }
@@ -34,10 +43,14 @@ module Spyke
 
     def find_one
       @find_one ||= klass.new_instance_from_result(fetch)
+    rescue ConnectionError => error
+      fallback_or_reraise(error, default: nil)
     end
 
     def find_some
       @find_some ||= klass.new_collection_from_result(fetch)
+    rescue ConnectionError => error
+      fallback_or_reraise(error, default: [])
     end
 
     def each(&block)
@@ -64,6 +77,18 @@ module Spyke
         yield
       ensure
         klass.current_scope = previous
+      end
+
+      def fallback_or_reraise(error, default:)
+        if should_fallback?
+          @fallback || default
+        else
+          raise error
+        end
+      end
+
+      def should_fallback?
+        @should_fallback
       end
   end
 end
