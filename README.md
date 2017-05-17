@@ -167,6 +167,24 @@ remap it in Faraday to match the above. Doing this will allow you to
 show errors returned from the server in forms and f.ex using
 `@post.errors.full_messages` just like ActiveRecord.
 
+### Error handling and fallbacks
+
+Should the API fail to connect or time out, a `Spyke::ConnectionError` will be raised.
+If you need to recover gracefully from connection problems, you can
+either rescue that exception or use the `with_fallback` feature:
+
+```ruby
+# API is down
+Article.all # => Spyke::ConnectionError
+Article.with_fallback.all # => []
+
+Article.find(1) # => Spyke::ConnectionError
+Article.with_fallback.find(1) # => nil
+
+article = Article.with_fallback(Article.new(title: "Dummy")).find(1)
+article.title # => "Dummy"
+```
+
 ### Attributes-wrapping
 
 Spyke, like Rails, by default wraps sent attributes in a root element,
