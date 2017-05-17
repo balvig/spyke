@@ -124,6 +124,15 @@ module Spyke
       assert_requested endpoint_2, times: 1
     end
 
+    def test_preloading
+      endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published')
+
+      recipes = Recipe.published.load
+      recipes.to_a
+
+      assert_requested endpoint, times: 1
+    end
+
     def test_path_validation
       assert_raises Spyke::InvalidPathError do
         Recipe.new.groups.to_a

@@ -36,6 +36,11 @@ module Spyke
       where
     end
 
+    def load
+      find_some
+      self
+    end
+
     # Overrides Enumerable find
     def find(id)
       scoping { klass.find(id) }
