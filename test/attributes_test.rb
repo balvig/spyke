@@ -92,7 +92,7 @@ module Spyke
 
     def test_explicit_attributes
       recipe = Recipe.new
-      assert_equal nil, recipe.title
+      assert_nil recipe.title
       assert_raises NoMethodError do
         recipe.not_set
       end
@@ -102,18 +102,18 @@ module Spyke
     end
 
     def test_super_with_explicit_attributes
-      assert_equal nil, Recipe.new.description
+      assert_nil Recipe.new.description
     end
 
     def test_inheriting_explicit_attributes
-      assert_equal nil, Image.new.description
-      assert_equal nil, Image.new.caption
+      assert_nil Image.new.description
+      assert_nil Image.new.caption
       assert_raises NoMethodError do
         Image.new.note
       end
-      assert_equal nil, StepImage.new.description
-      assert_equal nil, StepImage.new.caption
-      assert_equal nil, StepImage.new.note
+      assert_nil StepImage.new.description
+      assert_nil StepImage.new.caption
+      assert_nil StepImage.new.note
     end
 
     def test_converting_files_to_faraday_io

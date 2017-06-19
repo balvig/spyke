@@ -24,7 +24,7 @@ module Spyke
     def test_find_one_with_default_fallback
       recipe = Recipe.with_fallback.where(id: 1).find_one
 
-      assert_equal nil, recipe
+      assert_nil recipe
     end
 
     def test_find_some_with_default_fallback
