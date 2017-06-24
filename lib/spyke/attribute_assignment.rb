@@ -25,6 +25,10 @@ module Spyke
             define_method(name) do
               attribute(name)
             end
+
+            define_method(:"#{name}=") do |value|
+              set_attribute(name, value)
+            end
           end
         end
       end
