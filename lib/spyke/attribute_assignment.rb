@@ -15,7 +15,7 @@ module Spyke
       # they become overridable with "super".
       # http://thepugautomatic.com/2013/07/dsom/
       def attributes(*names)
-        unless instance_variable_defined?(:@spyke_instance_method_containear)
+        unless instance_variable_defined?(:@spyke_instance_method_container)
           @spyke_instance_method_container = Module.new
           include @spyke_instance_method_container
         end
