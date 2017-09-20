@@ -153,6 +153,40 @@ Post.request(:post, 'posts/3/log', time: '12:00')
 # => POST http://api.com/posts/3/log - { time: '12:00' }
 ```
 
+### Working with XML
+
+Spyke also handles APIs, which return XML data:
+
+```
+class XMLParser < Faraday::Response::Middleware
+    def parse(body)
+        xml = YourFavoriteXMLLibrary.parse(body)
+        {
+            data: xml[:result],
+            metadata: xml[:extra],
+            errors: xml[:errors]
+        }
+  end
+end
+
+Spyke::Base.connection = Faraday.new(url: 'http://xmlapi.com') do |c|
+    c.headers['Content-Type'] = 'application/xml'
+    c.use       XMLParser
+    c.adapter   Faraday.default_adapter
+end
+```
+
+To connect to API URLs with .xml extensions you will need to setup a custom URI:
+
+```
+class Project < Spyke::Base
+    uri 'projects(/:id).xml'
+end
+
+Project.all # => GET http://xmlapi.com/projects.xml
+Project.find(6) # => GET http://xmlapi.com/projects/6.xml
+```
+
 ### API-side validations
 
 Spyke expects errors to be formatted in the same way as the

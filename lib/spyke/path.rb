@@ -1,4 +1,4 @@
-require 'uri_template'
+require 'addressable/template'
 
 module Spyke
   class InvalidPathError < StandardError; end
@@ -24,16 +24,20 @@ module Spyke
     private
 
       def uri_template
-        @uri_template ||= URITemplate.new(:colon, pattern_with_rfc_style_parens)
+        @uri_template ||= Addressable::Template.new(pattern_with_rfc_style_parens)
       end
 
       def pattern_with_rfc_style_parens
-        @pattern.gsub('(', '{').gsub(')', '}')
+        # to be compatible with colon style:
+        # Step 1: replace all :var inside parentheses (optional vars) with {:var}
+        # Step 2: replace all parentheses with curly braces
+        # Step 3: remove all colons
+        @pattern.gsub(/(:\w+(?!\)))\b/, '{\1}').gsub('(', '{').gsub(')', '}').gsub(':', '')
       end
 
       def path
         validate_required_params!
-        uri_template.expand(@params).chomp('/')
+        uri_template.expand(@params).to_s.chomp('/')
       end
 
       def validate_required_params!
@@ -53,7 +57,9 @@ module Spyke
       end
 
       def required_params
-        @pattern.scan(/\/:(\w+)/).flatten.map(&:to_sym)
+        allp = @pattern.scan(/:(\w+)/).flatten.map(&:to_sym)
+        optp = @pattern.scan(/\(\/?:(\w+)\)/).flatten.map(&:to_sym)
+        allp - optp
       end
   end
 end
