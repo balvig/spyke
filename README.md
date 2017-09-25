@@ -91,7 +91,7 @@ user = User.find(3)
 # => GET http://api.com/users/3
 
 user.posts
-# => find embedded in returned JSON or GET http://api.com/users/3/posts
+# => find embedded in returned data or GET http://api.com/users/3/posts
 
 user.update(name: 'Alice')
 # => PUT http://api.com/users/3 - { user: { name: 'Alice' } }
@@ -106,22 +106,22 @@ User.create(name: 'Bob')
 ### Custom URIs
 
 You can specify custom URIs on both the class and association level.
-Set uri to `nil` for associations you only want to use embedded JSON
-and never call out to the API.
+Set uri to `nil` for associations you only want to use data embedded
+in the response and never call out to the API.
 
 ```ruby
 class User < Spyke::Base
-  uri 'people/(:id)' # id optional, both /people and /people/4 are valid
+  uri 'people(/:id)' # id optional, both /people and /people/4 are valid
 
   has_many :posts, uri: 'posts/for_user/:user_id' # user_id is required
-  has_one :image, uri: nil # only use embedded JSON
+  has_one :image, uri: nil # only use embedded data
 end
 
 class Post < Spyke::Base
 end
 
 user = User.find(3) # => GET http://api.com/people/3
-user.image # Will only use embedded JSON and never call out to api
+user.image # Will only use embedded data and never call out to api
 user.posts # => GET http://api.com/posts/for_user/3
 Post.find(4) # => GET http://api.com/posts/4
 ```
