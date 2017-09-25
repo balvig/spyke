@@ -3,7 +3,6 @@ require 'addressable/template'
 module Spyke
   class InvalidPathError < StandardError; end
   class Path
-
     def initialize(pattern, params = {})
       @pattern = pattern
       @params = params.symbolize_keys
@@ -36,30 +35,32 @@ module Spyke
       end
 
       def path
-        validate_required_params!
+        validate_required_variables!
         uri_template.expand(@params).to_s.chomp('/')
       end
 
-      def validate_required_params!
-        if missing_required_params.any?
-          raise Spyke::InvalidPathError, "Missing required params: #{missing_required_params.join(', ')} in #{@pattern}. Mark optional params with parens eg: (:param)"
+      def validate_required_variables!
+        if missing_required_variables.any?
+          raise Spyke::InvalidPathError, "Missing required variables: #{missing_required_variables.join(', ')} in #{@pattern}. Mark optional variables with parens eg: (:param)"
         end
       end
 
-      def missing_required_params
-        required_params - params_with_values
+      def missing_required_variables
+        required_variables - variables_with_values
       end
 
-      def params_with_values
+      def variables_with_values
         @params.map do |key, value|
           key if value.present?
         end.compact
       end
 
-      def required_params
-        allp = @pattern.scan(/:(\w+)/).flatten.map(&:to_sym)
-        optp = @pattern.scan(/\(\/?:(\w+)\)/).flatten.map(&:to_sym)
-        allp - optp
+      def required_variables
+        variables - optional_variables
+      end
+
+      def optional_variables
+        @pattern.scan(/\(\/?:(\w+)\)/).flatten.map(&:to_sym)
       end
   end
 end
