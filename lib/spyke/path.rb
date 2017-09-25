@@ -1,4 +1,5 @@
 require 'addressable/template'
+require 'spyke/rfc_converter'
 
 module Spyke
   class InvalidPathError < StandardError; end
@@ -27,11 +28,7 @@ module Spyke
       end
 
       def pattern_with_rfc_style_parens
-        # to be compatible with colon style:
-        # Step 1: replace all :var inside parentheses (optional vars) with {:var}
-        # Step 2: replace all parentheses with curly braces
-        # Step 3: remove all colons
-        @pattern.gsub(/(:\w+(?!\)))\b/, '{\1}').gsub('(', '{').gsub(')', '}').gsub(':', '')
+        RfcConverter.new(@pattern).convert
       end
 
       def path
