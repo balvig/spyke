@@ -102,9 +102,15 @@ module Spyke
 
       def add_errors_to_model(errors_hash)
         errors_hash.each do |field, field_errors|
-          field_errors.each do |attributes|
-            error_name = attributes.delete(:error).to_sym
-            errors.add(field.to_sym, error_name, attributes.symbolize_keys)
+          field_errors.each do |field_error|
+            if field_error.is_a? String
+              error_name = field_error
+              error_attrs = {}
+            else
+              error_name = field_error.delete(:error).to_sym
+              error_attrs = field_error.symbolize_keys
+            end
+            errors.add(field.to_sym, error_name, error_attrs)
           end
         end
       end

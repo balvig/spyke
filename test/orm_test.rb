@@ -93,6 +93,16 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_create_with_server_returning_string_validation_errors
+      endpoint = stub_request(:put, 'http://sushi.com/recipes/1').to_return_json(id: 'write_error:400', errors: { title: ["is too short"], groups: ["can't be blank"] })
+
+      recipe = Recipe.create(id: 1, title: 'sus')
+
+      assert_equal 'sus', recipe.title
+      assert_equal ['Title is too short', "Groups can't be blank"], recipe.errors.full_messages
+      assert_requested endpoint
+    end
+
     def test_find_using_custom_uri_template
       endpoint = stub_request(:get, 'http://sushi.com/images/photos/1').to_return_json(result: { id: 1 })
       Photo.find(1)
