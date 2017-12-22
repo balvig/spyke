@@ -26,6 +26,7 @@ class Recipe < Spyke::Base
   has_many :step_images
   has_one :background_image, class_name: 'Image', uri: nil
   has_one :alternate, class_name: 'Recipe', uri: 'recipes/:recipe_id/alternates/recipe'
+  has_many :author_friends, class_name: 'User', uri: 'recipes/:recipe_id/users/:user_id/friends'
   belongs_to :user
 
   scope :published, -> { where(status: 'published') }

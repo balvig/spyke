@@ -450,5 +450,12 @@ module Spyke
       assert_equal %w{ user_1_new_name }, comment.users.map(&:name)
       assert_equal [1], comment.users.map(&:id)
     end
+
+    def test_has_many_with_nested_foreign_keys
+      author_friends_endpoint = stub_request(:get, 'http://sushi.com/recipes/1/users/1/friends')
+      recipe = Recipe.new(id: 1, user_id: 1)
+      recipe.author_friends.first
+      assert_requested author_friends_endpoint
+    end
   end
 end
