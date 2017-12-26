@@ -3,6 +3,7 @@ require 'faraday_middleware'
 require 'spyke/config'
 require 'spyke/path'
 require 'spyke/result'
+require 'spyke/normalized_validation_error'
 
 module Spyke
   module Http
@@ -102,9 +103,9 @@ module Spyke
 
       def add_errors_to_model(errors_hash)
         errors_hash.each do |field, field_errors|
-          field_errors.each do |attributes|
-            error_name = attributes.delete(:error).to_sym
-            errors.add(field.to_sym, error_name, attributes.symbolize_keys)
+          field_errors.each do |error_attributes|
+            error = NormalizedValidationError.new(error_attributes)
+            errors.add(field.to_sym, error.message, error.options)
           end
         end
       end
