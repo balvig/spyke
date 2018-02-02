@@ -438,6 +438,11 @@ module Spyke
       assert_requested user_endpoint
     end
 
+    def test_return_nil_for_missing_id_for_belongs_to
+      recipe = Recipe.new(id: 1, user_id: nil)
+      assert_nil recipe.user
+    end
+
     def test_custom_primary_key_for_has_many
       stub_request(:get, 'http://sushi.com/comments/1').to_return_json(result: { users: [{ id: 1 }] })
       comment = Comment.find(1)

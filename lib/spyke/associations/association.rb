@@ -44,14 +44,14 @@ module Spyke
         end
 
         def fetch_embedded
-          if embedded
-            Result.new(data: embedded)
+          if embedded_data
+            Result.new(data: embedded_data)
           elsif !uri
             Result.new(data: nil)
           end
         end
 
-        def embedded
+        def embedded_data
           parent.attributes[name]
         end
 
