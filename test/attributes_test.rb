@@ -135,9 +135,9 @@ module Spyke
 
     def test_inspect
       recipe = Recipe.new(id: 2, title: 'Pizza', description: 'Delicious')
-      assert_equal '#<Recipe(recipes/(:id)) id: 2 title: "Pizza" description: "Delicious">', recipe.inspect
+      assert_equal '#<Recipe(recipes(/:id)) id: 2 title: "Pizza" description: "Delicious">', recipe.inspect
       recipe = Recipe.new
-      assert_equal '#<Recipe(recipes/(:id)) id: nil >', recipe.inspect
+      assert_equal '#<Recipe(recipes(/:id)) id: nil >', recipe.inspect
       user = Recipe.new.build_user
       assert_equal '#<User(users/:uuid) id: nil >', user.inspect
       group = Recipe.new.groups.build
