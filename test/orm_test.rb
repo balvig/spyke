@@ -206,5 +206,13 @@ module Spyke
       assert_equal 1, user[:uuid]
       assert_equal 42, user[:id]
     end
+
+    def test_custom_primary_key_used_for_persistence_check
+      user = User.new
+      assert_equal false, user.persisted?
+
+      user.uuid = 1
+      assert_equal true, user.persisted?
+    end
   end
 end

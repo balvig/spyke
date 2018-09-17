@@ -54,7 +54,7 @@ module Spyke
     end
 
     def persisted?
-      id?
+      send("#{self.class.primary_key}?")
     end
 
     def save
