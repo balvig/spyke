@@ -209,10 +209,10 @@ module Spyke
 
     def test_custom_primary_key_used_for_persistence_check
       user = User.new
-      assert_equal false, user.persisted?
+      refute user.persisted?
 
       user.uuid = 1
-      assert_equal true, user.persisted?
+      assert user.persisted?
     end
   end
 end
