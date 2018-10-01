@@ -45,6 +45,10 @@ module Spyke
       use_setters(new_attributes) if new_attributes
     end
 
+    def id?
+      id.present?
+    end
+
     def id
       attributes[primary_key]
     end
