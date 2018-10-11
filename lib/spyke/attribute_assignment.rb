@@ -6,7 +6,6 @@ module Spyke
     extend ActiveSupport::Concern
 
     included do
-      attr_reader :attributes
       delegate :[], :[]=, to: :attributes
     end
 
@@ -40,8 +39,12 @@ module Spyke
       yield self if block_given?
     end
 
+    def attributes
+      @spyke_attributes
+    end
+
     def attributes=(new_attributes)
-      @attributes ||= Attributes.new(scope.params)
+      @spyke_attributes ||= Attributes.new(scope.params)
       use_setters(new_attributes) if new_attributes
     end
 
