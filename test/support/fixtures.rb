@@ -152,3 +152,10 @@ module Cookbook
     include_root_in_json :foto
   end
 end
+
+class RecipeWithDirty < Recipe
+  # NOTE: Simply including ActiveModel::Dirty doesn't provide all the dirty
+  # functionality. This is left intentionally incomplete as it's all we need
+  # for testing compatibility.
+  include ActiveModel::Dirty
+end
