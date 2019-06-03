@@ -301,6 +301,18 @@ module Spyke
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
 
+    def test_nested_attributes_from_action_controller_parameters
+      require "action_controller"
+
+      raw_params = { recipe: { groups_attributes: [{ title: 'starter' }, { title: 'sauce' }] } }
+      strong_params = ActionController::Parameters.new(raw_params)
+      params = strong_params.require(:recipe).permit(groups_attributes: [:title])
+
+      recipe = Recipe.new(params)
+
+      assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
+    end
+
     def test_nested_attributes_replacing_existing_when_no_ids_present
       recipe = Recipe.new(groups_attributes: [{ title: 'starter' }, { title: 'sauce' }])
       recipe.attributes = { groups_attributes: [{ title: 'flavor' }] }
