@@ -9,7 +9,7 @@ end
 require 'spyke'
 require 'minitest/autorun'
 require 'minitest/reporters'
-require 'mocha/mini_test'
+require 'mocha/minitest'
 require 'multi_json'
 require 'pry'
 
