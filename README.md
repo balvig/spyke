@@ -152,6 +152,19 @@ Post.request(:post, 'posts/3/log', time: '12:00')
 # => POST http://api.com/posts/3/log - { time: '12:00' }
 ```
 
+### Custom primary keys
+
+Custom primary keys can be defined with `self.primary_key = :custom_key`:
+
+```ruby
+class User < Spyke::Base
+  self.primary_key = :user_id
+  
+  # When using custom URIs the :id parameter also has to be adjusted
+  uri 'people(/:user_id)'
+end
+```
+
 ### API-side validations
 
 Spyke expects errors to be formatted in the same way as the
