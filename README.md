@@ -30,6 +30,7 @@ Add this line to your application's Gemfile:
 
 ```ruby
 gem 'spyke'
+gem 'multi_json' # or whatever is needed to parse responses
 ```
 
 Spyke uses Faraday to handle requests and expects it to parse the response body into a hash in the following format:
@@ -159,7 +160,7 @@ Custom primary keys can be defined with `self.primary_key = :custom_key`:
 ```ruby
 class User < Spyke::Base
   self.primary_key = :user_id
-  
+
   # When using custom URIs the :id parameter also has to be adjusted
   uri 'people(/:user_id)'
 end
