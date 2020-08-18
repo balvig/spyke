@@ -301,13 +301,24 @@ module Spyke
       assert_equal 'Bob', recipe.user.name
     end
 
+    def test_nested_attributes_has_many
+      recipe = Recipe.new(groups_attributes: [{ title: 'starter' }, { title: 'sauce' }])
+      assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
+    end
+
+    def test_nested_attributes_has_one_using_strong_params
+      recipe = Recipe.new(image_attributes: ProtectedParams.new(file: 'bob.jpg').permit!)
+      assert_equal 'bob.jpg', recipe.image.file
+    end
+
     def test_nested_attributes_belongs_to_using_strong_params
-      recipe = Recipe.new(ProtectedParams.new(user_attributes: { name: 'Bob' }).permit!)
+      recipe = Recipe.new(user_attributes: ProtectedParams.new({ name: 'Bob' }).permit!)
       assert_equal 'Bob', recipe.user.name
     end
 
-    def test_nested_attributes_has_many
-      recipe = Recipe.new(groups_attributes: [{ title: 'starter' }, { title: 'sauce' }])
+    def test_nested_attributes_has_many_using_strong_params
+      params = ProtectedParams.new(groups_attributes: [ProtectedParams.new(title: 'starter').permit!, ProtectedParams.new(title: 'sauce').permit!]).permit!
+      recipe = Recipe.new(params)
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
 
@@ -332,12 +343,6 @@ module Spyke
 
     def test_nested_attributes_has_many_using_hash_syntax
       recipe = Recipe.new(groups_attributes: { '0' => { title: 'starter' }, '1' => { title: 'sauce' } })
-      assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
-    end
-
-    def test_nested_attributes_has_many_using_strong_params_with_array_syntax
-      params = ProtectedParams.new(groups_attributes: [ProtectedParams.new(title: 'starter').permit!, ProtectedParams.new(title: 'sauce').permit!]).permit!
-      recipe = Recipe.new(params)
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
 
