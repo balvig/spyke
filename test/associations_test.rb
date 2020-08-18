@@ -30,6 +30,11 @@ module Spyke
       assert_kind_of Image, recipe.image
     end
 
+    def test_initializing_using_strong_params
+      ingredient = Ingredient.new(ProtectedParams.new(name: 'Flour').permit!)
+      assert_equal 'Flour', ingredient.name
+    end
+
     def test_embedded_associations
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { groups: [{ id: 1, name: 'Fish' }] })
 
@@ -296,6 +301,11 @@ module Spyke
       assert_equal 'Bob', recipe.user.name
     end
 
+    def test_nested_attributes_belongs_to_using_strong_params
+      recipe = Recipe.new(ProtectedParams.new(user_attributes: { name: 'Bob' }).permit!)
+      assert_equal 'Bob', recipe.user.name
+    end
+
     def test_nested_attributes_has_many
       recipe = Recipe.new(groups_attributes: [{ title: 'starter' }, { title: 'sauce' }])
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
@@ -325,6 +335,23 @@ module Spyke
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
 
+    def test_nested_attributes_has_many_using_strong_params_with_array_syntax
+      params = ProtectedParams.new(groups_attributes: [ProtectedParams.new(title: 'starter').permit!, ProtectedParams.new(title: 'sauce').permit!]).permit!
+      recipe = Recipe.new(params)
+      assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
+    end
+
+    def test_nested_attributes_has_many_using_strong_params_with_hash_syntax
+      params = ProtectedParams.new(
+        groups_attributes: ProtectedParams.new(
+          '0' => ProtectedParams.new(title: 'starter').permit!,
+          '1' => ProtectedParams.new(title: 'sauce').permit!,
+        ).permit!
+      ).permit!
+      recipe = Recipe.new(params)
+      assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
+    end
+
     def test_deeply_nested_attributes_has_many_using_array_syntax
       params = { groups_attributes: [{ id: 1, ingredients_attributes: [{ id: 1, name: 'Salt' }, { id: 2, name: 'Pepper' } ]}] }
       recipe = Recipe.new(params)
@@ -351,6 +378,40 @@ module Spyke
 
     def test_deeply_nested_attributes_has_many_with_blank_ids_using_hash_syntax
       params = { groups_attributes: { '0' => { ingredients_attributes: { '0' => { id: '', name: 'Salt' }, '1' => { id: '', name: 'Pepper' } } } } }
+      recipe = Recipe.new(params)
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+      recipe.attributes = params
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+    end
+
+    def test_deeply_nested_attributes_has_many_using_strong_params_with_array_syntax
+      params = ProtectedParams.new(
+        groups_attributes: [
+          ProtectedParams.new(
+            ingredients_attributes: [
+              ProtectedParams.new(id: '', name: 'Salt').permit!,
+              ProtectedParams.new(id: '', name: 'Pepper').permit!,
+            ]
+          ).permit!
+        ]
+      ).permit!
+      recipe = Recipe.new(params)
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+      recipe.attributes = params
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+    end
+
+    def test_deeply_nested_attributes_has_many_using_strong_params_with_hash_syntax
+      params = ProtectedParams.new(
+        groups_attributes: ProtectedParams.new(
+          '0' => ProtectedParams.new(
+            ingredients_attributes: ProtectedParams.new(
+              '0' => ProtectedParams.new(id: '', name: 'Salt').permit!,
+              '1' => ProtectedParams.new(id: '', name: 'Pepper').permit!,
+            ).permit!
+          ).permit!
+        ).permit!
+      ).permit!
       recipe = Recipe.new(params)
       assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
       recipe.attributes = params
