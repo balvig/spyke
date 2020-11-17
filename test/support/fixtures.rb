@@ -167,30 +167,3 @@ class RecipeWithDirty < Recipe
   # for testing compatibility.
   include ActiveModel::Dirty
 end
-
-# Strong Parameters stub copied from Rails
-# https://github.com/rails/rails/blob/fbe2433be6e052a1acac63c7faf287c52ed3c5ba/activerecord/test/support/stubs/strong_parameters.rb
-class ProtectedParams
-  delegate :keys, :key?, :has_key?, :empty?, :to_h, :[], to: :@parameters
-
-  def initialize(parameters = {})
-    @parameters = parameters.with_indifferent_access
-    @permitted = false
-  end
-
-  def permitted?
-    @permitted
-  end
-
-  def permit!
-    @permitted = true
-    self
-  end
-
-  def dup
-    super.tap do |duplicate|
-      duplicate.instance_variable_set :@permitted, @permitted
-    end
-  end
-  alias stringify_keys dup
-end

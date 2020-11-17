@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'action_controller/metal/strong_parameters'
 
 module Spyke
   class AssociationsTest < MiniTest::Test
@@ -31,7 +32,7 @@ module Spyke
     end
 
     def test_initializing_using_strong_params
-      ingredient = Ingredient.new(ProtectedParams.new(name: 'Flour').permit!)
+      ingredient = Ingredient.new(strong_params(name: 'Flour'))
       assert_equal 'Flour', ingredient.name
     end
 
@@ -307,17 +308,17 @@ module Spyke
     end
 
     def test_nested_attributes_has_one_using_strong_params
-      recipe = Recipe.new(image_attributes: ProtectedParams.new(file: 'bob.jpg').permit!)
+      recipe = Recipe.new(image_attributes: strong_params(file: 'bob.jpg').permit!)
       assert_equal 'bob.jpg', recipe.image.file
     end
 
     def test_nested_attributes_belongs_to_using_strong_params
-      recipe = Recipe.new(user_attributes: ProtectedParams.new({ name: 'Bob' }).permit!)
+      recipe = Recipe.new(user_attributes: strong_params({ name: 'Bob' }).permit!)
       assert_equal 'Bob', recipe.user.name
     end
 
     def test_nested_attributes_has_many_using_strong_params
-      params = ProtectedParams.new(groups_attributes: [ProtectedParams.new(title: 'starter').permit!, ProtectedParams.new(title: 'sauce').permit!]).permit!
+      params = strong_params(groups_attributes: [strong_params(title: 'starter').permit!, strong_params(title: 'sauce').permit!]).permit!
       recipe = Recipe.new(params)
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
@@ -347,10 +348,10 @@ module Spyke
     end
 
     def test_nested_attributes_has_many_using_strong_params_with_hash_syntax
-      params = ProtectedParams.new(
-        groups_attributes: ProtectedParams.new(
-          '0' => ProtectedParams.new(title: 'starter').permit!,
-          '1' => ProtectedParams.new(title: 'sauce').permit!,
+      params = strong_params(
+        groups_attributes: strong_params(
+          '0' => strong_params(title: 'starter').permit!,
+          '1' => strong_params(title: 'sauce').permit!,
         ).permit!
       ).permit!
       recipe = Recipe.new(params)
@@ -390,12 +391,12 @@ module Spyke
     end
 
     def test_deeply_nested_attributes_has_many_using_strong_params_with_array_syntax
-      params = ProtectedParams.new(
+      params = strong_params(
         groups_attributes: [
-          ProtectedParams.new(
+          strong_params(
             ingredients_attributes: [
-              ProtectedParams.new(id: '', name: 'Salt').permit!,
-              ProtectedParams.new(id: '', name: 'Pepper').permit!,
+              strong_params(id: '', name: 'Salt').permit!,
+              strong_params(id: '', name: 'Pepper').permit!,
             ]
           ).permit!
         ]
@@ -407,12 +408,12 @@ module Spyke
     end
 
     def test_deeply_nested_attributes_has_many_using_strong_params_with_hash_syntax
-      params = ProtectedParams.new(
-        groups_attributes: ProtectedParams.new(
-          '0' => ProtectedParams.new(
-            ingredients_attributes: ProtectedParams.new(
-              '0' => ProtectedParams.new(id: '', name: 'Salt').permit!,
-              '1' => ProtectedParams.new(id: '', name: 'Pepper').permit!,
+      params = strong_params(
+        groups_attributes: strong_params(
+          '0' => strong_params(
+            ingredients_attributes: strong_params(
+              '0' => strong_params(id: '', name: 'Salt').permit!,
+              '1' => strong_params(id: '', name: 'Pepper').permit!,
             ).permit!
           ).permit!
         ).permit!
@@ -521,5 +522,11 @@ module Spyke
       assert_equal %w{ user_1_new_name }, comment.users.map(&:name)
       assert_equal [1], comment.users.map(&:id)
     end
+
+    private
+
+      def strong_params(params)
+        ActionController::Parameters.new(params)
+      end
   end
 end
