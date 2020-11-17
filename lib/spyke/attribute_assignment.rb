@@ -45,14 +45,6 @@ module Spyke
 
     def attributes=(new_attributes)
       @spyke_attributes ||= Attributes.new(scope.params)
-
-      # Convert attributes to a hash in case they are sent as ActionController::Parameters
-      # Note: this is where Rails would raise its ForbiddenAttributesError if any are unpermitted
-      # https://github.com/rails/rails/blob/fbe2433be6e052a1acac63c7faf287c52ed3c5ba/activemodel/lib/active_model/forbidden_attributes_protection.rb#L21-L28
-      if new_attributes.respond_to?(:permitted?)
-        new_attributes = new_attributes.to_h
-      end
-
       use_setters(new_attributes) if new_attributes
     end
 
