@@ -12,12 +12,7 @@ module Spyke
       end
 
       def assign_nested_attributes(incoming)
-        # Convert attributes to a hash in case they are sent as ActionController::Parameters
-        if incoming.respond_to?(:permitted?)
-          incoming = incoming.to_h
-        end
-
-        incoming = incoming.values if incoming.is_a?(Hash)
+        incoming = incoming.values if incoming.respond_to?(:values)
         combined_attributes = combine_with_existing(incoming)
         clear_existing!
         combined_attributes.each do |attributes|
