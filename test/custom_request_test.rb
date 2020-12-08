@@ -63,9 +63,16 @@ module Spyke
     end
 
     def test_multiple_apis
-      endpoint = stub_request(:get, 'http://sashimi.com/other_recipes')
+      endpoint = stub_request(:get, 'http://sashimi.com/recipes')
       OtherRecipe.all.to_a
       assert_requested endpoint
+    end
+
+    def test_multiple_apis_with_custom_fallback
+      fallback_endpoint = stub_request(:get, 'http://sushi.com/recipes')
+      primary_endpoint = stub_request(:get, 'http://sashimi.com/recipes').to_timeout
+      OtherRecipe.all.to_a
+      assert_requested fallback_endpoint
     end
   end
 end

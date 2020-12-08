@@ -116,7 +116,15 @@ class OtherApi < Spyke::Base
   end
 end
 
-class OtherRecipe < OtherApi; end
+class OtherRecipe < OtherApi
+  uri 'recipes/(:id)'
+
+  def self.send_request(method, path, params)
+    super
+  rescue Spyke::ConnectionError
+    Recipe.send_request(method, path, params)
+  end
+end
 
 class Search
   def initialize(query)
