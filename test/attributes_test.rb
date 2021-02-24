@@ -11,6 +11,18 @@ module Spyke
       assert_equal 'Tasty', recipe.description
     end
 
+    def test_initializing_using_permitted_strong_params
+      ingredient = Ingredient.new(strong_params(name: 'Flour').permit!)
+
+      assert_equal 'Flour', ingredient.name
+    end
+
+    def test_initializing_using_unpermitted_strong_params
+      assert_raises ActionController::UnfilteredParameters do
+        Ingredient.new(strong_params(name: 'Flour'))
+      end
+    end
+
     def test_to_params
       attr = Attributes.new(id: 3, 'title' => 'Fish', groups: [ Group.new(name: 'Starter'), { name: 'Dessert' } ])
       assert_equal({ 'id' => 3 , 'title' => 'Fish', 'groups' => [{ 'name' => 'Starter' }, { 'name' => 'Dessert' }] }, attr.to_params)

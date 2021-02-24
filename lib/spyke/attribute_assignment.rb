@@ -83,7 +83,7 @@ module Spyke
         # Set id attribute directly if using a custom primary key alongside an attribute named "id" to avoid clobbering
         set_attribute :id, attributes.delete(:id) if conflicting_ids?(attributes)
 
-        attributes.each do |key, value|
+        attributes.to_h.each do |key, value|
           send "#{key}=", value
         end
       end

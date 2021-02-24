@@ -30,11 +30,6 @@ module Spyke
       assert_kind_of Image, recipe.image
     end
 
-    def test_initializing_using_strong_params
-      ingredient = Ingredient.new(strong_params(name: 'Flour'))
-      assert_equal 'Flour', ingredient.name
-    end
-
     def test_embedded_associations
       stub_request(:get, 'http://sushi.com/recipes/1').to_return_json(result: { groups: [{ id: 1, name: 'Fish' }] })
 
