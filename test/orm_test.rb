@@ -65,7 +65,7 @@ module Spyke
     def test_save_hash_attribute_with_strong_params
       endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { meta: { foo: 'bar' } } })
 
-      Recipe.create(meta: strong_params(foo: 'bar').permit!)
+      Recipe.create(strong_params(meta: { foo: 'bar' }).permit!)
 
       assert_requested endpoint
     end

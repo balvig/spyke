@@ -12,7 +12,7 @@ module Spyke
       end
 
       def assign_nested_attributes(incoming)
-        incoming = incoming.values if incoming.respond_to?(:values)
+        incoming = incoming.values if incoming.is_a?(Hash)
         combined_attributes = combine_with_existing(incoming)
         clear_existing!
         combined_attributes.each do |attributes|
