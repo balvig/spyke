@@ -54,6 +54,22 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_save_hash_attribute
+      endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { meta: { foo: 'bar' } } })
+
+      Recipe.create(meta: { foo: 'bar' })
+
+      assert_requested endpoint
+    end
+
+    def test_save_hash_attribute_with_strong_params
+      endpoint = stub_request(:post, 'http://sushi.com/recipes').with(body: { recipe: { meta: { foo: 'bar' } } })
+
+      Recipe.create(meta: strong_params(foo: 'bar'))
+
+      assert_requested endpoint
+    end
+
     def test_update_attributes
       endpoint = stub_request(:put, 'http://sushi.com/recipes/1').with(body: { recipe: { title: 'Sushi' } }).to_return_json(result: { id: 1, title: 'Sushi (saved)' })
 

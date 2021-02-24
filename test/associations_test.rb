@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'action_controller/metal/strong_parameters'
 
 module Spyke
   class AssociationsTest < MiniTest::Test
@@ -522,11 +521,5 @@ module Spyke
       assert_equal %w{ user_1_new_name }, comment.users.map(&:name)
       assert_equal [1], comment.users.map(&:id)
     end
-
-    private
-
-      def strong_params(params)
-        ActionController::Parameters.new(params)
-      end
   end
 end
