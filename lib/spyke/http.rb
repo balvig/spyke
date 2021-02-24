@@ -50,8 +50,8 @@ module Spyke
             request.body = params
           end
         end
-        rescue Faraday::ConnectionFailed, Faraday::TimeoutError
-          raise ConnectionError
+      rescue Faraday::ConnectionFailed, Faraday::TimeoutError
+        raise ConnectionError
       end
 
       private
