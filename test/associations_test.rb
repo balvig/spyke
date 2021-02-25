@@ -301,6 +301,22 @@ module Spyke
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
 
+    def test_nested_attributes_has_one_using_strong_params
+      recipe = Recipe.new(image_attributes: strong_params(file: 'bob.jpg').permit!)
+      assert_equal 'bob.jpg', recipe.image.file
+    end
+
+    def test_nested_attributes_belongs_to_using_strong_params
+      recipe = Recipe.new(user_attributes: strong_params({ name: 'Bob' }).permit!)
+      assert_equal 'Bob', recipe.user.name
+    end
+
+    def test_nested_attributes_has_many_using_strong_params
+      params = strong_params(groups_attributes: [strong_params(title: 'starter').permit!, strong_params(title: 'sauce').permit!]).permit!
+      recipe = Recipe.new(params)
+      assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
+    end
+
     def test_nested_attributes_replacing_existing_when_no_ids_present
       recipe = Recipe.new(groups_attributes: [{ title: 'starter' }, { title: 'sauce' }])
       recipe.attributes = { groups_attributes: [{ title: 'flavor' }] }
@@ -322,6 +338,17 @@ module Spyke
 
     def test_nested_attributes_has_many_using_hash_syntax
       recipe = Recipe.new(groups_attributes: { '0' => { title: 'starter' }, '1' => { title: 'sauce' } })
+      assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
+    end
+
+    def test_nested_attributes_has_many_using_strong_params_with_hash_syntax
+      params = strong_params(
+        groups_attributes: strong_params(
+          '0' => strong_params(title: 'starter').permit!,
+          '1' => strong_params(title: 'sauce').permit!,
+        ).permit!
+      ).permit!
+      recipe = Recipe.new(params)
       assert_equal %w{ starter sauce }, recipe.groups.map(&:title)
     end
 
@@ -351,6 +378,40 @@ module Spyke
 
     def test_deeply_nested_attributes_has_many_with_blank_ids_using_hash_syntax
       params = { groups_attributes: { '0' => { ingredients_attributes: { '0' => { id: '', name: 'Salt' }, '1' => { id: '', name: 'Pepper' } } } } }
+      recipe = Recipe.new(params)
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+      recipe.attributes = params
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+    end
+
+    def test_deeply_nested_attributes_has_many_using_strong_params_with_array_syntax
+      params = strong_params(
+        groups_attributes: [
+          strong_params(
+            ingredients_attributes: [
+              strong_params(id: '', name: 'Salt').permit!,
+              strong_params(id: '', name: 'Pepper').permit!,
+            ]
+          ).permit!
+        ]
+      ).permit!
+      recipe = Recipe.new(params)
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+      recipe.attributes = params
+      assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
+    end
+
+    def test_deeply_nested_attributes_has_many_using_strong_params_with_hash_syntax
+      params = strong_params(
+        groups_attributes: strong_params(
+          '0' => strong_params(
+            ingredients_attributes: strong_params(
+              '0' => strong_params(id: '', name: 'Salt').permit!,
+              '1' => strong_params(id: '', name: 'Pepper').permit!,
+            ).permit!
+          ).permit!
+        ).permit!
+      ).permit!
       recipe = Recipe.new(params)
       assert_equal %w{ Salt Pepper }, recipe.ingredients.map(&:name)
       recipe.attributes = params

@@ -18,3 +18,10 @@ Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 
 # Pretty colors
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+
+# For testing strong params
+require 'action_controller/metal/strong_parameters'
+
+def strong_params(params)
+  ActionController::Parameters.new(params)
+end
