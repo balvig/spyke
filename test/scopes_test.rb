@@ -61,6 +61,14 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_where_with_stringified_keys
+      endpoint = stub_request(:get, 'http://sushi.com/recipes/1/image')
+
+      RecipeImage.where("recipe_id" => 1).to_a
+
+      assert_requested endpoint
+    end
+
     def test_chainable_class_method
       endpoint = stub_request(:get, 'http://sushi.com/recipes?status=published&per_page=3')
 
