@@ -5,7 +5,7 @@ module Spyke
     include Enumerable
 
     attr_reader :klass
-    attr_accessor :params
+    attr_reader :params
     delegate :to_ary, :[], :any?, :empty?, :last, :size, :metadata, to: :find_some
 
     def initialize(klass, options = {})
@@ -19,6 +19,10 @@ module Spyke
       relation = clone
       relation.params = params.merge(conditions)
       relation
+    end
+
+    def params=(params)
+      @params = params.symbolize_keys
     end
 
     def with(uri)
