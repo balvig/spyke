@@ -94,9 +94,9 @@ module Spyke
 
       def method_missing(name, *args, &block)
         case
-        when association?(name) then association(name).load
-        when attribute?(name)   then attribute(name)
-        when predicate?(name)   then predicate(name)
+        when association?(name) then association(name, *args).load
+        when attribute?(name)   then attribute(name, *args)
+        when predicate?(name)   then predicate(name, *args)
         when setter?(name)      then set_attribute(name, args.first)
         else super
         end

@@ -157,7 +157,6 @@ module Spyke
     end
 
     def test_rejecting_wrong_number_of_args
-      skip 'wishlisted'
       stub_request(:any, /.*/)
       recipe = Recipe.new(description: 'Delicious')
       assert_raises ArgumentError do

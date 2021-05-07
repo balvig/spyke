@@ -244,9 +244,3 @@ Completed 200 OK in 75ms (Views: 64.6ms | Spyke: 40.3ms | ActiveRecord: 0ms)
 
 For more examples of how Spyke can be used, check out [fixtures.rb](https://github.com/balvig/spyke/blob/master/test/support/fixtures.rb) and the
 [test suite](https://github.com/balvig/spyke/tree/master/test).
-
-
-## Contributing
-
-If possible please take a look at the [tests marked "wishlisted"](https://github.com/balvig/spyke/search?l=ruby&q=wishlisted&utf8=%E2%9C%93)!
-These are features/fixes I'd like to implement but haven't gotten around to doing yet :)
