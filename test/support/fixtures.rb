@@ -119,10 +119,10 @@ end
 class OtherRecipe < OtherApi
   uri 'recipes/(:id)'
 
-  def self.send_request(method, path, params)
+  def self.request(method, path, params)
     super
   rescue Spyke::ConnectionError
-    Recipe.send_request(method, path, params)
+    Recipe.request(method, path, params)
   end
 end
 
