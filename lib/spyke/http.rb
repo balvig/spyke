@@ -41,20 +41,20 @@ module Spyke
         @uri ||= uri_template || default_uri
       end
 
-      def send_request(method, path, params)
-        connection.send(method) do |request|
-          if method == :get
-            request.url path.to_s, params
-          else
-            request.url path.to_s
-            request.body = params
-          end
-        end
-      rescue Faraday::ConnectionFailed, Faraday::TimeoutError
-        raise ConnectionError
-      end
-
       private
+
+        def send_request(method, path, params)
+          connection.send(method) do |request|
+            if method == :get
+              request.url path.to_s, params
+            else
+              request.url path.to_s
+              request.body = params
+            end
+          end
+        rescue Faraday::ConnectionFailed, Faraday::TimeoutError
+          raise ConnectionError
+        end
 
         def scoped_request(method)
           uri = new.uri
