@@ -241,6 +241,15 @@ module Spyke
       assert_requested endpoint
     end
 
+
+    def test_using_where_with_custom_uri_including_query_params
+      endpoint = stub_request(:get, 'http://sushi.com/featured_ingredients?filter[group_id]=1&filter[status]=published')
+
+      Group.new(id: 1).featured_ingredients.where(filter: { status: 'published' }).to_a
+
+      assert_requested endpoint
+    end
+
     def test_path_inferred_from_name
       endpoint = stub_request(:get, 'http://sushi.com/recipes/1/gallery_images')
       Recipe.new(id: 1).gallery_images.to_a
