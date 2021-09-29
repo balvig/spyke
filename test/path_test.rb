@@ -21,13 +21,13 @@ module Spyke
     end
 
     def test_required_variables
-      assert_raises Spyke::InvalidPathError, 'Missing required variables: user_id in /users/:user_id/recipes/(:id)' do
+      assert_raises InvalidPathError, 'Missing required variables: user_id in /users/:user_id/recipes/(:id)' do
         Path.new('/users/:user_id/recipes/(:id)', id: 2).to_s
       end
     end
 
     def test_mix_of_required_and_unrequired_variables
-      assert_raises Spyke::InvalidPathError, 'Missing required variables: part2, part4' do
+      assert_raises InvalidPathError, 'Missing required variables: part2, part4' do
         Path.new('/1/profiles(/:part1)/:part2(/:part3)/:part4.xml').to_s
       end
     end
