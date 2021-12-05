@@ -79,6 +79,7 @@ end
 
 class Group < Spyke::Base
   has_many :ingredients, uri: nil
+  has_many :featured_ingredients, uri: 'featured_ingredients?filter[group_id]=:group_id', class_name: "Ingredient"
   accepts_nested_attributes_for :ingredients
 
   def self.build_default

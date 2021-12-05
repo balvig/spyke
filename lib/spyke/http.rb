@@ -46,7 +46,8 @@ module Spyke
         def send_request(method, path, params)
           connection.send(method) do |request|
             if method == :get
-              request.url path.to_s, params
+              path, params = merge_query_params(path, params)
+              request.url path, params
             else
               request.url path.to_s
               request.body = params
@@ -54,6 +55,13 @@ module Spyke
           end
         rescue Faraday::ConnectionFailed, Faraday::TimeoutError
           raise ConnectionError
+        end
+
+        def merge_query_params(path, params)
+          parsed_uri = Addressable::URI.parse(path.to_s)
+          path = parsed_uri.path
+          params = params.merge(parsed_uri.query_values || {})
+          [path, params]
         end
 
         def scoped_request(method)
