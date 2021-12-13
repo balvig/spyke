@@ -170,7 +170,7 @@ Spyke expects errors to be formatted in the same way as the
 [ActiveModel::Errors details hash](https://cowbell-labs.com/2015-01-22-active-model-errors-details.html), ie:
 
 ```ruby
-{ title: [{ error: 'blank'}, { error: 'too_short', count: 10 }]}
+{ title: [{ error: 'blank'}, { error: 'too_short', count: 10 }] }
 ```
 
 If the API you're using returns errors in a different format you can
