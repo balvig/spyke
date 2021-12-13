@@ -131,8 +131,6 @@ Post.find(4) # => GET http://api.com/posts/4
 Custom request methods and the `with` scope methods allow you to
 perform requests for non-REST actions:
 
-The `.with` scope:
-
 ```ruby
 Post.with('posts/recent') # => GET http://api.com/posts/recent
 Post.with(:recent) # => GET http://api.com/posts/recent
