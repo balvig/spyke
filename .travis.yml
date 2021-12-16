@@ -1,7 +1,0 @@
-notifications:
-  email: false
-rvm:
-  - 2.6.6
-  - 2.7.2
-  - 3.0.0
-sudo: false
