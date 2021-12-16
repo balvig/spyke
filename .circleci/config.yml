@@ -11,11 +11,17 @@ orbs:
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
+    parameters:
+      ruby_version:
+        type: string
     docker:
-      - image: circleci/ruby:2.6.3-stretch-node
+      - image: cimg/ruby:<< parameters.ruby_version >>
     executor: ruby/default
     steps:
       - checkout
+      - run:
+          name: Which ruby?
+          command: ruby -v
       - run:
           name: Which bundler?
           command: bundle -v
@@ -24,10 +30,10 @@ jobs:
           name: Run tests
           command: bundle exec rake
 
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  tests:
     jobs:
-      - build
+      - build:
+          matrix:
+            parameters:
+              ruby_version: ["2.6.6", "2.7.2", "3.0.0"]
