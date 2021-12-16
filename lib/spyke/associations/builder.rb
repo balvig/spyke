@@ -29,10 +29,22 @@ module Spyke
           candidates << type_name
 
           candidates.each do |candidate|
-            constant = ActiveSupport::Dependencies.safe_constantize(candidate)
+            constant = safe_constantize(candidate)
             return constant if candidate == constant.to_s
           end
           raise NameError.new("uninitialized constant #{candidates.first}", candidates.first)
+        end
+
+        # ActiveSupport < 7.0
+        if ActiveSupport::Dependencies.respond_to?(:safe_constantize)
+          def safe_constantize(name)
+            ActiveSupport::Dependencies.safe_constantize(name)
+          end
+        # ActiveSupport >= 7.0
+        else
+          def safe_constantize(name)
+            ActiveSupport::Inflector.safe_constantize(name)
+          end
         end
     end
   end
