@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'actionpack', ENV.fetch('RAILS_TEST_VERSION', '>= 4.0.0')
   spec.add_development_dependency 'bundler', '>= 1.6'
-  spec.add_development_dependency 'coveralls', '~> 0.7'
+  spec.add_development_dependency 'coveralls_reborn', '~> 0.23.0'
   spec.add_development_dependency 'minitest'
   spec.add_development_dependency 'minitest-line'
   spec.add_development_dependency 'minitest-reporters'
