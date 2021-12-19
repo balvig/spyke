@@ -14,9 +14,13 @@ jobs:
     parameters:
       ruby_version:
         type: string
+      rails_version:
+        type: string
     docker:
       - image: cimg/ruby:<< parameters.ruby_version >>
     executor: ruby/default
+    environment:
+      RAILS_TEST_VERSION: << parameters.rails_version >>
     steps:
       - checkout
       - run:
@@ -36,4 +40,15 @@ workflows:
       - build:
           matrix:
             parameters:
+              rails_version: ["~> 5.0"]
+              ruby_version: ["2.6.6", "2.7.2"]
+      - build:
+          matrix:
+            parameters:
+              rails_version: ["~> 6.0"]
               ruby_version: ["2.6.6", "2.7.2", "3.0.0"]
+      - build:
+          matrix:
+            parameters:
+              rails_version: ["~> 7.0"]
+              ruby_version: ["2.7.2", "3.0.0"]

@@ -18,15 +18,15 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'activesupport', '>= 4.0.0'
-  spec.add_dependency 'activemodel', '>= 4.0.0'
+  spec.add_dependency 'activesupport', ENV.fetch('RAILS_TEST_VERSION', '>= 4.0.0')
+  spec.add_dependency 'activemodel', ENV.fetch('RAILS_TEST_VERSION', '>= 4.0.0')
   spec.add_dependency 'faraday', '>= 0.9.0', '< 2.0'
   spec.add_dependency 'faraday_middleware', '>= 0.9.1', '< 2.0'
   spec.add_dependency 'addressable', '>= 2.5.2'
 
-  spec.add_development_dependency 'actionpack', '>= 4.0.0'
+  spec.add_development_dependency 'actionpack', ENV.fetch('RAILS_TEST_VERSION', '>= 4.0.0')
   spec.add_development_dependency 'bundler', '>= 1.6'
-  spec.add_development_dependency 'coveralls', '~> 0.7'
+  spec.add_development_dependency 'coveralls_reborn', '~> 0.23.0'
   spec.add_development_dependency 'minitest'
   spec.add_development_dependency 'minitest-line'
   spec.add_development_dependency 'minitest-reporters'
