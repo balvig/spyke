@@ -4,4 +4,7 @@ require 'bundler/setup'
 require 'spyke'
 require 'pry'
 
+# Require support files via `TEST=true bin/console`
+require_relative '../test/support/fixtures.rb' if ENV['TEST']
+
 Pry.start
