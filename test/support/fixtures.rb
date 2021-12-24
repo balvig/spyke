@@ -1,3 +1,5 @@
+require 'multi_json'
+
 # Dummy api
 class JSONParser < Faraday::Response::Middleware
   def parse(body)

@@ -10,7 +10,6 @@ require 'spyke'
 require 'minitest/autorun'
 require 'minitest/reporters'
 require 'mocha/minitest'
-require 'multi_json'
 require 'pry'
 
 # Require support files
