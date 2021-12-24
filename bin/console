@@ -7,6 +7,7 @@ require 'pry'
 # Require support files via `bin/console -t`
 if ARGV.any? { |o| %w(-t --test).include? o }
   require_relative '../test/support/fixtures.rb'
+  Spyke::Base.connection.response :logger
 end
 
 Pry.start
