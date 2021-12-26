@@ -40,6 +40,11 @@ workflows:
       - build:
           matrix:
             parameters:
+              rails_version: ["~> 4.0"]
+              ruby_version: ["2.6.6"]
+      - build:
+          matrix:
+            parameters:
               rails_version: ["~> 5.0"]
               ruby_version: ["2.6.6", "2.7.2"]
       - build:

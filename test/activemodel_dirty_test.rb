@@ -6,7 +6,7 @@ module Spyke
       recipe = RecipeWithDirty.new(title: 'Cheeseburger')
 
       # If @attributes is set on recipe ActiveModel::Dirty will crash
-      assert_equal false, recipe.attribute_changed_in_place?(:title)
+      assert_equal({}, recipe.changes)
     end
   end
 end

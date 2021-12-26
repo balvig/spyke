@@ -114,10 +114,10 @@ module Spyke
           field_errors.each do |error_attributes|
             error = NormalizedValidationError.new(error_attributes)
 
-            if errors.method(:add).arity == -2
-              errors.add(field.to_sym, error.message, **error.options)
-            else
+            if ActiveSupport::VERSION::MAJOR < 5
               errors.add(field.to_sym, error.message, error.options)
+            else
+              errors.add(field.to_sym, error.message, **error.options)
             end
           end
         end
