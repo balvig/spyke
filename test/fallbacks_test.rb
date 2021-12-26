@@ -7,6 +7,12 @@ module Spyke
       stub_request(:get, "http://sushi.com/recipes?published=true").to_timeout
     end
 
+    def test_find_without_fallback
+      assert_raises ConnectionError do
+        Recipe.find(1)
+      end
+    end
+
     def test_find_with_default_fallback
       assert_raises ResourceNotFound do
         Recipe.with_fallback.find(1)
