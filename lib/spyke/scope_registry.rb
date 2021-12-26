@@ -1,6 +1,12 @@
 module Spyke
   class ScopeRegistry
-    extend ActiveSupport::PerThreadRegistry
+    class << self
+      delegate :value_for, :set_value_for, to: :instance
+
+      def instance
+        ActiveSupport::IsolatedExecutionState[:spyke_scope_registry] ||= new
+      end
+    end
 
     def initialize
       @registry = Hash.new { |hash, key| hash[key] = {} }
