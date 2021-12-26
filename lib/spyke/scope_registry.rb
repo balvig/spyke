@@ -1,11 +1,16 @@
 module Spyke
   class ScopeRegistry
-    class << self
-      delegate :value_for, :set_value_for, to: :instance
+    # https://github.com/balvig/spyke/pull/128
+    if ActiveSupport::VERSION::MAJOR >= 7
+      class << self
+        delegate :value_for, :set_value_for, to: :instance
 
-      def instance
-        ActiveSupport::IsolatedExecutionState[:spyke_scope_registry] ||= new
+        def instance
+          ActiveSupport::IsolatedExecutionState[:spyke_scope_registry] ||= new
+        end
       end
+    else
+      extend ActiveSupport::PerThreadRegistry
     end
 
     def initialize
