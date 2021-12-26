@@ -18,8 +18,13 @@ module Spyke
     end
 
     def test_initializing_using_unpermitted_strong_params
-      assert_raises ActionController::UnfilteredParameters do
-        Ingredient.new(strong_params(name: 'Flour'))
+      if ActiveSupport::VERSION::MAJOR < 5
+        ingredient = Ingredient.new(strong_params(name: 'Flour'))
+        assert_equal({}, ingredient.attributes)
+      else
+        assert_raises ActionController::UnfilteredParameters do
+          Ingredient.new(strong_params(name: 'Flour'))
+        end
       end
     end
 
