@@ -1,7 +1,6 @@
 # Coverage
 require 'coveralls'
-Coveralls.wear!
-SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+Coveralls.wear_merged!
 SimpleCov.start do
   add_filter 'test'
 end

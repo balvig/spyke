@@ -33,12 +33,22 @@ jobs:
       - run:
           name: Run tests
           command: bundle exec rake
+  coverage:
+    docker:
+      - image: cimg/ruby:3.0.0
+    steps:
+      - checkout
+      - ruby/bundle-install
+      - run:
+          name: Push coverage to coveralls
+          command: bundle exec rake coveralls:push
 
 workflows:
   tests:
     jobs:
       - build:
           matrix:
+            alias: Rails 5
             parameters:
               rails_version: ["~> 4.0"]
               ruby_version: ["2.6.6"]
@@ -49,11 +59,15 @@ workflows:
               ruby_version: ["2.6.6", "2.7.2"]
       - build:
           matrix:
+            alias: Rails 6
             parameters:
               rails_version: ["~> 6.0"]
               ruby_version: ["2.6.6", "2.7.2", "3.0.0"]
       - build:
           matrix:
+            alias: Rails 7
             parameters:
               rails_version: ["~> 7.0"]
               ruby_version: ["2.7.2", "3.0.0"]
+      - coverage:
+          requires: ["Rails 5", "Rails 6", "Rails 7"]
