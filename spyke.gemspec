@@ -26,7 +26,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'actionpack', ENV.fetch('RAILS_TEST_VERSION', '>= 4.0.0')
   spec.add_development_dependency 'bundler', '>= 1.6'
-  spec.add_development_dependency 'coveralls_reborn', '~> 0.23.0'
   spec.add_development_dependency 'minitest'
   spec.add_development_dependency 'minitest-line'
   spec.add_development_dependency 'minitest-reporters'
@@ -34,5 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'multi_json'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'simplecov-lcov'
   spec.add_development_dependency 'webmock'
 end
