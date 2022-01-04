@@ -1,15 +1,13 @@
-# Spyke
-
-<p align="center">
-  <img src="http://upload.wikimedia.org/wikipedia/en/thumb/2/21/Spyke.jpg/392px-Spyke.jpg" width="15%" />
+<div align="center">
+  <img src="spyke.svg" width="250" alt="Spyke" />
   <br/>
   Interact with remote <strong>REST services</strong> in an <strong>ActiveRecord-like</strong> manner.
   <br /><br />
   <a href="https://rubygems.org/gems/spyke"><img src="https://badge.fury.io/rb/spyke.svg?style=flat" alt="Gem Version"></a>
   <a href="https://codeclimate.com/github/balvig/spyke"><img src="https://codeclimate.com/github/balvig/spyke/badges/gpa.svg" /></a>
   <a href='https://coveralls.io/github/balvig/spyke'><img src="https://coveralls.io/repos/github/balvig/spyke/badge.svg" /></a>
-  <a href="https://circleci.com/gh/balvig/spyke"><img src="https://circleci.com/gh/balvig/spyke.svg?style=shield" /></a>  
-</p>
+  <a href="https://circleci.com/gh/balvig/spyke"><img src="https://circleci.com/gh/balvig/spyke.svg?style=shield" /></a>
+</div>
 
 ---
 
