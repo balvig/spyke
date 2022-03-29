@@ -20,8 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'activesupport', ENV.fetch('RAILS_TEST_VERSION', '>= 4.0.0')
   spec.add_dependency 'activemodel', ENV.fetch('RAILS_TEST_VERSION', '>= 4.0.0')
-  spec.add_dependency 'faraday', '>= 0.9.0', '< 2.0'
-  spec.add_dependency 'faraday_middleware', '>= 0.9.1', '< 2.0'
+  spec.add_dependency 'faraday', '>= 0.9.0', '< 3.0'
   spec.add_dependency 'addressable', '>= 2.5.2'
 
   spec.add_development_dependency 'actionpack', ENV.fetch('RAILS_TEST_VERSION', '>= 4.0.0')

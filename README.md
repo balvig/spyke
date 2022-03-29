@@ -60,7 +60,7 @@ class JSONParser < Faraday::Response::Middleware
 end
 
 Spyke::Base.connection = Faraday.new(url: 'http://api.com') do |c|
-  c.request   :json
+  c.request   :json # if using Faraday 1.x, please add `faraday_middleware` to your dependencies first
   c.use       JSONParser
   c.adapter   Faraday.default_adapter
 end
