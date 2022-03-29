@@ -1,5 +1,16 @@
 require 'faraday'
-require 'faraday_middleware'
+if Gem.loaded_specs["faraday"].version < Gem::Version.new("2.0")
+  begin
+    require 'faraday_middleware'
+  rescue LoadError => e
+    puts <<~MSG
+      Please add `faraday_middleware` to your Gemfile when using Faraday 1.x. Alternatively,
+      upgrade to Faraday `~> 2` to avoid this dependency.
+    MSG
+    raise e
+  end
+end
+
 require 'spyke/config'
 require 'spyke/path'
 require 'spyke/result'
