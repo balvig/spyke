@@ -48,6 +48,19 @@ So, for example for an API that returns JSON like this:
 ```ruby
 # config/initializers/spyke.rb
 
+# Faraday v2.0
+class JSONParser < Faraday::Middleware
+  def on_complete(env)
+    json = MultiJson.load(env.body, symbolize_keys: true)
+    env.body = {
+      data: json[:result],
+      metadata: json[:extra],
+      errors: json[:errors]
+    }
+  end
+end
+
+# Faraday v1.0
 class JSONParser < Faraday::Response::Middleware
   def parse(body)
     json = MultiJson.load(body, symbolize_keys: true)

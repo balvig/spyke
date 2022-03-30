@@ -2,15 +2,15 @@ require 'multi_json'
 
 # Dummy api
 class JSONParser < Faraday::Middleware
-  def parse(body)
-    json = MultiJson.load(body, symbolize_keys: true)
-    {
+  def on_complete(env)
+    json = MultiJson.load(env.body, symbolize_keys: true)
+    env.body = {
       data: json[:result],
       metadata: json[:metadata],
       errors: json[:errors]
     }
   rescue MultiJson::ParseError => exception
-    { errors: { base: [ error: exception.message ] } }
+    env.body = { errors: { base: [ error: exception.message ] } }
   end
 end
 
