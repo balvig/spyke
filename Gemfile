@@ -3,4 +3,6 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in spyke.gemspec
 gemspec
 
-gem "faraday_middleware" # to support Faraday 1.x
+if ENV['FARADAY_TEST_VERSION'] == '< 2.0'
+  gem 'faraday_middleware'
+end
