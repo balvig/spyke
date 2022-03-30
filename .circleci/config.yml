@@ -18,11 +18,14 @@ jobs:
         type: string
       rails_version:
         type: string
+      faraday_version:
+        type: string
     docker:
       - image: cimg/ruby:<< parameters.ruby_version >>
     executor: ruby/default
     environment:
       RAILS_TEST_VERSION: << parameters.rails_version >>
+      FARADAY_TEST_VERSION: << parameters.faraday_version >>
       EUID: 0 # not sure why this is needed, but sudo npm fails
     steps:
       - checkout
@@ -56,23 +59,27 @@ workflows:
             parameters:
               rails_version: ["~> 4.0"]
               ruby_version: ["2.6.9"]
+              faraday_version: [">= 1.0", ">= 2.0"]
       - build:
           matrix:
             alias: Rails 5
             parameters:
               rails_version: ["~> 5.0"]
               ruby_version: ["2.6.9", "2.7.5"]
+              faraday_version: [">= 1.0", ">= 2.0"]
       - build:
           matrix:
             alias: Rails 6
             parameters:
               rails_version: ["~> 6.0"]
               ruby_version: ["2.6.9", "2.7.5", "3.0.3"]
+              faraday_version: [">= 1.0", ">= 2.0"]
       - build:
           matrix:
             alias: Rails 7
             parameters:
               rails_version: ["~> 7.0"]
               ruby_version: ["2.7.5", "3.0.3", "3.1.1"]
+              faraday_version: [">= 1.0", ">= 2.0"]
       - coverage:
           requires: ["Rails 4", "Rails 5", "Rails 6", "Rails 7"]
