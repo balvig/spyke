@@ -1,7 +1,7 @@
 require 'multi_json'
 
 # Dummy api
-class JSONParser < Faraday::Response::Middleware
+class JSONParser < Faraday::Middleware
   def parse(body)
     json = MultiJson.load(body, symbolize_keys: true)
     {
