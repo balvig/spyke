@@ -15,6 +15,7 @@ class JSONParser < Faraday::Middleware
 end
 
 Spyke::Base.connection = Faraday.new(url: 'http://sushi.com') do |faraday|
+  faraday.request   :multipart
   faraday.request   :json
   faraday.use       JSONParser
   faraday.adapter   Faraday.default_adapter

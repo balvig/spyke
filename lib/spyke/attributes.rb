@@ -1,5 +1,3 @@
-require 'faraday/multipart'
-
 module Spyke
   class Attributes < HashWithIndifferentAccess
     def to_params

@@ -48,8 +48,7 @@ So, for example for an API that returns JSON like this:
 ```ruby
 # config/initializers/spyke.rb
 
-# Faraday v2.0
-class JSONParser < Faraday::Middleware
+class JSONParser < Faraday::Middleware # Faraday::Response::Middleware for Faraday v1.0
   def on_complete(env)
     json = MultiJson.load(env.body, symbolize_keys: true)
     env.body = {
@@ -60,19 +59,8 @@ class JSONParser < Faraday::Middleware
   end
 end
 
-# Faraday v1.0
-class JSONParser < Faraday::Response::Middleware
-  def parse(body)
-    json = MultiJson.load(body, symbolize_keys: true)
-    {
-      data: json[:result],
-      metadata: json[:extra],
-      errors: json[:errors]
-    }
-  end
-end
-
 Spyke::Base.connection = Faraday.new(url: 'http://api.com') do |c|
+  c.request   :multipart
   c.request   :json # if using Faraday 1.x, please add `faraday_middleware` to your dependencies first
   c.use       JSONParser
   c.adapter   Faraday.default_adapter
@@ -215,7 +203,7 @@ but this can be disabled or customized:
 ```ruby
 class Article < Spyke::Base
   # Default
-  include_root_in_json  true # { article: { title: ...} }
+  include_root_in_json true # { article: { title: ...} }
 
   # Custom
   include_root_in_json :post # { post: { title: ...} }
