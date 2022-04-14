@@ -13,6 +13,7 @@ orbs:
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   build:
+    name: "Test"
     parameters:
       ruby_version:
         type: string
@@ -59,7 +60,7 @@ workflows:
             parameters:
               rails_version: ["~> 4.0"]
               ruby_version: ["2.6.9"]
-              faraday_version: [">= 1.0", ">= 2.0"]
+              faraday_version: [">= 0.9"]
       - build:
           matrix:
             alias: Rails 5
