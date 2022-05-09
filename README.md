@@ -241,5 +241,5 @@ Completed 200 OK in 75ms (Views: 64.6ms | Spyke: 40.3ms | ActiveRecord: 0ms)
 
 ### Other examples
 
-For more examples of how Spyke can be used, check out [fixtures.rb](https://github.com/balvig/spyke/blob/master/test/support/fixtures.rb) and the
-[test suite](https://github.com/balvig/spyke/tree/master/test).
+For more examples of how Spyke can be used, check out [fixtures.rb](https://github.com/balvig/spyke/blob/main/test/support/fixtures.rb) and the
+[test suite](https://github.com/balvig/spyke/tree/main/test).
