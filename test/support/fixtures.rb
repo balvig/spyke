@@ -1,28 +1,16 @@
-require 'multi_json'
-
-# Dummy api
-class JSONParser < Faraday::Middleware
-  def on_complete(env)
-    json = MultiJson.load(env.body, symbolize_keys: true)
-    env.body = {
-      data: json[:result],
-      metadata: json[:metadata],
-      errors: json[:errors]
-    }
-  rescue MultiJson::ParseError => exception
-    env.body = { errors: { base: [ error: exception.message ] } }
+class Api < Spyke::Base
+  self.connection = Faraday.new(url: 'http://sushi.com') do |faraday|
+    faraday.request   :multipart
+    faraday.request   :json
+    faraday.response  :json
+    faraday.adapter   Faraday.default_adapter
   end
-end
 
-Spyke::Base.connection = Faraday.new(url: 'http://sushi.com') do |faraday|
-  faraday.request   :multipart
-  faraday.request   :json
-  faraday.use       JSONParser
-  faraday.adapter   Faraday.default_adapter
+  spyke_json_mapping data_key: :result
 end
 
 # Test classes
-class Recipe < Spyke::Base
+class Recipe < Api
   has_many :groups
   has_many :gallery_images, class_name: 'Image'
   has_one :image
@@ -62,7 +50,7 @@ class Recipe < Spyke::Base
     def before_save_callback; end
 end
 
-class Image < Spyke::Base
+class Image < Api
   method_for :create, :put
   attributes :description, :caption
 end
@@ -80,7 +68,7 @@ class RecipeImage < Image
   include_root_in_json false
 end
 
-class Group < Spyke::Base
+class Group < Api
   has_many :ingredients, uri: nil
   has_many :featured_ingredients, uri: 'featured_ingredients?filter[group_id]=:group_id', class_name: "Ingredient"
   accepts_nested_attributes_for :ingredients
@@ -93,20 +81,20 @@ class Group < Spyke::Base
   end
 end
 
-class Ingredient < Spyke::Base
+class Ingredient < Api
   uri 'recipes/:recipe_id/ingredients/(:id)'
 end
 
-class User < Spyke::Base
+class User < Api
   self.primary_key = :uuid
   has_many :recipes
 end
 
-class Photo < Spyke::Base
+class Photo < Api
   uri 'images/photos/(:id)'
 end
 
-class Comment < Spyke::Base
+class Comment < Api
   belongs_to :user
   has_many :users
   scope :approved, -> { where(comment_approved: true) }
@@ -115,7 +103,7 @@ end
 
 class OtherApi < Spyke::Base
   self.connection = Faraday.new(url: 'http://sashimi.com') do |faraday|
-    faraday.use       JSONParser
+    faraday.response  :json
     faraday.adapter   Faraday.default_adapter
   end
 end
@@ -145,7 +133,7 @@ class Search
 end
 
 module Cookbook
-  class Tip < Spyke::Base
+  class Tip < Api
     uri 'tips/(:id)'
     has_many :likes, class_name: 'Cookbook::Like'
     has_many :favorites
@@ -153,14 +141,14 @@ module Cookbook
     has_many :photos, class_name: 'Photo'
   end
 
-  class Like < Spyke::Base
+  class Like < Api
     belongs_to :tip
   end
 
-  class Favorite < Spyke::Base
+  class Favorite < Api
   end
 
-  class Photo < Spyke::Base
+  class Photo < Api
     include_root_in_json :foto
   end
 end

@@ -26,7 +26,7 @@ module Spyke
     end
 
     def test_404
-      stub_request(:get, 'http://sushi.com/recipes/1').to_return(status: 404, body: { message: 'Not found' }.to_json)
+      stub_request(:get, 'http://sushi.com/recipes/1').to_return_json({ body: { message: 'Not found' } }, status: 404)
 
       assert_raises(ResourceNotFound) { Recipe.find(1) }
       assert_raises(ResourceNotFound) { Recipe.find(nil) }
@@ -185,14 +185,14 @@ module Spyke
     end
 
     def test_relative_uris
-      previous = Spyke::Base.connection.url_prefix
-      Spyke::Base.connection.url_prefix = 'http://sushi.com/api/v2/'
+      previous = Api.connection.url_prefix
+      Api.connection.url_prefix = 'http://sushi.com/api/v2/'
 
       endpoint = stub_request(:get, 'http://sushi.com/api/v2/recipes')
       Recipe.all.to_a
       assert_requested endpoint
 
-      Spyke::Base.connection.url_prefix = previous
+      Api.connection.url_prefix = previous
     end
 
     def test_custom_primary_key_on_collection
