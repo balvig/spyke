@@ -1,5 +1,6 @@
 <div align="center">
-  <img src="spyke.svg" width="250" alt="Spyke" />
+  <img src="spyke.svg#gh-light-mode-only" width="250" alt="Spyke" />
+  <img src="spyke-dark.svg#gh-dark-mode-only" width="250" alt="Spyke" />
   <br/>
   Interact with remote <strong>REST services</strong> in an <strong>ActiveRecord-like</strong> manner.
   <br /><br />
