@@ -41,8 +41,10 @@ module Spyke
     end
 
     # Overrides Enumerable find
-    def find(id)
-      scoping { klass.find(id) }
+    def find(id = nil, &block)
+      return scoping { klass.find(id) } if id
+      
+      block_given? ? find_some.find(&block) : find_some
     end
 
     def find_one
