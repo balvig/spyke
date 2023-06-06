@@ -15,7 +15,7 @@ module Spyke
     end
 
     def test_find_with_block
-      stub_request(:get, 'http://sushi.com/users').to_return_json(result: { id: 1, name: 'Bob' })
+      stub_request(:get, 'http://sushi.com/users').to_return_json(result: [{ id: 1, name: 'Bob' }])
 
       user = User.find do |u|
         u.name == 'Bob'
