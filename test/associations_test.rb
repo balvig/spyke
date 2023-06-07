@@ -90,8 +90,14 @@ module Spyke
       assert_equal %w{ Fish Fruit }, recipe.groups[0..1].map(&:name)
       assert_equal 'Bread', recipe.groups.last.name
       assert_equal 'Fish', recipe.groups.first.name
+    end
+
+    def test_find_with_block
+      stub_request(:get, 'http://sushi.com/recipes/1/groups').to_return_json(result: [{ name: 'Fish' }, { name: 'Fruit' }, { name: 'Bread' }])
+
+      recipe = Recipe.new(id: 1)
+
       assert_equal 'Fruit', recipe.groups.find { |g| g.name == 'Fruit' }.name
-      assert_kind_of Enumerable, recipe.groups.find
     end
 
     def test_nil_has_one_association
