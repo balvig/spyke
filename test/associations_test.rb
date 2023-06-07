@@ -92,6 +92,14 @@ module Spyke
       assert_equal 'Fish', recipe.groups.first.name
     end
 
+    def test_find_with_block
+      stub_request(:get, 'http://sushi.com/recipes/1/groups').to_return_json(result: [{ name: 'Fish' }, { name: 'Fruit' }, { name: 'Bread' }])
+
+      recipe = Recipe.new(id: 1)
+
+      assert_equal 'Fruit', recipe.groups.find { |g| g.name == 'Fruit' }.name
+    end
+
     def test_nil_has_one_association
       stub_request(:get, 'http://sushi.com/recipes/1/image')
 
