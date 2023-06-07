@@ -26,11 +26,13 @@ module Spyke
       end
 
       def find(id = nil, &block)
-        return all.find_some.find(&block) if block_given?
+        if block_given?
+          all.find_some.find(&block)
+        else
+          raise ResourceNotFound if id.blank?
 
-        raise ResourceNotFound if id.blank?
-
-        where(primary_key => id).find_one || raise(ResourceNotFound)
+          where(primary_key => id).find_one || raise(ResourceNotFound)
+        end
       end
 
       def fetch
