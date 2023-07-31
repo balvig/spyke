@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Spyke
-  class FallbacksTest < MiniTest::Test
+  class FallbacksTest < Minitest::Test
     def setup
       stub_request(:get, "http://sushi.com/recipes/1").to_timeout
       stub_request(:get, "http://sushi.com/recipes?published=true").to_timeout

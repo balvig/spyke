@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Spyke
-  class CallbacksTest < MiniTest::Test
+  class CallbacksTest < Minitest::Test
     def setup
       stub_request(:any, /.*/)
     end
