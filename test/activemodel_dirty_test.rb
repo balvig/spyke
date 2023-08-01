@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Spyke
-  class ActiveModelDirtyTest < MiniTest::Test
+  class ActiveModelDirtyTest < Minitest::Test
     def test_attributes_instance_var_compatibility
       recipe = RecipeWithDirty.new(title: 'Cheeseburger')
 

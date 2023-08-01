@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Spyke
-  class CustomRequestTest < MiniTest::Test
+  class CustomRequestTest < Minitest::Test
     def test_custom_get_request_from_class
       endpoint = stub_request(:get, 'http://sushi.com/recipes/recent').to_return_json(result: [{ id: 1, title: 'Bread' }])
       recipes = Recipe.with('/recipes/recent').get

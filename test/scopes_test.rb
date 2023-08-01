@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Spyke
-  class ScopesTest < MiniTest::Test
+  class ScopesTest < Minitest::Test
     def test_all
       stub_request(:get, 'http://sushi.com/recipes').to_return_json(result: [{ id: 1, title: 'Sushi' }, { id: 2, title: 'Nigiri' }], metadata: 'meta')
 

@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module Spyke
-  class AssociationsTest < MiniTest::Test
+  class AssociationsTest < Minitest::Test
     def test_association_independence
       assert_kind_of Associations::HasMany, Recipe.new.groups
       assert_raises NoMethodError do
