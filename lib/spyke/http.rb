@@ -10,9 +10,16 @@ module Spyke
 
     included do
       class_attribute :connection, instance_accessor: false
+
+      class_attribute :json_mapping
+      self.json_mapping = { data_key: :data, metadata_key: :metadata, errors_key: :errors }
     end
 
     module ClassMethods
+      def spyke_json_mapping(map)
+        self.json_mapping.merge!(map)
+      end
+
       METHODS.each do |method|
         define_method(method) do
           new_instance_or_collection_from_result scoped_request(method)
@@ -23,7 +30,7 @@ module Spyke
         ActiveSupport::Notifications.instrument('request.spyke', method: method) do |payload|
           response = send_request(method, path, params)
           payload[:url], payload[:status] = response.env.url, response.status
-          Result.new_from_response(response)
+          Result.new_from_response_body(response.body, **json_mapping)
         end
       end
 
