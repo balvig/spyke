@@ -57,7 +57,7 @@ workflows:
           matrix:
             alias: Rails 4
             parameters:
-              rails_version: ["~> 4"]
+              rails_version: ["~> 4.0"]
               ruby_version: ["2.6.9"]
               faraday_version: ["< 2.0"]
       - build:
