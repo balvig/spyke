@@ -6,7 +6,7 @@ version: 2.1
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
   ruby: circleci/ruby@0.1.2
-  coveralls: coveralls/coveralls@1.0.6
+  coveralls: coveralls/coveralls@2.2.1
   node: circleci/node@5.0.0
 
 # Define a job to be invoked later in a workflow.
