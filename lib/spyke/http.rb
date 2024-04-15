@@ -43,7 +43,7 @@ module Spyke
 
         def send_request(method, path, params)
           connection.send(method) do |request|
-            if [:get, :delete].include?(method)
+            if method == :get
               path, params = merge_query_params(path, params)
               request.url path, params
             else
