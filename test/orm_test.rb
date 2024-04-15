@@ -168,14 +168,6 @@ module Spyke
       assert_equal({ 'foto' => { 'url' => 'bob.jpg' } }, Cookbook::Photo.new(url: 'bob.jpg').to_params)
     end
 
-    def test_destroy_with_params
-      endpoint = stub_request(:delete, 'http://sushi.com/recipes/1?cascade=true').to_return_json(result: { id: 1, deleted: true })
-      recipe = Recipe.new(id: 1)
-      recipe.destroy(cascade: true)
-      assert recipe.deleted
-      assert_requested endpoint
-    end
-
     def test_destroy
       endpoint = stub_request(:delete, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1, deleted: true })
       recipe = Recipe.new(id: 1)

@@ -71,8 +71,8 @@ module Spyke
       end
     end
 
-    def destroy(params = {})
-      self.attributes = delete(params)
+    def destroy
+      self.attributes = delete
     end
 
     def update(new_attributes)
