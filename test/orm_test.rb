@@ -176,6 +176,23 @@ module Spyke
       assert_requested endpoint
     end
 
+    def test_destroy_without_params
+      endpoint = stub_request(:delete, 'http://sushi.com/recipes/1').to_return_json(result: { id: 1, deleted: true })
+      recipe = Recipe.new(id: 1)
+      recipe.destroy(customer_id: 9)
+      assert recipe.deleted
+      assert_requested endpoint
+    end
+
+    def test_destroy_with_params
+      Spyke::Base.allow_params_on_delete = true
+      endpoint = stub_request(:delete, 'http://sushi.com/recipes/1?customer_id=9').to_return_json(result: { id: 1, deleted: true })
+      recipe = Recipe.new(id: 1)
+      recipe.destroy(customer_id: 9)
+      assert recipe.deleted
+      assert_requested endpoint
+    end
+
     def test_destroy_class_method
       endpoint = stub_request(:delete, 'http://sushi.com/recipes/1')
       Recipe.destroy(1)

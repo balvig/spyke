@@ -227,6 +227,17 @@ class Post < Spyke::Base
 end
 ```
 
+### Allow parameters on delete request
+
+If you need to allow custom parameters on the `DELETE` action, this can be enabled:
+
+```ruby
+Spyke::Base.allow_params_on_delete = true
+
+User.new(id: 1).destroy(customer_id: 9)
+# => DELETE http://api.com/users/1?customer_id=9
+```
+
 ### Log output
 
 When used with Rails, Spyke will automatically output helpful
