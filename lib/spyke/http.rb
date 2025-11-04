@@ -98,6 +98,7 @@ module Spyke
 
         add_errors_to_model(result.errors)
         self.attributes = result.data
+        self
       end
     end
 
