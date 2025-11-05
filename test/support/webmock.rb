@@ -2,7 +2,8 @@ require 'webmock/minitest'
 
 class WebMock::RequestStub
   def to_return_json(hash, options = {})
-    options[:body] = MultiJson.dump(hash)
+    options[:body] = hash.to_json
+    options[:headers] = { content_type: 'application/json' }
     to_return(options)
   end
 end
