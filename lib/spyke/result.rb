@@ -7,7 +7,7 @@ module Spyke
     end
 
     def initialize(body)
-      @body = HashWithIndifferentAccess.new(body)
+      @body = body.respond_to?(:to_hash) ? HashWithIndifferentAccess.new(body) : HashWithIndifferentAccess.new({})
     end
 
     def data
