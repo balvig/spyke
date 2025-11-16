@@ -10,6 +10,7 @@ module Spyke
 
     included do
       class_attribute :connection, instance_accessor: false
+      class_attribute :allow_params_on_delete, instance_accessor: false, default: false
     end
 
     module ClassMethods
@@ -43,7 +44,7 @@ module Spyke
 
         def send_request(method, path, params)
           connection.send(method) do |request|
-            if method == :get
+            if params_in_url?(method)
               path, params = merge_query_params(path, params)
               request.url path, params
             else
@@ -86,6 +87,13 @@ module Spyke
 
         def default_uri
           "#{model_name.element.pluralize}(/:#{primary_key})"
+        end
+
+        def params_in_url?(method)
+          return true if method == :get
+          return true if allow_params_on_delete && method == :delete
+
+          false
         end
     end
 
